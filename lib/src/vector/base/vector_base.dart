@@ -17,6 +17,12 @@ abstract class VectorBase {
   /// Multiply this vector by [vector]
   double dot(VectorBase vector);
 
+  /// Add this vector to [vector]
+  VectorBase add(VectorBase vector);
+
+  /// Subtract this vector from [vector]
+  VectorBase subtract(VectorBase vector);
+
   /// Convert this vector to martix
   MatrixBase toMatrix();
 }

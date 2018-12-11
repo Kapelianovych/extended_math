@@ -1,3 +1,4 @@
+import '../exceptions/vector_exception.dart';
 import '../matrix/matrix.dart';
 import 'base/vector_base.dart';
 
@@ -12,6 +13,32 @@ class Vector extends VectorBase {
   @override
   double dot(VectorBase vector) =>
       toMatrix().transpose().multiplyByMatrix(vector.toMatrix()).data[0][0];
+
+  @override
+  Vector add(VectorBase vector) {
+    if (itemCount == vector.itemCount) {
+      final tmpData = <double>[];
+      for (var i = 0; i < itemCount; i++) {
+        tmpData.add(data[i] + vector.data[i]);
+      }
+      return Vector(tmpData);
+    } else {
+      throw VectorException('Count of vector\'s numbers isn\'t equal!');
+    }
+  }
+
+  @override
+  Vector subtract(VectorBase vector) {
+    if (itemCount == vector.itemCount) {
+      final tmpData = <double>[];
+      for (var i = 0; i < itemCount; i++) {
+        tmpData.add(data[i] - vector.data[i]);
+      }
+      return Vector(tmpData);
+    } else {
+      throw VectorException('Count of vector\'s numbers isn\'t equal!');
+    }
+  }
 
   @override
   Matrix toMatrix() {

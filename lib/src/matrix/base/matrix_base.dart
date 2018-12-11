@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../../vector/base/vector_base.dart';
 
 /// Base class for matrix
@@ -7,6 +9,46 @@ abstract class MatrixBase {
 
   /// Constructor that accept [data]
   MatrixBase.init(this.data);
+
+  /// Generate matrix with specified [rows] and [cols]
+  ///
+  /// If [fillRandom] is true, then matrix will filled with random numbers,
+  /// and if [fillRandom] is false and [identity] is true - creates an identity matrix,
+  /// otherwise matrix will have all values defaults to 0
+  MatrixBase.generate(int rows, int cols,
+      {bool fillRandom = false, bool identity = false}) {
+    if (fillRandom == true) {
+      data = <List<double>>[];
+
+      Iterable<double> genNumbers(int count) sync* {
+        var i = 0;
+        while (i < count) {
+          i++;
+          yield Random().nextDouble();
+        }
+      }
+
+      for (var j = 0; j < rows; j++) {
+        data.add(genNumbers(cols).take(cols).toList());
+      }
+    } else {
+      final emptyData = <List<double>>[];
+
+      for (var i = 0; i < rows; i++) {
+        final emptyRow = <double>[];
+        for (var j = 0; j < cols; j++) {
+          emptyRow.add(0);
+        }
+
+        if (identity == true && i < cols) {
+          emptyRow[i] = 1;
+        }
+
+        emptyData.add(emptyRow);
+      }
+      data = emptyData;
+    }
+  }
 
   /// Raw data of matrix
   List<List<double>> data;
@@ -25,6 +67,12 @@ abstract class MatrixBase {
 
   /// Gets specified row
   List<double> rowAt(int number);
+
+  /// Removes specified row
+  MatrixBase removeRow(int row);
+
+  /// Removes specified column
+  MatrixBase removeColumn(int column);
 
   /// Multiply matrix by number
   MatrixBase multiplyBy(double multiplier);

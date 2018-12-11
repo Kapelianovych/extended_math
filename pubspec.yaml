@@ -1,8 +1,9 @@
 name: extended_math
 description: Library for working with objects of linear algebra
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/YevhenKap/extended_math
 author: Kapelianovych Yevhen <kapelianovych.y.v@gmail.com>
+license: MIT
 
 environment:
   sdk: '>=2.1.0 <3.0.0'

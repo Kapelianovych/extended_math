@@ -1,56 +1,22 @@
-import 'dart:math';
-
-import 'package:meta/meta.dart';
-
 import '../exceptions/matrix_exception.dart';
 import '../vector/base/vector_base.dart';
 import 'base/matrix_base.dart';
 
 /// Class for work with numeric matrix
 class Matrix extends MatrixBase {
-  /// Constrictor accept array of arrays of double numbers
+  /// Constructor accept array of arrays of double numbers
   Matrix(List<List<double>> data) : super.init(data);
 
   /// Generate matrix with specified [rows] and [cols]
   ///
   /// If [fillRandom] is true, then matrix will filled with random numbers,
   /// otherwise matrix will have all values defaults to 0
-  Matrix.generate(int rows, int cols, {bool fillRandom = false}) {
-    if (fillRandom == true) {
-      data = <List<double>>[];
+  Matrix.generate(int rows, int cols, {bool fillRandom = false})
+      : super.generate(rows, cols, fillRandom: fillRandom);
 
-      Iterable<double> genNumbers(int count) sync* {
-        var i = 0;
-        while (i < count) {
-          i++;
-          yield Random().nextDouble();
-        }
-      }
-
-      for (var j = 0; j < rows; j++) {
-        data.add(genNumbers(cols).take(cols).toList());
-      }
-    } else {
-      final emptyData = <List<double>>[];
-
-      for (var i = 0; i < rows; i++) {
-        final emptyRow = <double>[];
-        for (var j = 0; j < cols; j++) {
-          emptyRow.add(0);
-        }
-        emptyData.add(emptyRow);
-      }
-      data = emptyData;
-    }
-  }
-
-  /// Multiply raw arrays with each other
-  Matrix.multiplyRawMatrices(
-      {@required List<List<double>> matrix, @required List<List<double>> by}) {
-    final f = Matrix(matrix);
-    final s = Matrix(by);
-    data = f.multiplyByMatrix(s).data;
-  }
+  /// Creates an identity matrix
+  Matrix.identity(int rows, int cols)
+      : super.generate(rows, cols, identity: true);
 
   @override
   int get rows => data.length;
@@ -82,6 +48,33 @@ class Matrix extends MatrixBase {
       throw RangeError('$number is out of range of matrix rows.');
     }
     return data[number - 1];
+  }
+
+  @override
+  Matrix removeRow(int row) {
+    if (row > rows) {
+      throw RangeError('$row is out of range of matrix rows.');
+    } else {
+      final newData = List<List<double>>.of(data);
+      newData.removeAt(row - 1);
+      return Matrix(newData);
+    }
+  }
+
+  @override
+  Matrix removeColumn(int column) {
+    if (column > columns) {
+      throw RangeError('$column is out of range of matrix columns.');
+    } else {
+      final newData = <List<double>>[];
+
+      for (var row in data) {
+        final newRow = List<double>.of(row);
+        newRow.removeAt(column - 1);
+        newData.add(newRow);
+      }
+      return Matrix(newData);
+    }
   }
 
   @override

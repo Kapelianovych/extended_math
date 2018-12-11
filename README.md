@@ -5,13 +5,13 @@ Created under a MIT-style
 
 ## Overview
 
-Contains 3 objects:
+Contains 3 base classes:
 
     1. Vector
     2. Matrix
     3. Tensor
 
-Each class implements the methods of working with them.
+Each class have vary implementations that have methods of working with them.
 
 ## Features and bugs
 

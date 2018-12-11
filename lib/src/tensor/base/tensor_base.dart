@@ -1,5 +1,5 @@
 /// Base class for tensor
-abstract class TensorBase {
+abstract class TensorBase<T> {
   /// Default constructor that don't accept data
   TensorBase();
 
@@ -7,5 +7,5 @@ abstract class TensorBase {
   TensorBase.init(this.data);
 
   /// Data for tensor
-  List<List<List<double>>> data;
+  List<List<List<T>>> data;
 }
