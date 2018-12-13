@@ -12,7 +12,12 @@ abstract class VectorBase {
   List<double> data;
 
   /// Count of vector's numbers
-  int get itemCount;
+  int get itemCount => data.length;
+
+  /// Gets number at specified [index]
+  /// 
+  /// [index] is in range from 1 to end inclusively.
+  double itemAt(int index) => data[index - 1];
 
   /// Multiply this vector by [vector]
   double dot(VectorBase vector);

@@ -1,4 +1,11 @@
-# 0.0.2
+# 0.0.3
+
+- Add `isIdentity()`, `replaceRow()` and `replaceColumn` methods to `MatrixBase` class.
+- Add `inverse()`, `isSingular()` and `isNotSingular()` methods to `SquareMatrix` class.
+- Fix `getDeterminant()` method.
+- Small changes in classes with access to items of matrices and vectors.
+
+## 0.0.2
 
 - Add and implement `add()`, `subtract()` methods to `Vector` class.
 - Add `SquareMatrix` class.

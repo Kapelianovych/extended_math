@@ -8,18 +8,15 @@ class Vector extends VectorBase {
   Vector(List<double> data) : super.init(data);
 
   @override
-  int get itemCount => data.length;
-
-  @override
   double dot(VectorBase vector) =>
-      toMatrix().transpose().multiplyByMatrix(vector.toMatrix()).data[0][0];
+      toMatrix().transpose().multiplyByMatrix(vector.toMatrix()).itemAt(0, 0);
 
   @override
   Vector add(VectorBase vector) {
     if (itemCount == vector.itemCount) {
       final tmpData = <double>[];
-      for (var i = 0; i < itemCount; i++) {
-        tmpData.add(data[i] + vector.data[i]);
+      for (var i = 1; i <= itemCount; i++) {
+        tmpData.add(itemAt(i) + vector.itemAt(i));
       }
       return Vector(tmpData);
     } else {
@@ -31,8 +28,8 @@ class Vector extends VectorBase {
   Vector subtract(VectorBase vector) {
     if (itemCount == vector.itemCount) {
       final tmpData = <double>[];
-      for (var i = 0; i < itemCount; i++) {
-        tmpData.add(data[i] - vector.data[i]);
+      for (var i = 1; i <= itemCount; i++) {
+        tmpData.add(itemAt(i) - vector.itemAt(i));
       }
       return Vector(tmpData);
     } else {

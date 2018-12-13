@@ -54,19 +54,58 @@ abstract class MatrixBase {
   List<List<double>> data;
 
   /// Rows count of matrix
-  int get rows;
+  int get rows => data.length;
 
   /// Columns count of matrix
-  int get columns;
+  int get columns => data[0].length;
 
   /// Count of all numbers of matrix
-  int get itemCount;
+  int get itemCount => rows * columns;
 
-  /// Gets specified column
-  List<double> columnAt(int number);
+  /// Gets number at specified [row] and [column]
+  /// 
+  /// [row] and [column] are in range from 1 to end inclusively.
+  double itemAt(int row, int column) {
+    if (row > rows || column > columns) {
+      throw RangeError('$row or $column is out of range of matrix rows/columns.');
+    } else {
+      return data[row - 1][column - 1];
+    }
+  }
 
-  /// Gets specified row
-  List<double> rowAt(int number);
+  /// Set number to specified [value], replace old value if exist
+  /// 
+  /// [row] and [column] are in range from 1 to end inclusively.
+  void setItem(int row, int column, double value) {
+    if (row > rows || column > columns) {
+      throw RangeError('$row or $column is out of range of matrix rows/columns.');
+    } else {
+      data[row - 1][column - 1] = value;
+    }
+  }
+
+  /// Gets specified column in range from 1 to end
+  List<double> columnAt(int number) {
+    final col = <double>[];
+
+    if (number > columns) {
+      throw RangeError('$number is out of range of matrix columns.');
+    }
+
+    for (var row in data) {
+      col.add(row[number - 1]);
+    }
+
+    return col;
+  }
+
+  /// Gets specified row in range from 1 to end
+  List<double> rowAt(int number) {
+    if (number > rows) {
+      throw RangeError('$number is out of range of matrix rows.');
+    }
+    return data[number - 1];
+  }
 
   /// Removes specified row
   MatrixBase removeRow(int row);
@@ -113,4 +152,26 @@ abstract class MatrixBase {
   /// The [vector] is added to each row of this matrix.
   /// Columns of matrix should be equal to items count of vector.
   MatrixBase addVector(VectorBase vector);
+
+  /// Checks if this is identity matrix
+  bool isIdentity() {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < columns; j++) {
+         if (!(itemAt(i, i) == 1 && (itemAt(i, j) == 0 || i == j))) {
+           return false;
+         }
+      }
+    }
+    return true;
+  }
+
+  /// Replace row at [index] with given [newRow]
+  /// 
+  /// [index] is in range from 1 to end of matrix including.
+  MatrixBase replaceRow(int index, List<double> newRow);
+
+  /// Replace row at [index] with given [newColumn]
+  /// 
+  /// [index] is in range from 1 to end of matrix including.
+  MatrixBase replaceColumn(int index, List<double> newColumn);
 }

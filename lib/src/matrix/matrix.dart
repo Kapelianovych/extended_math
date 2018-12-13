@@ -19,38 +19,6 @@ class Matrix extends MatrixBase {
       : super.generate(rows, cols, identity: true);
 
   @override
-  int get rows => data.length;
-
-  @override
-  int get columns => data[0].length;
-
-  @override
-  int get itemCount => rows * columns;
-
-  @override
-  List<double> columnAt(int number) {
-    final col = <double>[];
-
-    if (number > columns) {
-      throw RangeError('$number is out of range of matrix columns.');
-    }
-
-    for (var row in data) {
-      col.add(row[number - 1]);
-    }
-
-    return col;
-  }
-
-  @override
-  List<double> rowAt(int number) {
-    if (number > rows) {
-      throw RangeError('$number is out of range of matrix rows.');
-    }
-    return data[number - 1];
-  }
-
-  @override
   Matrix removeRow(int row) {
     if (row > rows) {
       throw RangeError('$row is out of range of matrix rows.');
@@ -74,6 +42,34 @@ class Matrix extends MatrixBase {
         newData.add(newRow);
       }
       return Matrix(newData);
+    }
+  }
+
+  @override
+  Matrix replaceRow(int index, List<double> newRow) {
+    if (index > rows) {
+      throw RangeError('$index is out of range of matrix rows.');
+    } else if (newRow.length != columns) {
+      throw MatrixException('Needed $columns items in row, but found ${newRow.length}');
+    } else {
+      final newMatrix = Matrix(data);
+      newMatrix.data[index - 1] = newRow;
+      return newMatrix;
+    }
+  }
+
+  @override
+  Matrix replaceColumn(int index, List<double> newColumn) {
+    if (index > columns) {
+      throw RangeError('$index is out of range of matrix rows.');
+    } else if (newColumn.length != rows) {
+      throw MatrixException('Needed $rows items in row, but found ${newColumn.length}');
+    } else {
+      final newMatrix = Matrix(data);
+      for (var i = 1; i <= rows; i++) {
+        newMatrix.setItem(i, index, newColumn[i - 1]);
+      }
+      return newMatrix;
     }
   }
 
@@ -118,9 +114,9 @@ class Matrix extends MatrixBase {
   Matrix hadamardProduct(MatrixBase matrix) {
     if (columns == matrix.columns && rows == matrix.rows) {
       final m = Matrix.generate(rows, columns);
-      for (var i = 0; i < rows; i++) {
-        for (var j = 0; j < columns; j++) {
-          m.data[i][j] = data[i][j] * matrix.data[i][j];
+      for (var i = 1; i <= rows; i++) {
+        for (var j = 1; j <= columns; j++) {
+          m.setItem(i, j, itemAt(i, j) * matrix.itemAt(i, j));
         }
       }
       return m;
@@ -136,9 +132,9 @@ class Matrix extends MatrixBase {
   @override
   Matrix transpose() {
     final transposedMatrix = Matrix.generate(columns, rows);
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < columns; j++) {
-        transposedMatrix.data[j][i] = data[i][j];
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        transposedMatrix.setItem(j, i, itemAt(i, j));
       }
     }
     return transposedMatrix;
@@ -147,9 +143,9 @@ class Matrix extends MatrixBase {
   @override
   Matrix subtract(MatrixBase matrix) {
     final subtractedMatrix = Matrix.generate(rows, columns);
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < columns; j++) {
-        subtractedMatrix.data[i][j] = data[i][j] - matrix.data[i][j];
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        subtractedMatrix.setItem(i, j, itemAt(i, j) - matrix.itemAt(i, j));
       }
     }
     return subtractedMatrix;
@@ -158,9 +154,9 @@ class Matrix extends MatrixBase {
   @override
   Matrix add(MatrixBase matrix) {
     final newMatrix = Matrix.generate(rows, columns);
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < columns; j++) {
-        newMatrix.data[i][j] = data[i][j] + matrix.data[i][j];
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        newMatrix.setItem(i, j, itemAt(i, j) + matrix.itemAt(i, j));
       }
     }
     return newMatrix;
@@ -170,8 +166,10 @@ class Matrix extends MatrixBase {
   Matrix addVector(VectorBase vector) {
     if (columns == vector.itemCount) {
       final newMatrix = Matrix.generate(rows, columns);
-      for (var i = 0; i < rows; i++) {
-        newMatrix.data[i] = vector.data;
+      for (var r = 1; r <= rows; r++) {
+        for (var c = 1; c <= columns; c++) {
+          newMatrix.setItem(r, c, itemAt(r, c) + vector.itemAt(c));
+        }
       }
       return add(newMatrix);
     } else {
