@@ -2,12 +2,14 @@ import 'package:extended_math/extended_math.dart';
 
 void main() {
 
-  final v3 = SquareMatrix(<List<double>>[
-    <double>[4, -2],
-    <double>[1, 6]
+  final m = Matrix(<List<double>>[
+    <double>[2, -1, 5],
+    <double>[0, 2, 1],
+    <double>[3, 1, 1]
   ]);
-  print(v3.transpose().data);
-  // print(v3.getDeterminant());
-  // print(v3.inverse().data);
-  // print(v3.inverse().multiplyByMatrix(v3).data);
+  print(m.frobeniusNorm());
+
+  final v1 = Vector(<double>[6, 3]);
+  final v2 = Vector(<double>[5, 13]);
+  print(v1.angleBetween(v2));
 }

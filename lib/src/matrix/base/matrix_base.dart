@@ -176,4 +176,15 @@ abstract class MatrixBase {
   ///
   /// [index] is in range from 1 to end of matrix including.
   MatrixBase replaceColumn(int index, List<double> newColumn);
+
+  /// Gets Frobenius norm of matrix
+  double frobeniusNorm() {
+    var sum = 0.0;
+    for (var row in data) {
+      for (var val in row) {
+        sum += pow(val, 2);
+      }
+    }
+    return sqrt(sum);
+  }
 }

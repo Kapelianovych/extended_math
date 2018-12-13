@@ -1,4 +1,10 @@
-# 0.0.3
+# 0.0.4
+
+- Add `frobeniusNorm()` method to `MatrixBase` class.
+- Add `norm()`, `euclideanNorm()`, `maxNorm()` and `angleBetween()` methods to `VectorBase` class.
+- Fix `dot()` method of `VectorBase` class.
+
+## 0.0.3
 
 - Add `isIdentity()`, `replaceRow()` and `replaceColumn` methods to `MatrixBase` class.
 - Add `inverse()`, `isSingular()` and `isNotSingular()` methods to `SquareMatrix` class.

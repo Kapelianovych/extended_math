@@ -8,10 +8,6 @@ class Vector extends VectorBase {
   Vector(List<double> data) : super.init(data);
 
   @override
-  double dot(VectorBase vector) =>
-      toMatrix().transpose().multiplyByMatrix(vector.toMatrix()).itemAt(0, 0);
-
-  @override
   Vector add(VectorBase vector) {
     if (itemCount == vector.itemCount) {
       final tmpData = <double>[];
