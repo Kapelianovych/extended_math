@@ -21,7 +21,8 @@ class SquareMatrix extends Matrix {
   ///
   /// If [fillRandom] is true, then matrix will filled with random numbers,
   /// otherwise matrix will have all values defaults to 0
-  SquareMatrix.generate(int number, {bool fillRandom = false}) : super.generate(number, number, fillRandom: fillRandom);
+  SquareMatrix.generate(int number, {bool fillRandom = false})
+      : super.generate(number, number, fillRandom: fillRandom);
 
   /// Creates an identity matrix
   SquareMatrix.identity(int number) : super.identity(number, number);
@@ -37,7 +38,8 @@ class SquareMatrix extends Matrix {
       for (var i = 0; i < firstRow.length; i++) {
         final changedMatrix =
             SquareMatrix(removeRow(1).removeColumn(i + 1).data);
-        res += pow(-1, 1 + (i + 1)) * firstRow[i] * changedMatrix.getDeterminant();
+        res +=
+            pow(-1, 1 + (i + 1)) * firstRow[i] * changedMatrix.getDeterminant();
       }
       return res;
     }
@@ -52,10 +54,11 @@ class SquareMatrix extends Matrix {
   /// Inverse and return inversed matrix
   SquareMatrix inverse() {
     if (isSingular()) {
-      throw MatrixException('The inverse is impossible because determinant of matrix equal to zero!');
+      throw MatrixException(
+          'The inverse is impossible because determinant of matrix equal to zero!');
     } else {
       final origin = SquareMatrix(data);
-      
+
       final matrixOfCofactors = SquareMatrix.generate(rows);
       for (var i = 1; i <= rows; i++) {
         for (var j = 1; j <= columns; j++) {

@@ -15,7 +15,7 @@ abstract class VectorBase {
   int get itemCount => data.length;
 
   /// Gets number at specified [index]
-  /// 
+  ///
   /// [index] is in range from 1 to end inclusively.
   double itemAt(int index) => data[index - 1];
 

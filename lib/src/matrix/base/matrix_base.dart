@@ -63,22 +63,24 @@ abstract class MatrixBase {
   int get itemCount => rows * columns;
 
   /// Gets number at specified [row] and [column]
-  /// 
+  ///
   /// [row] and [column] are in range from 1 to end inclusively.
   double itemAt(int row, int column) {
     if (row > rows || column > columns) {
-      throw RangeError('$row or $column is out of range of matrix rows/columns.');
+      throw RangeError(
+          '$row or $column is out of range of matrix rows/columns.');
     } else {
       return data[row - 1][column - 1];
     }
   }
 
   /// Set number to specified [value], replace old value if exist
-  /// 
+  ///
   /// [row] and [column] are in range from 1 to end inclusively.
   void setItem(int row, int column, double value) {
     if (row > rows || column > columns) {
-      throw RangeError('$row or $column is out of range of matrix rows/columns.');
+      throw RangeError(
+          '$row or $column is out of range of matrix rows/columns.');
     } else {
       data[row - 1][column - 1] = value;
     }
@@ -157,21 +159,21 @@ abstract class MatrixBase {
   bool isIdentity() {
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < columns; j++) {
-         if (!(itemAt(i, i) == 1 && (itemAt(i, j) == 0 || i == j))) {
-           return false;
-         }
+        if (!(itemAt(i, i) == 1 && (itemAt(i, j) == 0 || i == j))) {
+          return false;
+        }
       }
     }
     return true;
   }
 
   /// Replace row at [index] with given [newRow]
-  /// 
+  ///
   /// [index] is in range from 1 to end of matrix including.
   MatrixBase replaceRow(int index, List<double> newRow);
 
   /// Replace row at [index] with given [newColumn]
-  /// 
+  ///
   /// [index] is in range from 1 to end of matrix including.
   MatrixBase replaceColumn(int index, List<double> newColumn);
 }

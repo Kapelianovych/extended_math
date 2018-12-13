@@ -50,7 +50,8 @@ class Matrix extends MatrixBase {
     if (index > rows) {
       throw RangeError('$index is out of range of matrix rows.');
     } else if (newRow.length != columns) {
-      throw MatrixException('Needed $columns items in row, but found ${newRow.length}');
+      throw MatrixException(
+          'Needed $columns items in row, but found ${newRow.length}');
     } else {
       final newMatrix = Matrix(data);
       newMatrix.data[index - 1] = newRow;
@@ -63,7 +64,8 @@ class Matrix extends MatrixBase {
     if (index > columns) {
       throw RangeError('$index is out of range of matrix rows.');
     } else if (newColumn.length != rows) {
-      throw MatrixException('Needed $rows items in row, but found ${newColumn.length}');
+      throw MatrixException(
+          'Needed $rows items in row, but found ${newColumn.length}');
     } else {
       final newMatrix = Matrix(data);
       for (var i = 1; i <= rows; i++) {
