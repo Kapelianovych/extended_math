@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import '../exceptions/vector_exception.dart';
 import '../matrix/matrix.dart';
 import '../matrix/square_matrix.dart';
@@ -62,4 +60,16 @@ class Vector extends VectorBase {
           'Found $itemCount and ${vector.itemCount}');
     }
   }
+
+  @override
+  Vector hadamardProduct(VectorBase vector) {
+    final data = <double>[];
+    for (var i = 1; i <= itemCount; i++) {
+      data.add(itemAt(i) * vector.itemAt(i));
+    }
+    return Vector(data);
+  }
+
+  @override
+  Vector transform(double t(double value)) => Vector(data.map(t).toList());
 }

@@ -1,4 +1,12 @@
-# 0.0.5
+# 0.0.6
+
+- Add `rowAsVector()`, `columnAsVector()` methods to `MatrixBase` class.
+- Override `multiplyByVector()` and `inverse()` methods in `DiagonalMatrix` class.
+- Add `isSymmetric()` and `isOrthogonal()` methods to `SquareMatrix` class.
+- Add `hadamardProduct()`, `transform()`, `isUnit()`, `isOrthogonalTo()`, `isOrthonormalWith()`
+  methods to `VectorBase` class.
+
+## 0.0.5
 
 - Inner refactoring of support methods.
 - Create `DiagonalMatrix` class.

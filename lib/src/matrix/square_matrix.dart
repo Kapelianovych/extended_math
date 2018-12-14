@@ -53,6 +53,33 @@ class SquareMatrix extends Matrix {
   /// Checks if this matrix is singular
   bool isNotSingular() => !isSingular();
 
+  /// Checks if this matrix is symmetric
+  bool isSymmetric() {
+    for (var r = 1; r <= rows; r++) {
+      for (var c = 1; c <= columns; c++) {
+        if (itemAt(r, c) != itemAt(c, r)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /// Checks if this matrix is orthogonal
+  bool isOrthogonal() {
+    final inversed = inverse().toSquareMatrix();
+    final transposed = transpose().toSquareMatrix();
+
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        if (inversed.itemAt(i, j) != transposed.itemAt(i, j)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   /// Inverse and return inversed matrix
   SquareMatrix inverse() {
     if (isSingular()) {

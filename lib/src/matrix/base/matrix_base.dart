@@ -224,4 +224,10 @@ abstract class MatrixBase {
       throw MatrixException('This matrix isn\'t diagonal!');
     }
   }
+
+  /// Gets specified row of matrix as vector
+  VectorBase rowAsVector({int row = 1});
+
+  /// Gets specified column of matrix as vector
+  VectorBase columnAsVector({int column = 1});
 }

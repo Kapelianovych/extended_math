@@ -1,5 +1,6 @@
 import '../exceptions/matrix_exception.dart';
 import '../vector/base/vector_base.dart';
+import '../vector/vector.dart';
 import 'base/matrix_base.dart';
 
 /// Class for work with numeric matrix
@@ -180,4 +181,10 @@ class Matrix extends MatrixBase {
           'Columns of matrix should be equal to items count of vector!');
     }
   }
+
+  @override
+  Vector columnAsVector({int column = 1}) => Vector(columnAt(column));
+
+  @override
+  Vector rowAsVector({int row = 1}) => Vector(rowAt(row));
 }

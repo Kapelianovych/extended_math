@@ -89,4 +89,20 @@ abstract class VectorBase {
       return acos(dot / magnitudes) * 57.295779513;
     }
   }
+
+  /// Gets Hadamard product of vectors
+  VectorBase hadamardProduct(VectorBase vector);
+
+  /// Transform each element of this vector and return transformed vector
+  VectorBase transform(double t(double value));
+
+  /// Checks if vector is unit vector
+  bool isUnit() => euclideanNorm() == 1;
+
+  /// Checks if this vector and [vector] are orthogonal to each other
+  bool isOrthogonalTo(VectorBase vector) => dotProduct(vector) == 0;
+
+  /// Checks if this vector and [vector] are orthonormal
+  bool isOrthonormalWith(VectorBase vector) =>
+      isOrthogonalTo(vector) && isUnit() && vector.isUnit();
 }

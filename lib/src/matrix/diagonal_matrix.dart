@@ -1,5 +1,6 @@
 import '../utils/utils.dart';
 import '../vector/base/vector_base.dart';
+import 'matrix.dart';
 import 'square_matrix.dart';
 
 /// Class for work with numeric diagonal matrix
@@ -34,5 +35,18 @@ class DiagonalMatrix extends SquareMatrix {
         setItem(j, j, generateNumbers(number).take(1).single);
       }
     }
+  }
+
+  @override
+  Matrix multiplyByVector(VectorBase vector) =>
+      mainDiagonal().hadamardProduct(vector).toMatrix();
+
+  @override
+  DiagonalMatrix inverse() {
+    final newData = List<List<double>>.of(data);
+    for (var i = 1; i <= rows; i++) {
+      newData[i - 1][i - 1] = 1 / newData[i - 1][i - 1];
+    }
+    return DiagonalMatrix(newData).transpose().toDiagonalMatrix();
   }
 }

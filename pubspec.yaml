@@ -1,6 +1,6 @@
 name: extended_math
 description: Library for working with objects of linear algebra. Designed as expansion to dart:math and can be used everywhere.
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/YevhenKap/extended_math
 author: Kapelianovych Yevhen <kapelianovych.y.v@gmail.com>
 license: MIT
