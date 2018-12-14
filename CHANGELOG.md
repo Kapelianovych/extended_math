@@ -1,4 +1,12 @@
-# 0.0.4
+# 0.0.5
+
+- Inner refactoring of support methods.
+- Create `DiagonalMatrix` class.
+- Add `isSquare()`, `isDiagonal()`, `isIdentity()`, `mainDiagonal()`, `toSquareMatrix()` and `toDiagonalMatrix()`
+  methods to `MatrixBase` class.
+- Add `length` getter and `crossProduct()` method to `VectorBase` class.
+
+## 0.0.4
 
 - Add `frobeniusNorm()` method to `MatrixBase` class.
 - Add `norm()`, `euclideanNorm()`, `maxNorm()` and `angleBetween()` methods to `VectorBase` class.

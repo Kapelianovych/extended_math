@@ -1,6 +1,11 @@
 import 'dart:math';
 
+import '../../exceptions/matrix_exception.dart';
+import '../../utils/utils.dart';
 import '../../vector/base/vector_base.dart';
+import '../../vector/vector.dart';
+import '../diagonal_matrix.dart';
+import '../square_matrix.dart';
 
 /// Base class for matrix
 abstract class MatrixBase {
@@ -19,17 +24,8 @@ abstract class MatrixBase {
       {bool fillRandom = false, bool identity = false}) {
     if (fillRandom == true) {
       data = <List<double>>[];
-
-      Iterable<double> genNumbers(int count) sync* {
-        var i = 0;
-        while (i < count) {
-          i++;
-          yield Random().nextDouble();
-        }
-      }
-
       for (var j = 0; j < rows; j++) {
-        data.add(genNumbers(cols).take(cols).toList());
+        data.add(generateNumbers(cols).take(cols).toList());
       }
     } else {
       final emptyData = <List<double>>[];
@@ -155,18 +151,6 @@ abstract class MatrixBase {
   /// Columns of matrix should be equal to items count of vector.
   MatrixBase addVector(VectorBase vector);
 
-  /// Checks if this is identity matrix
-  bool isIdentity() {
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < columns; j++) {
-        if (!(itemAt(i, i) == 1 && (itemAt(i, j) == 0 || i == j))) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
   /// Replace row at [index] with given [newRow]
   ///
   /// [index] is in range from 1 to end of matrix including.
@@ -186,5 +170,58 @@ abstract class MatrixBase {
       }
     }
     return sqrt(sum);
+  }
+
+  /// Checks if this matrix is square
+  bool isSquare() => rows == columns;
+
+  /// Checks if this matrix is diagonal
+  bool isDiagonal({bool checkIdentity = false}) {
+    for (var r = 1; r <= rows; r++) {
+      for (var c = 1; c <= columns; c++) {
+        final rightExpression = itemAt(r, c) == 0 || r == c;
+
+        if (checkIdentity) {
+          if (!(itemAt(r, r) == 1 && rightExpression)) {
+            return false;
+          }
+        } else {
+          if (!(itemAt(r, r) != 0 && rightExpression)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  /// Checks if this is identity matrix
+  bool isIdentity() => isDiagonal(checkIdentity: true);
+
+  /// Gets main diagonal of this matrix
+  Vector mainDiagonal() {
+    final data = <double>[];
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        if (i == j) {
+          data.add(itemAt(i, j));
+        }
+      }
+    }
+    return Vector(data);
+  }
+
+  /// Converts this matrix to square matrix
+  ///
+  /// Throws `MatrixException` if [rows] isn't equal to [columns]
+  SquareMatrix toSquareMatrix() => SquareMatrix(data);
+
+  /// Converts this matrix to diagonal matrix
+  DiagonalMatrix toDiagonalMatrix() {
+    if (isDiagonal()) {
+      return DiagonalMatrix(data);
+    } else {
+      throw MatrixException('This matrix isn\'t diagonal!');
+    }
   }
 }

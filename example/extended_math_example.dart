@@ -4,7 +4,7 @@ void main() {
   final v1 = Vector(<double>[1, 2, 3]);
   final v2 = Vector(<double>[4, 5, 6]);
   // Multiply vectors
-  final double res = v1.dot(v2);
+  final double res = v1.dotProduct(v2);
   // Add vectors
   final Vector res1 = v1.add(v2);
 

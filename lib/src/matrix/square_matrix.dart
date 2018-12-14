@@ -11,7 +11,7 @@ class SquareMatrix extends Matrix {
   SquareMatrix(List<List<double>> data) : super(<List<double>>[]) {
     if (data.length != data[0].length) {
       throw MatrixException(
-          'Count of inner arrays must be equal to count of their elements!');
+          'Count of matrix columns must be equal to count of rows!');
     } else {
       this.data = data;
     }
@@ -21,8 +21,10 @@ class SquareMatrix extends Matrix {
   ///
   /// If [fillRandom] is true, then matrix will filled with random numbers,
   /// otherwise matrix will have all values defaults to 0
-  SquareMatrix.generate(int number, {bool fillRandom = false})
-      : super.generate(number, number, fillRandom: fillRandom);
+  SquareMatrix.generate(int number,
+      {bool fillRandom = false, bool identity = false})
+      : super.generate(number, number,
+            fillRandom: fillRandom, identity: identity);
 
   /// Creates an identity matrix
   SquareMatrix.identity(int number) : super.identity(number, number);
@@ -32,7 +34,7 @@ class SquareMatrix extends Matrix {
     final firstRow = rowAt(1);
 
     if (itemCount == 1) {
-      return itemAt(0, 0);
+      return itemAt(1, 1);
     } else {
       double res = 0;
       for (var i = 0; i < firstRow.length; i++) {

@@ -11,8 +11,9 @@ class Matrix extends MatrixBase {
   ///
   /// If [fillRandom] is true, then matrix will filled with random numbers,
   /// otherwise matrix will have all values defaults to 0
-  Matrix.generate(int rows, int cols, {bool fillRandom = false})
-      : super.generate(rows, cols, fillRandom: fillRandom);
+  Matrix.generate(int rows, int cols,
+      {bool fillRandom = false, bool identity = false})
+      : super.generate(rows, cols, fillRandom: fillRandom, identity: identity);
 
   /// Creates an identity matrix
   Matrix.identity(int rows, int cols)

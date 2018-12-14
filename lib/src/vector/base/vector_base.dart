@@ -17,13 +17,16 @@ abstract class VectorBase {
   /// Count of vector's numbers
   int get itemCount => data.length;
 
+  /// Gets length of this vector
+  double get length => euclideanNorm();
+
   /// Gets number at specified [index]
   ///
   /// [index] is in range from 1 to end inclusively.
   double itemAt(int index) => data[index - 1];
 
   /// Gets norm of vector alse known as vector's length
-  /// 
+  ///
   /// [p] should have only integer value, if not - any fractional digits will be discarded.
   double norm(double p) {
     final n = p.truncateToDouble();
@@ -52,9 +55,15 @@ abstract class VectorBase {
   /// Gets the norm where p is infinite
   double maxNorm() => norm(double.infinity);
 
-  /// Multiply this vector by [vector]
-  double dot(VectorBase vector) =>
+  /// Multiply this vector by [vector] using dot product algorithm
+  double dotProduct(VectorBase vector) =>
       toMatrix().transpose().multiplyByMatrix(vector.toMatrix()).itemAt(1, 1);
+
+  /// Gets cross product of this vector and another [vector]
+  ///
+  /// Only suited for three-dimensional Euclidean space.
+  /// [itemCount] of both vectors must be equal to 3.
+  VectorBase crossProduct(VectorBase vector);
 
   /// Add this vector to [vector]
   VectorBase add(VectorBase vector);
@@ -66,18 +75,18 @@ abstract class VectorBase {
   MatrixBase toMatrix();
 
   /// Get angle between this vector and another [vector]
-  /// 
+  ///
   /// Dafault unit for measuring angle is `radian`.
   /// If [degrees] is true - result will have the degrees unit.
   double angleBetween(VectorBase vector, {bool degrees = false}) {
-    final dotProduct = dot(vector);
+    final dot = dotProduct(vector);
     final magnitudes = euclideanNorm() * vector.euclideanNorm();
     if (degrees == false) {
-      return acos(dotProduct / magnitudes);
+      return acos(dot / magnitudes);
     } else {
       // Cast from radians to degrees
       // 1 rad = 57.295779513 degrees.
-      return acos(dotProduct / magnitudes) * 57.295779513;
+      return acos(dot / magnitudes) * 57.295779513;
     }
   }
 }
