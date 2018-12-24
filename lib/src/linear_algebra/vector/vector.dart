@@ -9,7 +9,7 @@ class Vector extends VectorBase {
   Vector(List<double> data) : super.init(data);
 
   @override
-  Vector add(VectorBase vector) {
+  Vector add(Vector vector) {
     if (itemCount == vector.itemCount) {
       final tmpData = <double>[];
       for (var i = 1; i <= itemCount; i++) {
@@ -22,7 +22,7 @@ class Vector extends VectorBase {
   }
 
   @override
-  Vector subtract(VectorBase vector) {
+  Vector subtract(Vector vector) {
     if (itemCount == vector.itemCount) {
       final tmpData = <double>[];
       for (var i = 1; i <= itemCount; i++) {
@@ -41,7 +41,7 @@ class Vector extends VectorBase {
   }
 
   @override
-  Vector crossProduct(VectorBase vector) {
+  Vector crossProduct(Vector vector) {
     if (itemCount == 3 && vector.itemCount == 3) {
       final m = SquareMatrix(<List<double>>[
         <double>[1, 1, 1],
@@ -51,7 +51,7 @@ class Vector extends VectorBase {
 
       final v = <double>[];
       for (var i = 1; i <= m.columns; i++) {
-        v.add(m.removeRow(1).removeColumn(i).toSquareMatrix().getDeterminant());
+        v.add(m.removeRow(1).removeColumn(i).toSquareMatrix().determinant());
       }
       return Vector(v);
     } else {
@@ -62,7 +62,7 @@ class Vector extends VectorBase {
   }
 
   @override
-  Vector hadamardProduct(VectorBase vector) {
+  Vector hadamardProduct(Vector vector) {
     final data = <double>[];
     for (var i = 1; i <= itemCount; i++) {
       data.add(itemAt(i) * vector.itemAt(i));

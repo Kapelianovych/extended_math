@@ -1,5 +1,4 @@
 import '../exceptions/matrix_exception.dart';
-import '../vector/base/vector_base.dart';
 import '../vector/vector.dart';
 import 'base/matrix_base.dart';
 
@@ -48,30 +47,36 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix replaceRow(int index, List<double> newRow) {
-    if (index > rows) {
-      throw RangeError('$index is out of range of matrix rows.');
-    } else if (newRow.length != columns) {
+  Matrix insertRow(List<double> newRow, {int index}) {
+    if (newRow.length != columns) {
       throw MatrixException(
           'Needed $columns items in row, but found ${newRow.length}');
-    } else {
+    } else if (index != null) {
       final newMatrix = Matrix(data);
       newMatrix.data[index - 1] = newRow;
+      return newMatrix;
+    } else {
+      final newMatrix = Matrix(data);
+      newMatrix.data.add(newRow);
       return newMatrix;
     }
   }
 
   @override
-  Matrix replaceColumn(int index, List<double> newColumn) {
-    if (index > columns) {
-      throw RangeError('$index is out of range of matrix rows.');
-    } else if (newColumn.length != rows) {
+  Matrix insertColumn(List<double> newColumn, {int index}) {
+    final newMatrix = Matrix(data);
+
+    if (newColumn.length != rows) {
       throw MatrixException(
           'Needed $rows items in row, but found ${newColumn.length}');
-    } else {
-      final newMatrix = Matrix(data);
+    } else if (index != null) {
       for (var i = 1; i <= rows; i++) {
         newMatrix.setItem(i, index, newColumn[i - 1]);
+      }
+      return newMatrix;
+    } else {
+      for (var i = 1; i <= rows; i++) {
+        newMatrix.data[i].add(newColumn[i - 1]);
       }
       return newMatrix;
     }
@@ -85,7 +90,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix multiplyByMatrix(MatrixBase matrix) {
+  Matrix multiplyByMatrix(Matrix matrix) {
     if (columns == matrix.rows) {
       return Matrix(data.map((row) {
         final result = <double>[];
@@ -111,11 +116,10 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix multiplyByVector(VectorBase vector) =>
-      multiplyByMatrix(vector.toMatrix());
+  Matrix multiplyByVector(Vector vector) => multiplyByMatrix(vector.toMatrix());
 
   @override
-  Matrix hadamardProduct(MatrixBase matrix) {
+  Matrix hadamardProduct(Matrix matrix) {
     if (columns == matrix.columns && rows == matrix.rows) {
       final m = Matrix.generate(rows, columns);
       for (var i = 1; i <= rows; i++) {
@@ -145,7 +149,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix subtract(MatrixBase matrix) {
+  Matrix subtract(Matrix matrix) {
     final subtractedMatrix = Matrix.generate(rows, columns);
     for (var i = 1; i <= rows; i++) {
       for (var j = 1; j <= columns; j++) {
@@ -156,7 +160,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix add(MatrixBase matrix) {
+  Matrix add(Matrix matrix) {
     final newMatrix = Matrix.generate(rows, columns);
     for (var i = 1; i <= rows; i++) {
       for (var j = 1; j <= columns; j++) {
@@ -167,7 +171,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix addVector(VectorBase vector) {
+  Matrix addVector(Vector vector) {
     if (columns == vector.itemCount) {
       final newMatrix = Matrix.generate(rows, columns);
       for (var r = 1; r <= rows; r++) {

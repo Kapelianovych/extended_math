@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import '../../../utils/utils.dart';
 import '../../exceptions/matrix_exception.dart';
-import '../../utils/utils.dart';
 import '../../vector/base/vector_base.dart';
 import '../../vector/vector.dart';
 import '../diagonal_matrix.dart';
@@ -118,16 +118,16 @@ abstract class MatrixBase {
   ///
   /// In order for the matrix `this` to be multiplied by the matrix [matrix], it is necessary
   /// that the number of columns of the matrix `this` be equal to the number of rows of the matrix [matrix].
-  MatrixBase multiplyByMatrix(MatrixBase matrix);
+  MatrixBase multiplyByMatrix(covariant MatrixBase matrix);
 
   /// Multiply this matrix by [vector]
-  MatrixBase multiplyByVector(VectorBase vector);
+  MatrixBase multiplyByVector(covariant VectorBase vector);
 
   /// Multiply this matrix by another [matrix] by the Adamart (Schur) method
   ///
   /// Takes two matrices of the same dimensions and produces another matrix where each element
   ///  `i`, `j` is the product of elements `i`, `j` of the original two matrices.
-  MatrixBase hadamardProduct(MatrixBase matrix);
+  MatrixBase hadamardProduct(covariant MatrixBase matrix);
 
   /// Transform matrix with given [t] function
   MatrixBase transform(double t(double v));
@@ -138,28 +138,30 @@ abstract class MatrixBase {
   /// Take away one [matrix] from this
   ///
   /// The matrices should be of the same dimension
-  MatrixBase subtract(MatrixBase matrix);
+  MatrixBase subtract(covariant MatrixBase matrix);
 
   /// Add one [matrix] to this
   ///
   /// The matrices should be of the same dimension
-  MatrixBase add(MatrixBase matrix);
+  MatrixBase add(covariant MatrixBase matrix);
 
   /// Add [vector] to this matrix
   ///
   /// The [vector] is added to each row of this matrix.
   /// Columns of matrix should be equal to items count of vector.
-  MatrixBase addVector(VectorBase vector);
+  MatrixBase addVector(covariant VectorBase vector);
 
-  /// Replace row at [index] with given [newRow]
+  /// Inserts row with given [newRow] to the end of matrix
   ///
+  /// If [index] is specified, then [newRow] replace row at [index].
   /// [index] is in range from 1 to end of matrix including.
-  MatrixBase replaceRow(int index, List<double> newRow);
+  MatrixBase insertRow(List<double> newRow, {int index});
 
-  /// Replace row at [index] with given [newColumn]
+  /// Inserts column with given [newColumn] to the end of matrix
   ///
+  /// If [index] is specified, then [newColumn] replace column at [index].
   /// [index] is in range from 1 to end of matrix including.
-  MatrixBase replaceColumn(int index, List<double> newColumn);
+  MatrixBase insertColumn(List<double> newColumn, {int index});
 
   /// Gets Frobenius norm of matrix
   double frobeniusNorm() {
@@ -211,6 +213,20 @@ abstract class MatrixBase {
     return Vector(data);
   }
 
+  /// Gets collateral diagonal of this matrix
+  Vector collateralDiagonal() {
+    final data = <double>[];
+    var counter = columns;
+
+    for (var i = 1; i <= rows; i++) {
+      if (counter >= 1) {
+        data.add(itemAt(i, counter));
+        counter--;
+      }
+    }
+    return Vector(data);
+  }
+
   /// Converts this matrix to square matrix
   ///
   /// Throws `MatrixException` if [rows] isn't equal to [columns]
@@ -230,4 +246,13 @@ abstract class MatrixBase {
 
   /// Gets specified column of matrix as vector
   VectorBase columnAsVector({int column = 1});
+
+  /// Gives the sum of all the diagonal entries of a matrix
+  double trace() {
+    var sum = 0.0;
+    for (var item in mainDiagonal().data) {
+      sum += item;
+    }
+    return sum;
+  }
 }

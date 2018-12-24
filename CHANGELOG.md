@@ -1,4 +1,11 @@
-# 0.0.6
+# 0.0.7
+
+- Add `Complex analysis`, `General` and `Number theory` sections.
+- Implement `QuadraticEquation` and `CubicEquation` classes of `General` section.
+- Implement `CompositeNumber` of `Number theory` section.
+- Add `eliminate()` method to `SquareMatrix` class.
+
+## 0.0.6
 
 - Add `rowAsVector()`, `columnAsVector()` methods to `MatrixBase` class.
 - Override `multiplyByVector()` and `inverse()` methods in `DiagonalMatrix` class.

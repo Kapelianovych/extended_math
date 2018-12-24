@@ -25,6 +25,13 @@ abstract class VectorBase {
   /// [index] is in range from 1 to end inclusively.
   double itemAt(int index) => data[index - 1];
 
+  /// Sets [item] in specified [position] of vector
+  ///
+  /// [position] should starts from 1.
+  void setItem(int position, double item) {
+    data[position - 1] = item;
+  }
+
   /// Gets norm of vector alse known as vector's length
   ///
   /// [p] should have only integer value, if not - any fractional digits will be discarded.
@@ -56,20 +63,20 @@ abstract class VectorBase {
   double maxNorm() => norm(double.infinity);
 
   /// Multiply this vector by [vector] using dot product algorithm
-  double dotProduct(VectorBase vector) =>
+  double dotProduct(covariant VectorBase vector) =>
       toMatrix().transpose().multiplyByMatrix(vector.toMatrix()).itemAt(1, 1);
 
   /// Gets cross product of this vector and another [vector]
   ///
   /// Only suited for three-dimensional Euclidean space.
   /// [itemCount] of both vectors must be equal to 3.
-  VectorBase crossProduct(VectorBase vector);
+  VectorBase crossProduct(covariant VectorBase vector);
 
   /// Add this vector to [vector]
-  VectorBase add(VectorBase vector);
+  VectorBase add(covariant VectorBase vector);
 
   /// Subtract this vector from [vector]
-  VectorBase subtract(VectorBase vector);
+  VectorBase subtract(covariant VectorBase vector);
 
   /// Convert this vector to martix
   MatrixBase toMatrix();
@@ -78,7 +85,7 @@ abstract class VectorBase {
   ///
   /// Dafault unit for measuring angle is `radian`.
   /// If [degrees] is true - result will have the degrees unit.
-  double angleBetween(VectorBase vector, {bool degrees = false}) {
+  double angleBetween(covariant VectorBase vector, {bool degrees = false}) {
     final dot = dotProduct(vector);
     final magnitudes = euclideanNorm() * vector.euclideanNorm();
     if (degrees == false) {
@@ -91,7 +98,7 @@ abstract class VectorBase {
   }
 
   /// Gets Hadamard product of vectors
-  VectorBase hadamardProduct(VectorBase vector);
+  VectorBase hadamardProduct(covariant VectorBase vector);
 
   /// Transform each element of this vector and return transformed vector
   VectorBase transform(double t(double value));
@@ -100,9 +107,9 @@ abstract class VectorBase {
   bool isUnit() => euclideanNorm() == 1;
 
   /// Checks if this vector and [vector] are orthogonal to each other
-  bool isOrthogonalTo(VectorBase vector) => dotProduct(vector) == 0;
+  bool isOrthogonalTo(covariant VectorBase vector) => dotProduct(vector) == 0;
 
   /// Checks if this vector and [vector] are orthonormal
-  bool isOrthonormalWith(VectorBase vector) =>
+  bool isOrthonormalWith(covariant VectorBase vector) =>
       isOrthogonalTo(vector) && isUnit() && vector.isUnit();
 }

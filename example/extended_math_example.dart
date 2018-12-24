@@ -19,7 +19,7 @@ void main() {
     <double>[-1, -8, 1]
   ]);
   // Gets determinant of matrix
-  final double det = v3.getDeterminant();
+  final double det = v3.determinant();
 
   final m = Matrix(<List<double>>[
     <double>[2, -1, 5],
