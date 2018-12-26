@@ -1,6 +1,6 @@
 name: extended_math
 description: Library that add functionality of all maths sections that don't exist in dart:math. 
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/YevhenKap/extended_math
 author: Kapelianovych Yevhen <kapelianovych.y.v@gmail.com>
 license: MIT

@@ -1,4 +1,4 @@
-import '../../utils/utils.dart';
+import '../../../applied_mathematics/probability_theory/numbers_generator.dart';
 import '../vector/vector.dart';
 import 'square_matrix.dart';
 
@@ -31,7 +31,7 @@ class DiagonalMatrix extends SquareMatrix {
       : super.identity(number) {
     if (fillRandom == true) {
       for (var j = 1; j <= number; j++) {
-        setItem(j, j, generateNumbers(number).take(1).single);
+        setItem(j, j, NumbersGenerator().doubleSyncIterable(1).take(1).single);
       }
     }
   }

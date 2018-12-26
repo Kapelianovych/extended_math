@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import '../../general/elementary_algebra/cubic_equation.dart';
-import '../../general/elementary_algebra/quadratic_equation.dart';
+import '../../../general/elementary_algebra/cubic_equation.dart';
+import '../../../general/elementary_algebra/quadratic_equation.dart';
 import '../exceptions/matrix_exception.dart';
 import '../vector/vector.dart';
 import 'matrix.dart';

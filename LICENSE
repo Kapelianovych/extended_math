@@ -1,4 +1,4 @@
-Library for working with objects of linear algebra
+Library that add functionality of all maths sections that don't exist in dart:math
 Copyright (c) <2018> <Kapelianovych Yevhen>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

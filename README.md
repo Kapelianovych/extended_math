@@ -1,4 +1,4 @@
-# Library that add functionality of all maths sections that don't exist in dart:math
+# Library that add functionality of all maths sections that don't exist in `dart:math`
 
 Created under a MIT-style
 [license](https://github.com/YevhenKap/extended_math/blob/master/LICENSE).
@@ -7,10 +7,10 @@ Created under a MIT-style
 
 At the moment library have 4 sections:
 
-    1. General math
+    1. General mathematics
     2. Complex analysis
-    3. Linear algebra
-    4. Number theory
+    3. Discrete mathematics
+    4. Applied mathematics
 
 Each section don't have full implementation yet.
 See [dartdoc](https://pub.dartlang.org/documentation/extended_math/latest/) for which functionality are implemented.

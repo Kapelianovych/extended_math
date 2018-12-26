@@ -1,4 +1,10 @@
-# 0.0.7
+# 0.0.8
+
+- Unit `number_theory` and `linear_algebra` into `discrete_mathematics`.
+- Add `Probability theory` subsection with `NumbersGenerator` class.
+- Correct title in `LICENSE`.
+
+## 0.0.7
 
 - Add `Complex analysis`, `General` and `Number theory` sections.
 - Implement `QuadraticEquation` and `CubicEquation` classes of `General` section.

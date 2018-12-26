@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../number_theory/composite_number.dart';
+import '../../discrete_mathematics/number_theory/composite_number.dart';
 import 'base/equation_base.dart';
 import 'exceptions/equation_exception.dart';
 import 'quadratic_equation.dart';

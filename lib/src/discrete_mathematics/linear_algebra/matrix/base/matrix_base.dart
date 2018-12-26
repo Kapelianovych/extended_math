@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../../utils/utils.dart';
+import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
 import '../../exceptions/matrix_exception.dart';
 import '../../vector/base/vector_base.dart';
 import '../../vector/vector.dart';
@@ -24,8 +24,10 @@ abstract class MatrixBase {
       {bool fillRandom = false, bool identity = false}) {
     if (fillRandom == true) {
       data = <List<double>>[];
+
       for (var j = 0; j < rows; j++) {
-        data.add(generateNumbers(cols).take(cols).toList());
+        data.add(
+            NumbersGenerator().doubleSyncIterable(cols).take(cols).toList());
       }
     } else {
       final emptyData = <List<double>>[];

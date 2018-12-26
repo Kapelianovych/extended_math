@@ -24,6 +24,9 @@ void main() {
     <double>[2, 4],
     <double>[5, 3]
   ]);
-  print(m.eliminate(<double>[8, 4, 10, 13]).data);
+  // print(m.eliminate(<double>[8, 4, 10, 13]).data);
   // print(m1.insertRow(<double>[1, 2], index: 1).data);
+
+  // print(NumbersGenerator().nextDouble(from: -0.4, to: 0.7));
+  // print(DiagonalMatrix.generate(2, fillRandom: true).data);
 }
