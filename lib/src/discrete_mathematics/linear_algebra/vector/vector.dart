@@ -9,32 +9,6 @@ class Vector extends VectorBase {
   Vector(List<double> data) : super.init(data);
 
   @override
-  Vector add(Vector vector) {
-    if (itemCount == vector.itemCount) {
-      final tmpData = <double>[];
-      for (var i = 1; i <= itemCount; i++) {
-        tmpData.add(itemAt(i) + vector.itemAt(i));
-      }
-      return Vector(tmpData);
-    } else {
-      throw VectorException('Count of vector\'s numbers isn\'t equal!');
-    }
-  }
-
-  @override
-  Vector subtract(Vector vector) {
-    if (itemCount == vector.itemCount) {
-      final tmpData = <double>[];
-      for (var i = 1; i <= itemCount; i++) {
-        tmpData.add(itemAt(i) - vector.itemAt(i));
-      }
-      return Vector(tmpData);
-    } else {
-      throw VectorException('Count of vector\'s numbers isn\'t equal!');
-    }
-  }
-
-  @override
   Matrix toMatrix() {
     final matrix = data.map((value) => <double>[value]).toList();
     return Matrix(matrix);
@@ -72,4 +46,17 @@ class Vector extends VectorBase {
 
   @override
   Vector transform(double t(double value)) => Vector(data.map(t).toList());
+
+  @override
+  Vector operator +(Vector vector) {
+    if (itemCount == vector.itemCount) {
+      final tmpData = <double>[];
+      for (var i = 1; i <= itemCount; i++) {
+        tmpData.add(itemAt(i) + vector.itemAt(i));
+      }
+      return Vector(tmpData);
+    } else {
+      throw VectorException('Count of vector\'s numbers isn\'t equal!');
+    }
+  }
 }

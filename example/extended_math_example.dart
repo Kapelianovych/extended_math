@@ -6,7 +6,7 @@ void main() {
   // Multiply vectors
   final double res = v1.dotProduct(v2);
   // Add vectors
-  final Vector res1 = v1.add(v2);
+  final Vector res1 = v1 + v2;
 
   final v5 = Vector(<double>[6, 3]);
   final v6 = Vector(<double>[5, 13]);

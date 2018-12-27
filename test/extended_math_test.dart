@@ -10,6 +10,7 @@ void main() {
   ]);
 
   final v2 = Vector(<double>[-2, 5, 1]);
+  final v3 = Vector(<double>[-1, 4, 3]);
 
   // [[0.5, -0.0, 0.0], [-0.0, 0.125, -0.0], [0.0, -0.0, 0.2]]
   // print(v1.inverse().data);
@@ -21,12 +22,14 @@ void main() {
     <double>[7, 9, 15, 11]
   ]);
   final m1 = SquareMatrix(<List<double>>[
-    <double>[2, 4],
-    <double>[5, 3]
+    <double>[2, 4, 7],
+    <double>[1, 9, 2],
+    <double>[5, 3, 5]
   ]);
   // print(m.eliminate(<double>[8, 4, 10, 13]).data);
   // print(m1.insertRow(<double>[1, 2], index: 1).data);
 
   // print(NumbersGenerator().nextDouble(from: -0.4, to: 0.7));
   // print(DiagonalMatrix.generate(2, fillRandom: true).data);
+  print(CompositeNumber(66).isPrime());
 }

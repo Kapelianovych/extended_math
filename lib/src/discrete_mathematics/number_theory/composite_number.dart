@@ -8,7 +8,7 @@ class CompositeNumber {
   /// Composite number
   double composite;
 
-  /// Gets prime numbers of [composite]
+  /// Gets unique prime numbers of [composite]
   Set<double> factorizate() {
     final result = Set<double>();
 

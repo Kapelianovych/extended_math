@@ -1,4 +1,11 @@
-# 0.0.8
+# 0.0.9
+
+- Override `*`, `/`, `+` and `-` operators of `VectorBase` class.
+- Removes `add()` and `subtract()` methods of `VectorBase` class.
+- Override `*`, `/`, `+` and `-` operators of `MatrixBase` class.
+- Removes `add()` and `subtract()` methods of `MatrixBase` class.
+
+## 0.0.8
 
 - Unit `number_theory` and `linear_algebra` into `discrete_mathematics`.
 - Add `Probability theory` subsection with `NumbersGenerator` class.

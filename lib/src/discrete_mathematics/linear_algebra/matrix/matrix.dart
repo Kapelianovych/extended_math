@@ -149,28 +149,6 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix subtract(Matrix matrix) {
-    final subtractedMatrix = Matrix.generate(rows, columns);
-    for (var i = 1; i <= rows; i++) {
-      for (var j = 1; j <= columns; j++) {
-        subtractedMatrix.setItem(i, j, itemAt(i, j) - matrix.itemAt(i, j));
-      }
-    }
-    return subtractedMatrix;
-  }
-
-  @override
-  Matrix add(Matrix matrix) {
-    final newMatrix = Matrix.generate(rows, columns);
-    for (var i = 1; i <= rows; i++) {
-      for (var j = 1; j <= columns; j++) {
-        newMatrix.setItem(i, j, itemAt(i, j) + matrix.itemAt(i, j));
-      }
-    }
-    return newMatrix;
-  }
-
-  @override
   Matrix addVector(Vector vector) {
     if (columns == vector.itemCount) {
       final newMatrix = Matrix.generate(rows, columns);
@@ -179,7 +157,7 @@ class Matrix extends MatrixBase {
           newMatrix.setItem(r, c, itemAt(r, c) + vector.itemAt(c));
         }
       }
-      return add(newMatrix);
+      return this + newMatrix;
     } else {
       throw MatrixException(
           'Columns of matrix should be equal to items count of vector!');
@@ -191,4 +169,15 @@ class Matrix extends MatrixBase {
 
   @override
   Vector rowAsVector({int row = 1}) => Vector(rowAt(row));
+
+  @override
+  Matrix operator +(Matrix matrix) {
+    final newMatrix = Matrix.generate(rows, columns);
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        newMatrix.setItem(i, j, itemAt(i, j) + matrix.itemAt(i, j));
+      }
+    }
+    return newMatrix;
+  }
 }

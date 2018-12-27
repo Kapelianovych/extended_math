@@ -161,8 +161,7 @@ class SquareMatrix extends Matrix {
 
       for (var j = i + 1; j <= columns; j++) {
         final tmpRow = Vector(row1)
-            .transform((v) => v * (-1) * itemAt(j, i))
-            .add(Vector(rowAt(j)));
+            .transform((v) => v * (-1) * itemAt(j, i)) + Vector(rowAt(j));
         vector[j - 1] += vector[i - 1] * (-1) * itemAt(j, i);
         matrix = matrix.insertRow(tmpRow.data, index: j).toSquareMatrix();
       }
@@ -173,8 +172,7 @@ class SquareMatrix extends Matrix {
 
       for (var j = i - 1; j >= 1; j--) {
         final tmpRow = Vector(row1)
-            .transform((v) => v * (-1) * itemAt(j, i))
-            .add(Vector(rowAt(j)));
+            .transform((v) => v * (-1) * itemAt(j, i)) + Vector(rowAt(j));
         vector[j - 1] += vector[i - 1] * (-1) * itemAt(j, i);
         matrix = matrix.insertRow(tmpRow.data, index: j).toSquareMatrix();
       }

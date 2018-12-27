@@ -1,5 +1,7 @@
 # Library that add functionality of all maths sections that don't exist in `dart:math`
 
+_This library is under heavy development!_
+
 Created under a MIT-style
 [license](https://github.com/YevhenKap/extended_math/blob/master/LICENSE).
 

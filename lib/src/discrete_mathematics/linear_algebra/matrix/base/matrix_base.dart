@@ -137,16 +137,6 @@ abstract class MatrixBase {
   /// Transpose matrix
   MatrixBase transpose();
 
-  /// Take away one [matrix] from this
-  ///
-  /// The matrices should be of the same dimension
-  MatrixBase subtract(covariant MatrixBase matrix);
-
-  /// Add one [matrix] to this
-  ///
-  /// The matrices should be of the same dimension
-  MatrixBase add(covariant MatrixBase matrix);
-
   /// Add [vector] to this matrix
   ///
   /// The [vector] is added to each row of this matrix.
@@ -257,4 +247,29 @@ abstract class MatrixBase {
     }
     return sum;
   }
+
+  /// Add values of [matrix] to corresponding values of this matrix
+  ///
+  /// The matrices should be of the same dimension
+  MatrixBase operator +(covariant MatrixBase matrix);
+
+  /// Subtract values of [matrix] from corresponding values of this matrix
+  ///
+  /// The matrices should be of the same dimension
+  MatrixBase operator -(covariant MatrixBase matrix) =>
+    this + matrix.transform((v) => -v);
+
+  /// Multiply values of this matrix by corresponding values of [matrix]
+  /// 
+  /// Takes two matrices of the same dimensions and produces another matrix where each element
+  /// `i`, `j` is the product of elements `i`, `j` of the original two matrices.
+  MatrixBase operator *(covariant MatrixBase matrix) =>
+    hadamardProduct(matrix);
+
+  /// Multiply values of this matrix by corresponding values of [matrix]
+  /// 
+  /// Takes two matrices of the same dimensions and produces another matrix where each element
+  /// `i`, `j` is the division's result of elements `i`, `j` of the original two matrices.
+  MatrixBase operator /(covariant MatrixBase matrix) =>
+    this * matrix.transform((v) => 1 / v);
 }

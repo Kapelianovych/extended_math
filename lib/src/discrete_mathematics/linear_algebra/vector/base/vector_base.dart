@@ -72,12 +72,6 @@ abstract class VectorBase {
   /// [itemCount] of both vectors must be equal to 3.
   VectorBase crossProduct(covariant VectorBase vector);
 
-  /// Add this vector to [vector]
-  VectorBase add(covariant VectorBase vector);
-
-  /// Subtract this vector from [vector]
-  VectorBase subtract(covariant VectorBase vector);
-
   /// Convert this vector to martix
   MatrixBase toMatrix();
 
@@ -112,4 +106,17 @@ abstract class VectorBase {
   /// Checks if this vector and [vector] are orthonormal
   bool isOrthonormalWith(covariant VectorBase vector) =>
       isOrthogonalTo(vector) && isUnit() && vector.isUnit();
+
+  /// Multiplies two vectors using Hadamard product algorithm
+  VectorBase operator *(covariant VectorBase vector) => hadamardProduct(vector);
+
+  /// Divides corresponding values of this vactors by [vector]
+  VectorBase operator /(covariant VectorBase vector) =>
+    this * vector.transform((v) => 1 / v);
+
+  /// Add values of this vector to [vector]'s values
+  VectorBase operator +(covariant VectorBase vector);
+
+  /// Subtract [vector]'s values from values of this vector
+  VectorBase operator -(covariant VectorBase vector) => this + vector.transform((v) => -v);
 }
