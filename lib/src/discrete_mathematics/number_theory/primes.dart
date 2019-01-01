@@ -1,5 +1,5 @@
 /// Prime numbers from 2 to 271
-final List<double> primes = <double>[
+final List<int> primes = <int>[
   2,
   3,
   5,

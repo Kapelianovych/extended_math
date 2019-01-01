@@ -4,18 +4,18 @@ import 'square_matrix.dart';
 
 /// Class for work with numeric diagonal matrix
 class DiagonalMatrix extends SquareMatrix {
-  /// Constructor accept array of arrays of double numbers
+  /// Constructor accept array of arrays of num numbers
   ///
   /// Count of inner arrays must be equal to count of their elements!
   /// All elements of matrix except elements of main diagonal must be equal to zero!
-  DiagonalMatrix(List<List<double>> data) : super(data);
+  DiagonalMatrix(List<List<num>> data) : super(data);
 
   /// Creates non square diagonal matrix
   ///
   /// All elements of matrix except elements of main diagonal must be equal to zero!
-  DiagonalMatrix.nonSquare(List<List<double>> data)
-      : super(<List<double>>[
-          <double>[1]
+  DiagonalMatrix.nonSquare(List<List<num>> data)
+      : super(<List<num>>[
+          <num>[1]
         ]) {
     this.data = data;
   }
@@ -31,7 +31,7 @@ class DiagonalMatrix extends SquareMatrix {
       : super.identity(number) {
     if (fillRandom == true) {
       for (var j = 1; j <= number; j++) {
-        setItem(j, j, NumbersGenerator().doubleSyncIterable(1).take(1).single);
+        setItem(j, j, NumbersGenerator().doubleIterableSync(1).take(1).single);
       }
     }
   }
@@ -42,7 +42,7 @@ class DiagonalMatrix extends SquareMatrix {
 
   @override
   DiagonalMatrix inverse() {
-    final newData = List<List<double>>.of(data);
+    final newData = List<List<num>>.of(data);
     for (var i = 1; i <= rows; i++) {
       newData[i - 1][i - 1] = 1 / newData[i - 1][i - 1];
     }

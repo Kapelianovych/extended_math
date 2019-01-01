@@ -6,20 +6,22 @@ class CompositeNumber {
   CompositeNumber(this.composite);
 
   /// Composite number
-  double composite;
+  int composite;
 
   /// Gets unique prime numbers of [composite]
-  Set<double> factorizate() {
-    final result = Set<double>();
+  Set<int> factorizate() {
+    final result = Set<int>();
 
     if (isPrime()) {
-      result.addAll(<double>[1, composite]);
+      result.addAll(<int>[1, composite]);
     } else {
+      var o = composite.toDouble();
       var counter = 0;
-      while (composite != 1) {
-        if (composite % primes[counter] == 0) {
+
+      while (!CompositeNumber(o.toInt()).isPrime()) {
+        if (o % primes[counter] == 0) {
           result.add(primes[counter]);
-          composite /= primes[counter];
+          o /= primes[counter];
         } else {
           counter++;
         }

@@ -10,77 +10,81 @@ class CubicEquation extends EquationBase {
   /// Accepts coefficients [a], [b], [c] and [d]
   ///
   /// All values shouldn't be equal to zero. Otherwise the [EquationException] is thrown.
-  CubicEquation(double a, {this.b, this.c, this.d}) {
+  CubicEquation({this.a = 1, this.b = 0, this.c = 0, this.d = 0}) {
     if (a == 0) {
       throw EquationException('Coefficient a shouldn\'t be equal to zero!');
-    } else {
-      this.a = a;
     }
   }
 
   /// [a] coefficient in cubic equation
-  double a;
+  num a;
 
   /// [b] coefficient in cubic equation
-  double b = 0;
+  num b;
 
   /// [c] coefficient in cubic equation
-  double c = 0;
+  num c;
 
   /// [d] coefficient in cubic equation
-  double d = 0;
+  num d;
 
   /// Calculates [p] in canonical cubic expression
-  double get p => (c / a) - (pow(b, 2) / 3 * pow(a, 2));
+  num get p => (c / a) - (pow(b, 2) / (3 * pow(a, 2)));
 
   /// Calculates [q] in canonical cubic expression
-  double get q {
-    final firstExpression = 2 * pow(b, 3) / 27 * pow(a, 3);
-    final secondExpression = b * c / 3 * pow(a, 2);
+  num get q {
+    final firstExpression = (2 * pow(b, 3)) / (27 * pow(a, 3));
+    final secondExpression = (b * c) / (3 * pow(a, 2));
     final thirdExpression = d / a;
     return firstExpression - secondExpression + thirdExpression;
   }
 
   @override
-  Set<double> calculate() {
-    final result = Set<double>();
+  Set<num> calculate() {
+    final result = Set<num>();
     final dis = discriminant();
 
-    if (dis == 0 || dis < 0) {
-      final possibleX = CompositeNumber(d).factorizate();
-      possibleX.add(1);
+    final possibleX = CompositeNumber(d).factorizate();
+    possibleX.add(1);
 
-      for (var item in possibleX) {
-        for (var i = 1; i <= 2; i++) {
-          if (evaluateForZero(pow(-1, i) * item)) {
-            result.add(pow(-1, i) * item);
-          }
+    for (var item in possibleX) {
+      for (var i = 1; i <= 2; i++) {
+        if (evaluateForZero(pow(-1, i) * item)) {
+          result.add(pow(-1, i) * item);
         }
       }
-    } else {
+    }
+
+    if (result.isEmpty) {
       final z =
           pow(-(q / 2) + sqrt(dis), 1 / 3) + pow(-(q / 2) - sqrt(dis), 1 / 3);
-      final x = z - b / 3 * a;
+      final x = z - b / (3 * a);
       result.add(x);
     }
 
     final tmpB = b - -result.elementAt(0) * a;
-    var tmpC = c - -result.elementAt(0) * tmpB;
+    final tmpC = c - -result.elementAt(0) * tmpB;
+    final r = d - -result.elementAt(0) * tmpC;
 
-    // Don't handle complex roots
-    if (d - -result.elementAt(0) * tmpC == 0) {
-      final quadratic = QuadraticEquation(a, b: tmpB, c: tmpC);
-      result.addAll(quadratic.calculate());
+    if (r != 0) {
+      return result;
+    } else {
+      try {
+        final quadratic = QuadraticEquation(a: a, b: tmpB, c: tmpC);
+        result.addAll(quadratic.calculate());
+      } on EquationException {
+        return result;
+      }
     }
 
     return result;
   }
 
   @override
-  double discriminant() => (pow(q, 2) / 4) + (pow(p, 3) / 27);
+  num discriminant() => (pow(q, 2) / 4) + (pow(p, 3) / 27);
 
   @override
-  bool evaluateForZero(double x) =>
+  bool evaluateForZero(num x) =>
       (a * pow(x, 3) + b * pow(x, 2) + c * x + d) == 0;
 
   @override

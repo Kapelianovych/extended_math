@@ -4,8 +4,8 @@ import 'base/matrix_base.dart';
 
 /// Class for work with numeric matrix
 class Matrix extends MatrixBase {
-  /// Constructor accept array of arrays of double numbers
-  Matrix(List<List<double>> data) : super.init(data);
+  /// Constructor accept array of arrays of num numbers
+  Matrix(List<List<num>> data) : super.init(data);
 
   /// Generate matrix with specified [rows] and [cols]
   ///
@@ -24,7 +24,7 @@ class Matrix extends MatrixBase {
     if (row > rows) {
       throw RangeError('$row is out of range of matrix rows.');
     } else {
-      final newData = List<List<double>>.of(data);
+      final newData = List<List<num>>.of(data);
       newData.removeAt(row - 1);
       return Matrix(newData);
     }
@@ -35,10 +35,10 @@ class Matrix extends MatrixBase {
     if (column > columns) {
       throw RangeError('$column is out of range of matrix columns.');
     } else {
-      final newData = <List<double>>[];
+      final newData = <List<num>>[];
 
       for (var row in data) {
-        final newRow = List<double>.of(row);
+        final newRow = List<num>.of(row);
         newRow.removeAt(column - 1);
         newData.add(newRow);
       }
@@ -47,7 +47,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix insertRow(List<double> newRow, {int index}) {
+  Matrix insertRow(List<num> newRow, {int index}) {
     if (newRow.length != columns) {
       throw MatrixException(
           'Needed $columns items in row, but found ${newRow.length}');
@@ -63,7 +63,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix insertColumn(List<double> newColumn, {int index}) {
+  Matrix insertColumn(List<num> newColumn, {int index}) {
     final newMatrix = Matrix(data);
 
     if (newColumn.length != rows) {
@@ -83,8 +83,8 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix multiplyBy(double multiplier) {
-    List<double> m(List<double> row) =>
+  Matrix multiplyBy(num multiplier) {
+    List<num> m(List<num> row) =>
         row.map((value) => value * multiplier).toList();
     return Matrix(data.map(m).toList());
   }
@@ -93,8 +93,8 @@ class Matrix extends MatrixBase {
   Matrix multiplyByMatrix(Matrix matrix) {
     if (columns == matrix.rows) {
       return Matrix(data.map((row) {
-        final result = <double>[];
-        final resultTmp = <double>[];
+        final result = <num>[];
+        final resultTmp = <num>[];
 
         for (var i = 1; i <= matrix.columns; i++) {
           final mCol = matrix.columnAt(i);
@@ -116,9 +116,6 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix multiplyByVector(Vector vector) => multiplyByMatrix(vector.toMatrix());
-
-  @override
   Matrix hadamardProduct(Matrix matrix) {
     if (columns == matrix.columns && rows == matrix.rows) {
       final m = Matrix.generate(rows, columns);
@@ -134,7 +131,7 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix transform(double t(double v)) =>
+  Matrix transform(num t(num v)) =>
       Matrix(data.map((row) => row.map(t).toList()).toList());
 
   @override

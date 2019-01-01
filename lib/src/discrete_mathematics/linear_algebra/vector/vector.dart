@@ -6,24 +6,24 @@ import 'base/vector_base.dart';
 /// Class for work with vectors
 class Vector extends VectorBase {
   /// Inits [data] for vector
-  Vector(List<double> data) : super.init(data);
+  Vector(List<num> data) : super.init(data);
 
   @override
   Matrix toMatrix() {
-    final matrix = data.map((value) => <double>[value]).toList();
+    final matrix = data.map((value) => <num>[value]).toList();
     return Matrix(matrix);
   }
 
   @override
   Vector crossProduct(Vector vector) {
     if (itemCount == 3 && vector.itemCount == 3) {
-      final m = SquareMatrix(<List<double>>[
-        <double>[1, 1, 1],
+      final m = SquareMatrix(<List<num>>[
+        <num>[1, 1, 1],
         data,
         vector.data
       ]);
 
-      final v = <double>[];
+      final v = <num>[];
       for (var i = 1; i <= m.columns; i++) {
         v.add(m.removeRow(1).removeColumn(i).toSquareMatrix().determinant());
       }
@@ -37,7 +37,7 @@ class Vector extends VectorBase {
 
   @override
   Vector hadamardProduct(Vector vector) {
-    final data = <double>[];
+    final data = <num>[];
     for (var i = 1; i <= itemCount; i++) {
       data.add(itemAt(i) * vector.itemAt(i));
     }
@@ -45,12 +45,12 @@ class Vector extends VectorBase {
   }
 
   @override
-  Vector transform(double t(double value)) => Vector(data.map(t).toList());
+  Vector transform(num t(num value)) => Vector(data.map(t).toList());
 
   @override
   Vector operator +(Vector vector) {
     if (itemCount == vector.itemCount) {
-      final tmpData = <double>[];
+      final tmpData = <num>[];
       for (var i = 1; i <= itemCount; i++) {
         tmpData.add(itemAt(i) + vector.itemAt(i));
       }

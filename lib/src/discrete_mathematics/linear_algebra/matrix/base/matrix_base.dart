@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:quiver/core.dart';
+
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
 import '../../exceptions/matrix_exception.dart';
 import '../../vector/base/vector_base.dart';
@@ -23,17 +25,17 @@ abstract class MatrixBase {
   MatrixBase.generate(int rows, int cols,
       {bool fillRandom = false, bool identity = false}) {
     if (fillRandom == true) {
-      data = <List<double>>[];
+      data = <List<num>>[];
 
       for (var j = 0; j < rows; j++) {
         data.add(
-            NumbersGenerator().doubleSyncIterable(cols).take(cols).toList());
+            NumbersGenerator().doubleIterableSync(cols).take(cols).toList());
       }
     } else {
-      final emptyData = <List<double>>[];
+      final emptyData = <List<num>>[];
 
       for (var i = 0; i < rows; i++) {
-        final emptyRow = <double>[];
+        final emptyRow = <num>[];
         for (var j = 0; j < cols; j++) {
           emptyRow.add(0);
         }
@@ -49,7 +51,7 @@ abstract class MatrixBase {
   }
 
   /// Raw data of matrix
-  List<List<double>> data;
+  List<List<num>> data;
 
   /// Rows count of matrix
   int get rows => data.length;
@@ -63,7 +65,7 @@ abstract class MatrixBase {
   /// Gets number at specified [row] and [column]
   ///
   /// [row] and [column] are in range from 1 to end inclusively.
-  double itemAt(int row, int column) {
+  num itemAt(int row, int column) {
     if (row > rows || column > columns) {
       throw RangeError(
           '$row or $column is out of range of matrix rows/columns.');
@@ -75,7 +77,7 @@ abstract class MatrixBase {
   /// Set number to specified [value], replace old value if exist
   ///
   /// [row] and [column] are in range from 1 to end inclusively.
-  void setItem(int row, int column, double value) {
+  void setItem(int row, int column, num value) {
     if (row > rows || column > columns) {
       throw RangeError(
           '$row or $column is out of range of matrix rows/columns.');
@@ -85,8 +87,8 @@ abstract class MatrixBase {
   }
 
   /// Gets specified column in range from 1 to end
-  List<double> columnAt(int number) {
-    final col = <double>[];
+  List<num> columnAt(int number) {
+    final col = <num>[];
 
     if (number > columns) {
       throw RangeError('$number is out of range of matrix columns.');
@@ -100,7 +102,7 @@ abstract class MatrixBase {
   }
 
   /// Gets specified row in range from 1 to end
-  List<double> rowAt(int number) {
+  List<num> rowAt(int number) {
     if (number > rows) {
       throw RangeError('$number is out of range of matrix rows.');
     }
@@ -114,7 +116,7 @@ abstract class MatrixBase {
   MatrixBase removeColumn(int column);
 
   /// Multiply matrix by number
-  MatrixBase multiplyBy(double multiplier);
+  MatrixBase multiplyBy(num multiplier);
 
   /// Multiply this matrix by another [matrix]
   ///
@@ -123,7 +125,8 @@ abstract class MatrixBase {
   MatrixBase multiplyByMatrix(covariant MatrixBase matrix);
 
   /// Multiply this matrix by [vector]
-  MatrixBase multiplyByVector(covariant VectorBase vector);
+  MatrixBase _multiplyByVector(covariant VectorBase vector) =>
+      multiplyByMatrix(vector.toMatrix());
 
   /// Multiply this matrix by another [matrix] by the Adamart (Schur) method
   ///
@@ -132,7 +135,7 @@ abstract class MatrixBase {
   MatrixBase hadamardProduct(covariant MatrixBase matrix);
 
   /// Transform matrix with given [t] function
-  MatrixBase transform(double t(double v));
+  MatrixBase transform(num t(num v));
 
   /// Transpose matrix
   MatrixBase transpose();
@@ -147,16 +150,16 @@ abstract class MatrixBase {
   ///
   /// If [index] is specified, then [newRow] replace row at [index].
   /// [index] is in range from 1 to end of matrix including.
-  MatrixBase insertRow(List<double> newRow, {int index});
+  MatrixBase insertRow(List<num> newRow, {int index});
 
   /// Inserts column with given [newColumn] to the end of matrix
   ///
   /// If [index] is specified, then [newColumn] replace column at [index].
   /// [index] is in range from 1 to end of matrix including.
-  MatrixBase insertColumn(List<double> newColumn, {int index});
+  MatrixBase insertColumn(List<num> newColumn, {int index});
 
   /// Gets Frobenius norm of matrix
-  double frobeniusNorm() {
+  num frobeniusNorm() {
     var sum = 0.0;
     for (var row in data) {
       for (var val in row) {
@@ -194,7 +197,7 @@ abstract class MatrixBase {
 
   /// Gets main diagonal of this matrix
   Vector mainDiagonal() {
-    final data = <double>[];
+    final data = <num>[];
     for (var i = 1; i <= rows; i++) {
       for (var j = 1; j <= columns; j++) {
         if (i == j) {
@@ -207,7 +210,7 @@ abstract class MatrixBase {
 
   /// Gets collateral diagonal of this matrix
   Vector collateralDiagonal() {
-    final data = <double>[];
+    final data = <num>[];
     var counter = columns;
 
     for (var i = 1; i <= rows; i++) {
@@ -240,7 +243,7 @@ abstract class MatrixBase {
   VectorBase columnAsVector({int column = 1});
 
   /// Gives the sum of all the diagonal entries of a matrix
-  double trace() {
+  num trace() {
     var sum = 0.0;
     for (var item in mainDiagonal().data) {
       sum += item;
@@ -257,19 +260,39 @@ abstract class MatrixBase {
   ///
   /// The matrices should be of the same dimension
   MatrixBase operator -(covariant MatrixBase matrix) =>
-    this + matrix.transform((v) => -v);
+      this + matrix.transform((v) => -v);
+
+  /// Multiply this matrix by [other]
+  ///
+  /// [other] may be one of three types:
+  ///     1. num (and subclasses)
+  ///     2. VectorBase (and subclasses)
+  ///     3. MatrixBase (and subclasses)
+  ///
+  /// Otherwise returns `null`.
+  MatrixBase operator *(Object other) {
+    MatrixBase m;
+    if (other is num) {
+      m = multiplyBy(other);
+    } else if (other is VectorBase) {
+      m = _multiplyByVector(other);
+    } else if (other is MatrixBase) {
+      m = hadamardProduct(other);
+    }
+    return m;
+  }
 
   /// Multiply values of this matrix by corresponding values of [matrix]
-  /// 
-  /// Takes two matrices of the same dimensions and produces another matrix where each element
-  /// `i`, `j` is the product of elements `i`, `j` of the original two matrices.
-  MatrixBase operator *(covariant MatrixBase matrix) =>
-    hadamardProduct(matrix);
-
-  /// Multiply values of this matrix by corresponding values of [matrix]
-  /// 
+  ///
   /// Takes two matrices of the same dimensions and produces another matrix where each element
   /// `i`, `j` is the division's result of elements `i`, `j` of the original two matrices.
   MatrixBase operator /(covariant MatrixBase matrix) =>
-    this * matrix.transform((v) => 1 / v);
+      this * matrix.transform((v) => 1 / v);
+
+  @override
+  bool operator ==(Object other) =>
+      other is MatrixBase && hashCode == other.hashCode;
+
+  @override
+  int get hashCode => hashObjects(data);
 }

@@ -15,7 +15,7 @@ library extended_math;
 
 export 'src/applied_mathematics/probability_theory/numbers_generator.dart';
 
-export 'src/complex_analysis/i.dart';
+export 'src/complex_analysis/complex.dart';
 
 export 'src/discrete_mathematics/linear_algebra/exceptions/matrix_exception.dart';
 export 'src/discrete_mathematics/linear_algebra/exceptions/vector_exception.dart';

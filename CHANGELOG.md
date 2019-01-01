@@ -1,4 +1,13 @@
-# 0.0.9
+# 0.0.10
+
+- Fix `QuadraticEquation`'s and `CubicEquation`'s `calculate()` method.
+- Fix `factorizate()` method of `CompositeNumber` class.
+- Implement `*`, `/`, `+` and `-` operators for complex number `I`.
+- Add `module`, `argument` getters to `I` class.
+- Changed `double` type of elements to `num` type.
+- Override `==` operator for `MatrixBase`, `VectorBase` and `Complex` classes.
+
+## 0.0.9
 
 - Override `*`, `/`, `+` and `-` operators of `VectorBase` class.
 - Removes `add()` and `subtract()` methods of `VectorBase` class.

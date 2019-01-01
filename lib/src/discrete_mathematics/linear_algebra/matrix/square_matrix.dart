@@ -8,10 +8,10 @@ import 'matrix.dart';
 
 /// Class for work with numeric square matrix
 class SquareMatrix extends Matrix {
-  /// Constructor accept array of arrays of double numbers
+  /// Constructor accept array of arrays of num numbers
   ///
   /// Count of inner arrays must be equal to count of their elements!
-  SquareMatrix(List<List<double>> data) : super(<List<double>>[]) {
+  SquareMatrix(List<List<num>> data) : super(<List<num>>[]) {
     if (data.length != data[0].length) {
       throw MatrixException(
           'Count of matrix columns must be equal to count of rows!');
@@ -33,13 +33,13 @@ class SquareMatrix extends Matrix {
   SquareMatrix.identity(int number) : super.identity(number, number);
 
   /// Gets determinant of matrix
-  double determinant() {
+  num determinant() {
     final firstRow = rowAt(1);
 
     if (itemCount == 1) {
       return itemAt(1, 1);
     } else {
-      double res = 0;
+      num res = 0;
       for (var i = 0; i < firstRow.length; i++) {
         final changedMatrix =
             SquareMatrix(removeRow(1).removeColumn(i + 1).data);
@@ -107,16 +107,16 @@ class SquareMatrix extends Matrix {
 
   // TODO(YevhenKap): find eigenvectors
   /// Gets eigenvalues and eigenvectors of this matrix
-  Map<String, List<double>> eigenDecomposition() {
-    final result = <String, List<double>>{};
+  Map<String, List<num>> eigenDecomposition() {
+    final result = <String, List<num>>{};
 
     if (rows == 1) {
-      result['eigenValues'] = <double>[itemAt(1, 1)];
-      result['eigenVectors'] = <double>[1];
+      result['eigenValues'] = <num>[itemAt(1, 1)];
+      result['eigenVectors'] = <num>[1];
     } else if (rows == 2) {
       final b = -(itemAt(1, 1) + itemAt(2, 2));
       final c = determinant();
-      final expression = QuadraticEquation(1, b: b, c: c);
+      final expression = QuadraticEquation(b: b, c: c);
 
       result['eigenValues'] = expression.calculate().toList();
     } else if (rows == 3) {
@@ -127,7 +127,7 @@ class SquareMatrix extends Matrix {
               itemAt(1, 3) * itemAt(2, 2) * itemAt(3, 1));
       final d = determinant();
 
-      final expression = CubicEquation(-1, b: b, c: c, d: d);
+      final expression = CubicEquation(a: -1, b: b, c: c, d: d);
 
       result['eigenValues'] = expression.calculate().toList();
     }
@@ -136,13 +136,13 @@ class SquareMatrix extends Matrix {
   }
 
   // TODO(YevhenKap): realize this method
-  /// Singulat value decomposition for this matrix
+  /// Singular value decomposition for this matrix
   Map<String, Vector> svd() {}
 
   /// Performs Gaussian elimination of this matrix and [equalTo] as right-side of augmented matrix
   ///
   /// [equalTo] should be equal to [rows].
-  Vector eliminate(List<double> equalTo) {
+  Vector eliminate(List<num> equalTo) {
     var matrix = SquareMatrix(data);
     final vector = equalTo;
 
@@ -160,8 +160,8 @@ class SquareMatrix extends Matrix {
       matrix = matrix.insertRow(row1, index: i).toSquareMatrix();
 
       for (var j = i + 1; j <= columns; j++) {
-        final tmpRow = Vector(row1)
-            .transform((v) => v * (-1) * itemAt(j, i)) + Vector(rowAt(j));
+        final tmpRow = Vector(row1).transform((v) => v * (-1) * itemAt(j, i)) +
+            Vector(rowAt(j));
         vector[j - 1] += vector[i - 1] * (-1) * itemAt(j, i);
         matrix = matrix.insertRow(tmpRow.data, index: j).toSquareMatrix();
       }
@@ -171,8 +171,8 @@ class SquareMatrix extends Matrix {
       final row1 = matrix.rowAt(i);
 
       for (var j = i - 1; j >= 1; j--) {
-        final tmpRow = Vector(row1)
-            .transform((v) => v * (-1) * itemAt(j, i)) + Vector(rowAt(j));
+        final tmpRow = Vector(row1).transform((v) => v * (-1) * itemAt(j, i)) +
+            Vector(rowAt(j));
         vector[j - 1] += vector[i - 1] * (-1) * itemAt(j, i);
         matrix = matrix.insertRow(tmpRow.data, index: j).toSquareMatrix();
       }
