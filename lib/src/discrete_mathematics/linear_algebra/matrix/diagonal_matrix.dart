@@ -1,5 +1,4 @@
 import '../../../applied_mathematics/probability_theory/numbers_generator.dart';
-import '../vector/vector.dart';
 import 'square_matrix.dart';
 
 /// Class for work with numeric diagonal matrix
@@ -35,10 +34,6 @@ class DiagonalMatrix extends SquareMatrix {
       }
     }
   }
-
-  @override
-  DiagonalMatrix multiplyByVector(Vector vector) =>
-      mainDiagonal().hadamardProduct(vector).toMatrix().toDiagonalMatrix();
 
   @override
   DiagonalMatrix inverse() {

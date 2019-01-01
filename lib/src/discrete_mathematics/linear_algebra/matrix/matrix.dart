@@ -83,13 +83,6 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Matrix multiplyBy(num multiplier) {
-    List<num> m(List<num> row) =>
-        row.map((value) => value * multiplier).toList();
-    return Matrix(data.map(m).toList());
-  }
-
-  @override
   Matrix multiplyByMatrix(Matrix matrix) {
     if (columns == matrix.rows) {
       return Matrix(data.map((row) {

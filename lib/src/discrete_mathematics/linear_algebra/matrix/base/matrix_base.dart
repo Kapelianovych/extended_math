@@ -7,6 +7,7 @@ import '../../exceptions/matrix_exception.dart';
 import '../../vector/base/vector_base.dart';
 import '../../vector/vector.dart';
 import '../diagonal_matrix.dart';
+import '../matrix.dart';
 import '../square_matrix.dart';
 
 /// Base class for matrix
@@ -116,7 +117,11 @@ abstract class MatrixBase {
   MatrixBase removeColumn(int column);
 
   /// Multiply matrix by number
-  MatrixBase multiplyBy(num multiplier);
+  MatrixBase _multiplyBy(num multiplier) {
+    List<num> m(List<num> row) =>
+        row.map((value) => value * multiplier).toList();
+    return Matrix(data.map(m).toList());
+  }
 
   /// Multiply this matrix by another [matrix]
   ///
@@ -273,7 +278,7 @@ abstract class MatrixBase {
   MatrixBase operator *(Object other) {
     MatrixBase m;
     if (other is num) {
-      m = multiplyBy(other);
+      m = _multiplyBy(other);
     } else if (other is VectorBase) {
       m = _multiplyByVector(other);
     } else if (other is MatrixBase) {

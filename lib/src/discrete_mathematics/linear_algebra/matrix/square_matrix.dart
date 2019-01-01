@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import '../../../general/elementary_algebra/cubic_equation.dart';
-import '../../../general/elementary_algebra/quadratic_equation.dart';
+// import '../../../general/elementary_algebra/cubic_equation.dart';
+// import '../../../general/elementary_algebra/quadratic_equation.dart';
 import '../exceptions/matrix_exception.dart';
 import '../vector/vector.dart';
 import 'matrix.dart';
@@ -100,44 +100,44 @@ class SquareMatrix extends Matrix {
       }
 
       final adjugatedMatrix = SquareMatrix(matrixOfCofactors.transpose().data);
-      final inversedMatrix = adjugatedMatrix.multiplyBy(1 / determinant());
+      final inversedMatrix = adjugatedMatrix * (1 / determinant());
       return SquareMatrix(inversedMatrix.data);
     }
   }
 
   // TODO(YevhenKap): find eigenvectors
   /// Gets eigenvalues and eigenvectors of this matrix
-  Map<String, List<num>> eigenDecomposition() {
-    final result = <String, List<num>>{};
+  // Map<String, List<num>> eigenDecomposition() {
+  //   final result = <String, List<num>>{};
 
-    if (rows == 1) {
-      result['eigenValues'] = <num>[itemAt(1, 1)];
-      result['eigenVectors'] = <num>[1];
-    } else if (rows == 2) {
-      final b = -(itemAt(1, 1) + itemAt(2, 2));
-      final c = determinant();
-      final expression = QuadraticEquation(b: b, c: c);
+  //   if (rows == 1) {
+  //     result['eigenValues'] = <num>[itemAt(1, 1)];
+  //     result['eigenVectors'] = <num>[1];
+  //   } else if (rows == 2) {
+  //     final b = -(itemAt(1, 1) + itemAt(2, 2));
+  //     final c = determinant();
+  //     final expression = QuadraticEquation(b: b, c: c);
 
-      result['eigenValues'] = expression.calculate().toList();
-    } else if (rows == 3) {
-      final b = mainDiagonal().data.reduce((f, s) => f + s);
-      final c = itemAt(1, 2) * itemAt(2, 1) +
-          itemAt(2, 3) * itemAt(3, 2) -
-          ((itemAt(1, 1) * (itemAt(2, 2) + itemAt(3, 3)) + itemAt(3, 3)) -
-              itemAt(1, 3) * itemAt(2, 2) * itemAt(3, 1));
-      final d = determinant();
+  //     result['eigenValues'] = expression.calculate().toList();
+  //   } else if (rows == 3) {
+  //     final b = mainDiagonal().data.reduce((f, s) => f + s);
+  //     final c = itemAt(1, 2) * itemAt(2, 1) +
+  //         itemAt(2, 3) * itemAt(3, 2) -
+  //         ((itemAt(1, 1) * (itemAt(2, 2) + itemAt(3, 3)) + itemAt(3, 3)) -
+  //             itemAt(1, 3) * itemAt(2, 2) * itemAt(3, 1));
+  //     final d = determinant();
 
-      final expression = CubicEquation(a: -1, b: b, c: c, d: d);
+  //     final expression = CubicEquation(a: -1, b: b, c: c, d: d);
 
-      result['eigenValues'] = expression.calculate().toList();
-    }
+  //     result['eigenValues'] = expression.calculate().toList();
+  //   }
 
-    return result;
-  }
+  //   return result;
+  // }
 
   // TODO(YevhenKap): realize this method
   /// Singular value decomposition for this matrix
-  Map<String, Vector> svd() {}
+  // Map<String, Vector> svd() {}
 
   /// Performs Gaussian elimination of this matrix and [equalTo] as right-side of augmented matrix
   ///

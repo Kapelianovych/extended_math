@@ -1,4 +1,12 @@
-# 0.0.10
+# 0.0.11
+
+- Removes overridden `multiplyByVector()` method in `DiagonalMatrix` class.
+- Change `multiplyByVector()` and `multiplyBy()` methods to private methods.
+- Comment `eigenDecomposition()` and `svd()` methods of `SquareMatrix` class - they aren't finished.
+- Rename `I` class to `Complex` class.
+- Implement `rootOf()` and `pow()` methods of `Complex` class.
+
+## 0.0.10
 
 - Fix `QuadraticEquation`'s and `CubicEquation`'s `calculate()` method.
 - Fix `factorizate()` method of `CompositeNumber` class.
