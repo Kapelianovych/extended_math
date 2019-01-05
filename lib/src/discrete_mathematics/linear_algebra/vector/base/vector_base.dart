@@ -69,7 +69,7 @@ abstract class VectorBase {
 
   /// Multiply this vector by [vector] using dot product algorithm
   num dotProduct(covariant VectorBase vector) =>
-      toMatrixRow().multiplyByMatrix(vector.toMatrixColumn()).itemAt(1, 1);
+      toMatrixRow().matrixProduct(vector.toMatrixColumn()).itemAt(1, 1);
 
   /// Gets cross product of this vector and another [vector]
   ///
@@ -128,7 +128,7 @@ abstract class VectorBase {
     return v;
   }
 
-  /// Divides corresponding values of this vactors by [vector]
+  /// Divides corresponding values of this vactors by [number]
   VectorBase operator /(num number) => this * 1 / number;
 
   /// Add values of this vector to [vector]'s values

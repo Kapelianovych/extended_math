@@ -118,7 +118,7 @@ abstract class MatrixBase {
   ///
   /// In order for the matrix `this` to be multiplied by the matrix [matrix], it is necessary
   /// that the number of columns of the matrix `this` be equal to the number of rows of the matrix [matrix].
-  MatrixBase multiplyByMatrix(covariant MatrixBase matrix);
+  MatrixBase matrixProduct(covariant MatrixBase matrix);
 
   /// Multiply this matrix by another [matrix] by the Adamart (Schur) method
   ///

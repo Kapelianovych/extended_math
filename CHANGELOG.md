@@ -1,4 +1,9 @@
-# 0.0.12
+# 0.0.13
+
+- Rename `multiplyByMatrix()` to `matrixProduct()` of `MatrixBase` class.
+- Fix `gaussian()` method.
+
+## 0.0.12
 
 - Add `swapRows()`, `swapColumns()`, `submatrix()`, `gaussian()`, `rank()` and `isUpperTriangle()` methods to `MatrixBase` class.
 - Distinct `insert(Row/Column)()` to `(replace/append)(Row/Column)()` methods of `MatrixBase` class.

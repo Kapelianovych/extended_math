@@ -22,7 +22,7 @@ class Matrix extends MatrixBase {
       : super.generate(rows, cols, identity: true);
 
   @override
-  Matrix multiplyByMatrix(Matrix matrix) {
+  Matrix matrixProduct(Matrix matrix) {
     if (columns == matrix.rows) {
       return Matrix(data.map((row) {
         final result = <num>[];
@@ -104,13 +104,19 @@ class Matrix extends MatrixBase {
 
   @override
   Matrix gaussian() {
-    if (isUpperTriangle()) {
-      return this;
-    }
-
     final eliminatedMatrix = Matrix(data);
 
     for (var i = 1; i <= min(rows, columns); i++) {
+      var counts = 0;
+      for (var row in eliminatedMatrix.data) {
+        counts += row.where((v) => v != 0).length;
+      }
+      final mainCounts = eliminatedMatrix.mainDiagonal().data.where((v) => v != 0).length;
+
+      if (isUpperTriangle() && counts == mainCounts) {
+        return eliminatedMatrix;
+      }
+
       if (eliminatedMatrix.itemAt(i, i) == 0) {
         final col = eliminatedMatrix.columnAt(i);
         final row = eliminatedMatrix.rowAt(i);
@@ -135,7 +141,7 @@ class Matrix extends MatrixBase {
 
         final diff =
             eliminatedMatrix.itemAt(j, i) / eliminatedMatrix.itemAt(i, i);
-        print(diff);
+
         final tmpRow = Vector(choosedRow).transform((v) => v * -diff) +
             Vector(eliminatedMatrix.rowAt(j));
 
