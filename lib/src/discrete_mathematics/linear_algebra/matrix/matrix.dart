@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../exceptions/matrix_exception.dart';
 import '../vector/vector.dart';
 import 'base/matrix_base.dart';
@@ -18,69 +20,6 @@ class Matrix extends MatrixBase {
   /// Creates an identity matrix
   Matrix.identity(int rows, int cols)
       : super.generate(rows, cols, identity: true);
-
-  @override
-  Matrix removeRow(int row) {
-    if (row > rows) {
-      throw RangeError('$row is out of range of matrix rows.');
-    } else {
-      final newData = List<List<num>>.of(data);
-      newData.removeAt(row - 1);
-      return Matrix(newData);
-    }
-  }
-
-  @override
-  Matrix removeColumn(int column) {
-    if (column > columns) {
-      throw RangeError('$column is out of range of matrix columns.');
-    } else {
-      final newData = <List<num>>[];
-
-      for (var row in data) {
-        final newRow = List<num>.of(row);
-        newRow.removeAt(column - 1);
-        newData.add(newRow);
-      }
-      return Matrix(newData);
-    }
-  }
-
-  @override
-  Matrix insertRow(List<num> newRow, {int index}) {
-    if (newRow.length != columns) {
-      throw MatrixException(
-          'Needed $columns items in row, but found ${newRow.length}');
-    } else if (index != null) {
-      final newMatrix = Matrix(data);
-      newMatrix.data[index - 1] = newRow;
-      return newMatrix;
-    } else {
-      final newMatrix = Matrix(data);
-      newMatrix.data.add(newRow);
-      return newMatrix;
-    }
-  }
-
-  @override
-  Matrix insertColumn(List<num> newColumn, {int index}) {
-    final newMatrix = Matrix(data);
-
-    if (newColumn.length != rows) {
-      throw MatrixException(
-          'Needed $rows items in row, but found ${newColumn.length}');
-    } else if (index != null) {
-      for (var i = 1; i <= rows; i++) {
-        newMatrix.setItem(i, index, newColumn[i - 1]);
-      }
-      return newMatrix;
-    } else {
-      for (var i = 1; i <= rows; i++) {
-        newMatrix.data[i].add(newColumn[i - 1]);
-      }
-      return newMatrix;
-    }
-  }
 
   @override
   Matrix multiplyByMatrix(Matrix matrix) {
@@ -155,10 +94,63 @@ class Matrix extends MatrixBase {
   }
 
   @override
-  Vector columnAsVector({int column = 1}) => Vector(columnAt(column));
+  Matrix submatrix(int rowFrom, int rowTo, int colFrom, int colTo) {
+    final newData = data
+        .sublist(rowFrom - 1, rowTo)
+        .map((row) => row.sublist(colFrom - 1, colTo))
+        .toList();
+    return Matrix(newData);
+  }
 
   @override
-  Vector rowAsVector({int row = 1}) => Vector(rowAt(row));
+  Matrix gaussian() {
+    if (isUpperTriangle()) {
+      return this;
+    }
+
+    final eliminatedMatrix = Matrix(data);
+
+    for (var i = 1; i <= min(rows, columns); i++) {
+      if (eliminatedMatrix.itemAt(i, i) == 0) {
+        final col = eliminatedMatrix.columnAt(i);
+        final row = eliminatedMatrix.rowAt(i);
+
+        final indexCol = row.indexWhere((n) => n != 0, i - 1);
+        final indexRow = col.indexWhere((n) => n != 0, i - 1);
+
+        if (indexRow != -1) {
+          eliminatedMatrix.swapRows(i, indexRow + 1);
+        } else if (indexCol != -1) {
+          eliminatedMatrix.swapColumns(i, indexCol + 1);
+        }
+      }
+
+      final choosedRow = eliminatedMatrix.rowAt(i);
+
+      for (var j = i + 1; j <= rows; j++) {
+        // For avoiding NaN if main diagonal contains mostly with 0
+        if (eliminatedMatrix.itemAt(i, i) == 0) {
+          continue;
+        }
+
+        final diff =
+            eliminatedMatrix.itemAt(j, i) / eliminatedMatrix.itemAt(i, i);
+        print(diff);
+        final tmpRow = Vector(choosedRow).transform((v) => v * -diff) +
+            Vector(eliminatedMatrix.rowAt(j));
+
+        eliminatedMatrix.replaceRow(j, tmpRow.data);
+      }
+    }
+
+    return eliminatedMatrix;
+  }
+
+  @override
+  Vector columnAsVector(int column) => Vector(columnAt(column));
+
+  @override
+  Vector rowAsVector(int row) => Vector(rowAt(row));
 
   @override
   Matrix operator +(Matrix matrix) {

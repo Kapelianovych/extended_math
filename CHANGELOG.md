@@ -1,4 +1,15 @@
-# 0.0.11
+# 0.0.12
+
+- Add `swapRows()`, `swapColumns()`, `submatrix()`, `gaussian()`, `rank()` and `isUpperTriangle()` methods to `MatrixBase` class.
+- Distinct `insert(Row/Column)()` to `(replace/append)(Row/Column)()` methods of `MatrixBase` class.
+- Split `toMatrix()` mathod of `VectorBase` class to `toMatrix(Row/Column)()` methods.
+- Move `/` operator to `SquareMatrix` class from `MatrixBase`.
+- Removes `_multiplyByVector()` method from `MatrixBase` class.
+- Change methods for work with rows and columns of matrix to work with self instance.
+- Set `data` to private and create getter with the same name which returns copy of `data`.
+- Add `CONTRIBUTING.md`.
+
+## 0.0.11
 
 - Removes overridden `multiplyByVector()` method in `DiagonalMatrix` class.
 - Change `multiplyByVector()` and `multiplyBy()` methods to private methods.

@@ -9,23 +9,28 @@ class Vector extends VectorBase {
   Vector(List<num> data) : super.init(data);
 
   @override
-  Matrix toMatrix() {
+  Matrix toMatrixColumn() {
     final matrix = data.map((value) => <num>[value]).toList();
     return Matrix(matrix);
   }
 
   @override
+  Matrix toMatrixRow() => Matrix(<List<num>>[data]);
+
+  @override
   Vector crossProduct(Vector vector) {
     if (itemCount == 3 && vector.itemCount == 3) {
-      final m = SquareMatrix(<List<num>>[
-        <num>[1, 1, 1],
-        data,
-        vector.data
-      ]);
-
       final v = <num>[];
-      for (var i = 1; i <= m.columns; i++) {
-        v.add(m.removeRow(1).removeColumn(i).toSquareMatrix().determinant());
+      for (var i = 1; i <= 3; i++) {
+        final m = SquareMatrix(<List<num>>[
+          <num>[1, 1, 1],
+          data,
+          vector.data
+        ]);
+        m
+          ..removeRow(1)
+          ..removeColumn(i);
+        v.add(m.determinant());
       }
       return Vector(v);
     } else {

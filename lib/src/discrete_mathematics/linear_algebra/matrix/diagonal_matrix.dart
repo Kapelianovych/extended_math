@@ -9,16 +9,6 @@ class DiagonalMatrix extends SquareMatrix {
   /// All elements of matrix except elements of main diagonal must be equal to zero!
   DiagonalMatrix(List<List<num>> data) : super(data);
 
-  /// Creates non square diagonal matrix
-  ///
-  /// All elements of matrix except elements of main diagonal must be equal to zero!
-  DiagonalMatrix.nonSquare(List<List<num>> data)
-      : super(<List<num>>[
-          <num>[1]
-        ]) {
-    this.data = data;
-  }
-
   /// Create identity matrix
   DiagonalMatrix.identity(int number) : super.identity(number);
 
