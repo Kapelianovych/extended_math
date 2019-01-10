@@ -2,6 +2,8 @@
 
 - Rename `multiplyByMatrix()` to `matrixProduct()` of `MatrixBase` class.
 - Fix `gaussian()` method.
+- Add `eigenDecomposition()` method to `SquareMatrix` class.
+- Add `svd()` method to `MatrixBase` class.
 
 ## 0.0.12
 

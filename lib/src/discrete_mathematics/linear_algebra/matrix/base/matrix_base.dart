@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:data/matrix.dart' as dd;
 import 'package:quiver/core.dart';
 
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
+import '../../../../utils/convert.dart';
 import '../../exceptions/matrix_exception.dart';
 import '../../vector/base/vector_base.dart';
 import '../../vector/vector.dart';
@@ -325,6 +327,24 @@ abstract class MatrixBase {
 
   /// Gets rang of this matrix
   int rank() => gaussian().mainDiagonal().data.where((e) => e != 0).length;
+
+  /// Singular value decomposition for this matrix
+  ///
+  /// Returns `Map` that contains `values`, `leftVectors` and `rightVectors` with corresponding values.
+  ///
+  /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
+  Map<String, MatrixBase> svd() {
+    final m = toMatrixDartData(this);
+    final result = dd.singularValue(m);
+    final singularValues = fromMatrixDartData(result.S);
+    final leftSingularVectors = fromMatrixDartData(result.U);
+    final rightSingularVectors = fromMatrixDartData(result.V);
+    return <String, MatrixBase>{
+      'values': singularValues,
+      'leftVectors': leftSingularVectors,
+      'rightVectors': rightSingularVectors
+    };
+  }
 
   /// Add values of [matrix] to corresponding values of this matrix
   ///

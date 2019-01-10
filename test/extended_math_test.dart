@@ -19,5 +19,5 @@ void main() {
   final v1 = Vector(<int>[6, 5, 7]);
   final v2 = Vector(<int>[6, 3, 1]);
 
-  print(i1.matrixProduct(i2));
+  print(i2.svd());
 }

@@ -1,9 +1,11 @@
 import 'dart:math';
 
-// import '../../../general/elementary_algebra/cubic_equation.dart';
-// import '../../../general/elementary_algebra/quadratic_equation.dart';
+import 'package:data/matrix.dart' as dd;
+
+import '../../../utils/convert.dart';
 import '../exceptions/matrix_exception.dart';
 import '../vector/vector.dart';
+import 'base/matrix_base.dart';
 import 'matrix.dart';
 
 /// Class for work with numeric square matrix
@@ -107,39 +109,18 @@ class SquareMatrix extends Matrix {
     }
   }
 
-  // TODO(YevhenKap): find eigenvectors
   /// Gets eigenvalues and eigenvectors of this matrix
-  // Map<String, List<num>> eigenDecomposition() {
-  //   final result = <String, List<num>>{};
-
-  //   if (rows == 1) {
-  //     result['eigenValues'] = <num>[itemAt(1, 1)];
-  //     result['eigenVectors'] = <num>[1];
-  //   } else if (rows == 2) {
-  //     final b = -(itemAt(1, 1) + itemAt(2, 2));
-  //     final c = determinant();
-  //     final expression = QuadraticEquation(b: b, c: c);
-
-  //     result['eigenValues'] = expression.calculate().toList();
-  //   } else if (rows == 3) {
-  //     final b = mainDiagonal().data.reduce((f, s) => f + s);
-  //     final c = itemAt(1, 2) * itemAt(2, 1) +
-  //         itemAt(2, 3) * itemAt(3, 2) -
-  //         ((itemAt(1, 1) * (itemAt(2, 2) + itemAt(3, 3)) + itemAt(3, 3)) -
-  //             itemAt(1, 3) * itemAt(2, 2) * itemAt(3, 1));
-  //     final d = determinant();
-
-  //     final expression = CubicEquation(a: -1, b: b, c: c, d: d);
-
-  //     result['eigenValues'] = expression.calculate().toList();
-  //   }
-
-  //   return result;
-  // }
-
-  // TODO(YevhenKap): realize this method
-  /// Singular value decomposition for this matrix
-  // Map<String, Vector> svd() {}
+  ///
+  /// Returns `Map` object that contains `values` and `vectors` keys with corresponding values.
+  ///
+  /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
+  Map<String, MatrixBase> eigenDecomposition() {
+    final m = toMatrixDartData(this);
+    final result = dd.eigenvalue(m);
+    final eigenValues = fromMatrixDartData(result.D);
+    final eigenVectors = fromMatrixDartData(result.V);
+    return <String, MatrixBase>{'values': eigenValues, 'vectors': eigenVectors};
+  }
 
   /// Performs Gaussian-Jordan elimination of this matrix and [equalTo] as right-side of augmented matrix
   ///

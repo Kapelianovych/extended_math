@@ -21,11 +21,14 @@ void main() {
   // Gets determinant of matrix
   final double det = v3.determinant();
 
+  // Computes eigenvalues and eigenvectors of square matrix
+  final Map<String, MatrixBase> result = v3.eigenDecomposition();
+
   final m = Matrix(<List<double>>[
     <double>[2, -1, 5],
     <double>[0, 2, 1],
     <double>[3, 1, 1]
   ]);
-  // Compute Frobenius norm of matrix
+  // Computes Frobenius norm of matrix
   print(m.frobeniusNorm());
 }

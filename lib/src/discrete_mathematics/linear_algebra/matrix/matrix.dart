@@ -111,7 +111,8 @@ class Matrix extends MatrixBase {
       for (var row in eliminatedMatrix.data) {
         counts += row.where((v) => v != 0).length;
       }
-      final mainCounts = eliminatedMatrix.mainDiagonal().data.where((v) => v != 0).length;
+      final mainCounts =
+          eliminatedMatrix.mainDiagonal().data.where((v) => v != 0).length;
 
       if (isUpperTriangle() && counts == mainCounts) {
         return eliminatedMatrix;
