@@ -10,6 +10,7 @@
 - Change `rootsOf()` method of `Complex` class to return all roots.
 - Add `Number`, `Integer` and `Double` classes in subsuction of discrete mathematics.
 - Implement `*`, `/`, `+` and `-` operators for new types.
+- Small changes in README.
 
 ## 0.0.13
 

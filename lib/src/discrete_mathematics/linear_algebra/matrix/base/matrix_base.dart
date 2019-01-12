@@ -6,6 +6,8 @@ import 'package:quiver/core.dart';
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
 import '../../../../mixins/copyable_mixin.dart';
 import '../../../../utils/convert.dart';
+import '../../../general_algebraic_systems/number/exception/division_by_zero_exception.dart';
+import '../../../general_algebraic_systems/number/base/number.dart';
 import '../../exceptions/matrix_exception.dart';
 import '../../vector/base/vector_base.dart';
 import '../../vector/vector.dart';
@@ -362,9 +364,10 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
 
   /// Multiply this matrix by [other]
   ///
-  /// [other] may be one of two types:
+  /// [other] may be one of three types:
   ///     1. num (and subclasses)
   ///     2. MatrixBase (and subclasses)
+  ///     3. Number (and subclasses)
   ///
   /// Otherwise returns `null`.
   MatrixBase operator *(Object other) {
@@ -373,6 +376,8 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
       m = _multiplyBy(other);
     } else if (other is MatrixBase) {
       m = hadamardProduct(other);
+    } else if (other is Number) {
+      m = _multiplyBy(other.toDouble());
     }
     return m;
   }
@@ -382,9 +387,17 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
   MatrixBase operator /(Object other) {
     MatrixBase m;
     if (other is num) {
-      m = this * 1 / other;
+      if (other == 0) {
+        throw DivisionByZeroException();
+      }
+      m = this * (1 / other);
     } else if (this is SquareMatrix && other is SquareMatrix) {
       m = this * other.inverse();
+    } else if (other is Number) {
+      if (other.toDouble() == 0) {
+        throw DivisionByZeroException();
+      }
+      m = this * (1 / other.toDouble());
     }
     return m;
   }

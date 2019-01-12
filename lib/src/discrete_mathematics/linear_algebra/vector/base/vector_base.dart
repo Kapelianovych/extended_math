@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:quiver/core.dart';
 
 import '../../../../mixins/copyable_mixin.dart';
+import '../../../general_algebraic_systems/number/base/number.dart';
+import '../../../general_algebraic_systems/number/exception/division_by_zero_exception.dart';
 import '../../exceptions/vector_exception.dart';
 import '../../matrix/base/matrix_base.dart';
 
@@ -125,12 +127,28 @@ abstract class VectorBase with CopyableMixin<VectorBase> {
       v = transform((v) => v * other);
     } else if (other is VectorBase) {
       v = hadamardProduct(other);
+    } else if (other is Number) {
+      v = transform((v) => v * other.toDouble());
     }
     return v;
   }
 
-  /// Divides corresponding values of this vactors by [number]
-  VectorBase operator /(num number) => this * 1 / number;
+  /// Divides corresponding values of this vactors by [other]
+  VectorBase operator /(Object other) {
+    VectorBase v;
+    if (other is num) {
+      if (other == 0) {
+        throw DivisionByZeroException();
+      }
+      v = this * (1 / other);
+    } else if (other is Number) {
+      if (other.toDouble() == 0) {
+        throw DivisionByZeroException();
+      }
+      v = this * (1 / other.toDouble());
+    }
+    return v;
+  }
 
   /// Add values of this vector to [vector]'s values
   VectorBase operator +(covariant VectorBase vector);

@@ -2,6 +2,7 @@ import 'dart:math' as m;
 
 import 'package:quiver/core.dart';
 
+import '../discrete_mathematics/general_algebraic_systems/number/base/number.dart';
 import '../discrete_mathematics/general_algebraic_systems/number/double.dart';
 import '../discrete_mathematics/linear_algebra/vector/vector.dart';
 import '../mixins/copyable_mixin.dart';
@@ -39,6 +40,8 @@ class Complex with CopyableMixin<Complex> {
       c = Complex(re: re + other, im: im);
     } else if (other is Complex) {
       c = Complex(re: re + other.re, im: im + other.im);
+    } else if (other is Number) {
+      c = Complex(re: re + other.toDouble(), im: im);
     }
     return c;
   }
@@ -52,6 +55,8 @@ class Complex with CopyableMixin<Complex> {
       c = this + -other;
     } else if (other is num) {
       c = Complex(re: re - other, im: im);
+    } else if (other is Number) {
+      c = this + -other;
     }
     return c;
   }
@@ -72,6 +77,10 @@ class Complex with CopyableMixin<Complex> {
       final newRe = re * other.re - im * other.im;
       final newIm = re * other.im + im * other.re;
       c = Complex(re: newRe, im: newIm);
+    } else if (other is Number) {
+      final newRe = re * other.toDouble();
+      final newIm = im * other.toDouble();
+      c = Complex(re: newRe, im: newIm);
     }
     return c;
   }
@@ -88,6 +97,11 @@ class Complex with CopyableMixin<Complex> {
       c = Complex(re: newRe, im: newIm);
     } else if (other is Complex) {
       c = this * other.conjugate();
+    } else if (other is Number) {
+      final down = m.pow(other.toDouble(), 2);
+      final newRe = (re * other.toDouble()) / down;
+      final newIm = (im * other.toDouble()) / down;
+      c = Complex(re: newRe, im: newIm);
     }
     return c;
   }
