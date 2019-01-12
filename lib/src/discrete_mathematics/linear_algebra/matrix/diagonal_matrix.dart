@@ -33,4 +33,7 @@ class DiagonalMatrix extends SquareMatrix {
     }
     return DiagonalMatrix(newData).transpose().toDiagonalMatrix();
   }
+
+  @override
+  DiagonalMatrix copy() => DiagonalMatrix(data);
 }

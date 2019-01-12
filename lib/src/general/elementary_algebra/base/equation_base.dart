@@ -1,7 +1,11 @@
+import '../../../complex_analysis/complex.dart';
+
 /// Class defining methods for equation expressions
 abstract class EquationBase {
-  /// Calculates x1...xn for this expression
-  Set<num> calculate();
+  /// Calculates `x1...xn` for this expression
+  ///
+  /// Any real roots are converted to [Complex] numbers and can be resolved with [Complex.toReal] method.
+  Map<String, Complex> calculate();
 
   /// Gets discriminant of equation
   num discriminant();

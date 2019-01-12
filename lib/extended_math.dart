@@ -17,6 +17,11 @@ export 'src/applied_mathematics/probability_theory/numbers_generator.dart';
 
 export 'src/complex_analysis/complex.dart';
 
+export 'src/discrete_mathematics/general_algebraic_systems/number/base/number.dart';
+export 'src/discrete_mathematics/general_algebraic_systems/number/double.dart';
+export 'src/discrete_mathematics/general_algebraic_systems/number/exception/division_by_zero_exception.dart';
+export 'src/discrete_mathematics/general_algebraic_systems/number/integer.dart';
+
 export 'src/discrete_mathematics/linear_algebra/exceptions/matrix_exception.dart';
 export 'src/discrete_mathematics/linear_algebra/exceptions/vector_exception.dart';
 export 'src/discrete_mathematics/linear_algebra/matrix/base/matrix_base.dart';

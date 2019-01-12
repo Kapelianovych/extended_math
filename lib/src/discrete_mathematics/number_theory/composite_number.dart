@@ -2,7 +2,7 @@ import 'primes.dart';
 
 /// Class gets prime numbers of composite number
 class CompositeNumber {
-  /// Accept composite number
+  /// Accept integer composite number
   CompositeNumber(this.composite);
 
   /// Composite number

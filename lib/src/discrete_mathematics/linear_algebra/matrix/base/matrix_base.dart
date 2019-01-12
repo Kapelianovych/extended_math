@@ -4,6 +4,7 @@ import 'package:data/matrix.dart' as dd;
 import 'package:quiver/core.dart';
 
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
+import '../../../../mixins/copyable_mixin.dart';
 import '../../../../utils/convert.dart';
 import '../../exceptions/matrix_exception.dart';
 import '../../vector/base/vector_base.dart';
@@ -13,7 +14,7 @@ import '../matrix.dart';
 import '../square_matrix.dart';
 
 /// Base class for matrix
-abstract class MatrixBase {
+abstract class MatrixBase with CopyableMixin<MatrixBase> {
   /// Default constructor that don't accept [_data]
   MatrixBase();
 
@@ -310,7 +311,7 @@ abstract class MatrixBase {
   /// Gets specified column of matrix as vector
   VectorBase columnAsVector(int column);
 
-  /// Gives the sum of all the diagonal entries of a matrix
+  /// Calculates trace operator of this matrix
   num trace() {
     var sum = 0.0;
     for (var item in mainDiagonal().data) {

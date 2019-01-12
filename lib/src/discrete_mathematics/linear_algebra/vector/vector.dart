@@ -64,4 +64,7 @@ class Vector extends VectorBase {
       throw VectorException('Count of vector\'s numbers isn\'t equal!');
     }
   }
+
+  @override
+  Vector copy() => Vector(data);
 }

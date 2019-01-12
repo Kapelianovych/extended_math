@@ -5,7 +5,6 @@ import 'package:data/matrix.dart' as dd;
 import '../../../utils/convert.dart';
 import '../exceptions/matrix_exception.dart';
 import '../vector/vector.dart';
-import 'base/matrix_base.dart';
 import 'matrix.dart';
 
 /// Class for work with numeric square matrix
@@ -111,15 +110,21 @@ class SquareMatrix extends Matrix {
 
   /// Gets eigenvalues and eigenvectors of this matrix
   ///
-  /// Returns `Map` object that contains `values` and `vectors` keys with corresponding values.
+  /// Returns `Map` object where `Map.keys` are `eigenvalues` and `Map.values` are `eigenvectors`.
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
-  Map<String, MatrixBase> eigenDecomposition() {
-    final m = toMatrixDartData(this);
-    final result = dd.eigenvalue(m);
-    final eigenValues = fromMatrixDartData(result.D);
-    final eigenVectors = fromMatrixDartData(result.V);
-    return <String, MatrixBase>{'values': eigenValues, 'vectors': eigenVectors};
+  Map<num, Vector> eigenDecomposition() {
+    final thisCopy = SquareMatrix(data).transform((v) => v.toDouble());
+    final m = toMatrixDartData(thisCopy);
+    final ddResult = dd.eigenvalue(m);
+    final eigenValues = fromMatrixDartData(ddResult.D).mainDiagonal();
+    final eigenVectors = fromMatrixDartData(ddResult.V);
+
+    final result = <num, Vector>{};
+    for (var i = 1; i <= eigenValues.itemCount; i++) {
+      result[eigenValues.itemAt(i)] = eigenVectors.rowAsVector(i);
+    }
+    return result;
   }
 
   /// Performs Gaussian-Jordan elimination of this matrix and [equalTo] as right-side of augmented matrix
@@ -182,4 +187,7 @@ class SquareMatrix extends Matrix {
 
     return Vector(result);
   }
+
+  @override
+  SquareMatrix copy() => SquareMatrix(data);
 }

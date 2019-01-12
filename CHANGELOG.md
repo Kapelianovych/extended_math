@@ -1,4 +1,17 @@
-# 0.0.13
+# 0.0.14
+
+- Remove `Complex.toComplex()` constructor.
+- Rewrite `calculate()` method of `EquationBase` class to calculate complex roots.
+- Change return object of `eigenDecomposition()` method of `SquareMatrix` class.
+- Fix `calculate()` method of `CubicEquation` class.
+- Allow `*` and `/` operators of `Complex` class for work with real numbers.
+- Create `CopyableMixin` which extends `MatrixBase`, `VectorBase` and `Complex` classes.
+- Add `isReal()`, `conjugate()` and `toReal()` methods to `Complex` class.
+- Change `rootsOf()` method of `Complex` class to return all roots.
+- Add `Number`, `Integer` and `Double` classes in subsuction of discrete mathematics.
+- Implement `*`, `/`, `+` and `-` operators for new types.
+
+## 0.0.13
 
 - Rename `multiplyByMatrix()` to `matrixProduct()` of `MatrixBase` class.
 - Fix `gaussian()` method.

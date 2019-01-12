@@ -169,4 +169,7 @@ class Matrix extends MatrixBase {
     }
     return newMatrix;
   }
+
+  @override
+  Matrix copy() => Matrix(data);
 }

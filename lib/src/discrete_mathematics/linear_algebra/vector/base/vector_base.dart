@@ -2,11 +2,12 @@ import 'dart:math';
 
 import 'package:quiver/core.dart';
 
+import '../../../../mixins/copyable_mixin.dart';
 import '../../exceptions/vector_exception.dart';
 import '../../matrix/base/matrix_base.dart';
 
 /// Base class for vector
-abstract class VectorBase {
+abstract class VectorBase with CopyableMixin<VectorBase> {
   /// Default constructor that don't accept data
   VectorBase();
 

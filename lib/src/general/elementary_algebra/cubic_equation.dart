@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import '../../complex_analysis/complex.dart';
+import '../../discrete_mathematics/general_algebraic_systems/number/base/number.dart';
+import '../../discrete_mathematics/general_algebraic_systems/number/double.dart';
 import '../../discrete_mathematics/number_theory/composite_number.dart';
 import 'base/equation_base.dart';
 import 'exceptions/equation_exception.dart';
@@ -40,41 +43,43 @@ class CubicEquation extends EquationBase {
   }
 
   @override
-  Set<num> calculate() {
-    final result = Set<num>();
+  Map<String, Complex> calculate() {
+    final result = <String, Complex>{};
     final dis = discriminant();
 
-    final possibleX = CompositeNumber(d).factorizate();
-    possibleX.add(1);
+    if (d != 0) {
+      final possibleX = CompositeNumber(d).factorizate();
+      possibleX.add(1);
 
-    for (var item in possibleX) {
-      for (var i = 1; i <= 2; i++) {
-        if (evaluateForZero(pow(-1, i) * item)) {
-          result.add(pow(-1, i) * item);
+      for (var item in possibleX) {
+        for (var i = 1; i <= 2; i++) {
+          if (evaluateForZero(pow(-1, i) * item)) {
+            result['x1'] = Complex(re: pow(-1, i) * item);
+          }
         }
       }
+    } else {
+      result['x1'] = Complex();
     }
 
     if (result.isEmpty) {
-      final z =
-          pow(-(q / 2) + sqrt(dis), 1 / 3) + pow(-(q / 2) - sqrt(dis), 1 / 3);
+      final alpha =
+          Double(-(q / 2) + sqrt(dis)).preciseTo(2).rootOf(3).toDouble();
+      final beta =
+          Double(-(q / 2) - sqrt(dis)).preciseTo(2).rootOf(3).toDouble();
+      final z = alpha + beta;
       final x = z - b / (3 * a);
-      result.add(x);
+      result['x1'] = Complex(re: x);
     }
 
-    final tmpB = b - -result.elementAt(0) * a;
-    final tmpC = c - -result.elementAt(0) * tmpB;
-    final r = d - -result.elementAt(0) * tmpC;
+    final tmpB = result['x1'] * a + b;
+    final tmpC = result['x1'] * tmpB + c;
 
-    if (r != 0) {
-      return result;
-    } else {
-      try {
-        final quadratic = QuadraticEquation(a: a, b: tmpB, c: tmpC);
-        result.addAll(quadratic.calculate());
-      } on EquationException {
-        return result;
-      }
+    final quadratic =
+        QuadraticEquation(a: a, b: tmpB.toReal(), c: tmpC.toReal());
+    final quadResult = quadratic.calculate();
+    for (var i = 1; i <= quadResult.length; i++) {
+      result['x${i + 1}'] = quadResult['x$i'];
     }
 
     return result;

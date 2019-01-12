@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../../complex_analysis/complex.dart';
 import 'base/equation_base.dart';
 import 'exceptions/equation_exception.dart';
 
@@ -24,19 +25,22 @@ class QuadraticEquation extends EquationBase {
   num c;
 
   @override
-  Set<num> calculate() {
-    final result = Set<num>();
+  Map<String, Complex> calculate() {
+    final result = <String, Complex>{};
     final dis = discriminant();
 
     if (dis > 0) {
       for (var i = 1; i <= 2; i++) {
-        result.add((-b + pow(-1, i) * sqrt(dis)) / (2 * a));
+        result['x$i'] = Complex(re: (-b + pow(-1, i) * sqrt(dis)) / (2 * a));
       }
     } else if (dis == 0) {
-      result.add(-b / (2 * a));
+      result['x'] = Complex(re: -b / (2 * a));
     } else {
-      throw EquationException(
-          'Expression haven\'t solutions, because of discriminant is less than zero!');
+      for (var i = 1; i <= 2; i++) {
+        final re = -b / (2 * a);
+        final im = pow(-1, i) * sqrt(-dis) / (2 * a);
+        result['x$i'] = Complex(re: re, im: im);
+      }
     }
     return result;
   }
