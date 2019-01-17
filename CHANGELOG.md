@@ -1,4 +1,8 @@
-# 0.0.14
+# 0.0.14+1
+
+- Downgrade required Dart SDK to `2.1.0-dev.9.4`.
+
+## 0.0.14
 
 - Remove `Complex.toComplex()` constructor.
 - Rewrite `calculate()` method of `EquationBase` class to calculate complex roots.

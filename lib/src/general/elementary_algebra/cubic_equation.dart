@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import '../../complex_analysis/complex.dart';
-import '../../discrete_mathematics/general_algebraic_systems/number/base/number.dart';
 import '../../discrete_mathematics/general_algebraic_systems/number/double.dart';
 import '../../discrete_mathematics/number_theory/composite_number.dart';
 import 'base/equation_base.dart';
