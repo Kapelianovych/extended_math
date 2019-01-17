@@ -33,8 +33,6 @@ export 'src/discrete_mathematics/linear_algebra/tensor/tensor.dart';
 export 'src/discrete_mathematics/linear_algebra/vector/base/vector_base.dart';
 export 'src/discrete_mathematics/linear_algebra/vector/vector.dart';
 
-export 'src/discrete_mathematics/number_theory/composite_number.dart';
-
 export 'src/general/elementary_algebra/base/equation_base.dart';
 export 'src/general/elementary_algebra/cubic_equation.dart';
 export 'src/general/elementary_algebra/exceptions/equation_exception.dart';

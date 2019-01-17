@@ -20,9 +20,9 @@ void main() {
 
   // print(i2.eigenDecomposition());
 
-  final result = CubicEquation(a: 1, b: 80, c: -20, d: 0).calculate();
+  // final result = CubicEquation(a: 1, b: 80, c: -20, d: 0).calculate();
   //final result = QuadraticEquation(c: -4).calculate();
-  print(result);
+  //print(result);
 
   // final c = Complex(re: -4);
   // final c2 = Complex(re: -4);

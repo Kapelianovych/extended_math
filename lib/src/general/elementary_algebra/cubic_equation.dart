@@ -2,7 +2,7 @@ import 'dart:math';
 
 import '../../complex_analysis/complex.dart';
 import '../../discrete_mathematics/general_algebraic_systems/number/double.dart';
-import '../../discrete_mathematics/number_theory/composite_number.dart';
+import '../../discrete_mathematics/general_algebraic_systems/number/integer.dart';
 import 'base/equation_base.dart';
 import 'exceptions/equation_exception.dart';
 import 'quadratic_equation.dart';
@@ -47,7 +47,7 @@ class CubicEquation extends EquationBase {
     final dis = discriminant();
 
     if (d != 0) {
-      final possibleX = CompositeNumber(d).factorizate();
+      final possibleX = Integer(d).factorizate();
       possibleX.add(1);
 
       for (var item in possibleX) {

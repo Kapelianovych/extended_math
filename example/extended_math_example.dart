@@ -31,4 +31,13 @@ void main() {
   ]);
   // Computes Frobenius norm of matrix
   print(m.frobeniusNorm());
+
+  final c = Complex(re: -4);
+  final c2 = Complex(re: -4);
+  // Gets root of complex number
+  final r = c.rootsOf(2);
+  // Divides complex numbers
+  print(c / c2);
+  // Gets pow of complex number
+  print(Complex(re: 2).pow(2));
 }
