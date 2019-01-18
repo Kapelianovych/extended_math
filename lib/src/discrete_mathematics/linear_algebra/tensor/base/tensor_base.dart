@@ -1,11 +1,13 @@
+import '../../../../mixins/copyable_mixin.dart';
+
 /// Base class for tensor
-abstract class TensorBase<T> {
-  /// Default constructor that don't accept data
-  TensorBase();
+abstract class TensorBase<T> with CopyableMixin<TensorBase<T>> {
+  /// Creates instanse of TensorBase with dimension
+  TensorBase(this._dimension);
 
-  /// Constructor that accept [data]
-  TensorBase.init(this.data);
+  /// Holds dimension of this tensor
+  int _dimension;
 
-  /// Data for tensor
-  List<List<List<T>>> data;
+  /// Gets dimendion of this tensor
+  int get dimension => _dimension;
 }

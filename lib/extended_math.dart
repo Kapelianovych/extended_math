@@ -29,7 +29,7 @@ export 'src/discrete_mathematics/linear_algebra/matrix/diagonal_matrix.dart';
 export 'src/discrete_mathematics/linear_algebra/matrix/matrix.dart';
 export 'src/discrete_mathematics/linear_algebra/matrix/square_matrix.dart';
 export 'src/discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
-export 'src/discrete_mathematics/linear_algebra/tensor/tensor.dart';
+export 'src/discrete_mathematics/linear_algebra/tensor/tensor3.dart';
 export 'src/discrete_mathematics/linear_algebra/vector/base/vector_base.dart';
 export 'src/discrete_mathematics/linear_algebra/vector/vector.dart';
 
