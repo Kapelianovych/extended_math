@@ -6,7 +6,7 @@ author: Kapelianovych Yevhen <kapelianovych.y.v@gmail.com>
 license: MIT
 
 environment:
-  sdk: '>=2.1.0 <3.0.0'
+  sdk: '>=2.1.0-dev.9.4 <3.0.0'
 
 dependencies:
   meta: ^1.1.7

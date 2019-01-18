@@ -1,4 +1,11 @@
 
+# 0.0.15
+
+- Moves functionality of `CompositeNumber` class to `Integer` class.
+
+## 0.0.14+1
+
+- Downgrade required Dart SDK to `2.1.0-dev.9.4`.
 
 ## 0.0.14
 
