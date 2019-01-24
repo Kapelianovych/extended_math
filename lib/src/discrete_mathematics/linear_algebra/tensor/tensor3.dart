@@ -10,13 +10,15 @@ class Tensor3 extends TensorBase {
 
   /// Gets width (rows) of this tensor
   int get width => _data.length;
+
   /// Gets length (columns) of this tensor
   int get length => _data[0].length;
+
   /// Gets depth of this tensor
   int get depth => _data[0][0].length;
 
   /// Gets two dimensional matrix in specified depth position
-  /// 
+  ///
   /// [depthPosition] may be in range from 1 to end inclusively.
   Matrix matrixAt(int depthPosition) {
     final data = <List<num>>[];
@@ -28,7 +30,8 @@ class Tensor3 extends TensorBase {
 
   @override
   Tensor3 copy() {
-    final data = _data.map((row) => row.map((z) => z.toList()).toList()).toList();
+    final data =
+        _data.map((row) => row.map((z) => z.toList()).toList()).toList();
     return Tensor3(data);
   }
 

@@ -24,7 +24,8 @@ class Matrix extends TensorBase {
   /// and if [fillRandom] is false and [identity] is true - creates an identity matrix,
   /// otherwise matrix will have all values defaults to 0
   Matrix.generate(int rows, int cols,
-      {bool fillRandom = false, bool identity = false}) : super(2) {
+      {bool fillRandom = false, bool identity = false})
+      : super(2) {
     if (fillRandom == true) {
       _data = <List<num>>[];
 
@@ -52,7 +53,8 @@ class Matrix extends TensorBase {
   }
 
   /// Creates an identity matrix
-  factory Matrix.identity(int rows, int cols) => Matrix.generate(rows, cols, identity: true);
+  factory Matrix.identity(int rows, int cols) =>
+      Matrix.generate(rows, cols, identity: true);
 
   /// Raw data of matrix
   List<List<num>> _data;
