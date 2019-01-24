@@ -1,5 +1,10 @@
+# 0.0.16
 
-# 0.0.15
+- Add `Tensor3` class for work with three-dimensional tensors.
+- Remove `VectorBase`, `MatrixBase` classes.
+- Add `TensorException` class.
+
+## 0.0.15
 
 - Moves functionality of `CompositeNumber` class to `Integer` class.
 

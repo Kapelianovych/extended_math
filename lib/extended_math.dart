@@ -23,15 +23,15 @@ export 'src/discrete_mathematics/general_algebraic_systems/number/exception/divi
 export 'src/discrete_mathematics/general_algebraic_systems/number/integer.dart';
 
 export 'src/discrete_mathematics/linear_algebra/exceptions/matrix_exception.dart';
+export 'src/discrete_mathematics/linear_algebra/exceptions/tensor_exception.dart';
 export 'src/discrete_mathematics/linear_algebra/exceptions/vector_exception.dart';
-export 'src/discrete_mathematics/linear_algebra/matrix/base/matrix_base.dart';
-export 'src/discrete_mathematics/linear_algebra/matrix/diagonal_matrix.dart';
-export 'src/discrete_mathematics/linear_algebra/matrix/matrix.dart';
-export 'src/discrete_mathematics/linear_algebra/matrix/square_matrix.dart';
 export 'src/discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
+export 'src/discrete_mathematics/linear_algebra/tensor/tensor1/vector.dart';
+export 'src/discrete_mathematics/linear_algebra/tensor/tensor2/diagonal_matrix.dart';
+export 'src/discrete_mathematics/linear_algebra/tensor/tensor2/matrix.dart';
+export 'src/discrete_mathematics/linear_algebra/tensor/tensor2/square_matrix.dart';
 export 'src/discrete_mathematics/linear_algebra/tensor/tensor3.dart';
-export 'src/discrete_mathematics/linear_algebra/vector/base/vector_base.dart';
-export 'src/discrete_mathematics/linear_algebra/vector/vector.dart';
+export 'src/discrete_mathematics/linear_algebra/tensor/tensor4.dart';
 
 export 'src/general/elementary_algebra/base/equation_base.dart';
 export 'src/general/elementary_algebra/cubic_equation.dart';

@@ -4,7 +4,7 @@ import 'package:quiver/core.dart';
 
 import '../discrete_mathematics/general_algebraic_systems/number/base/number.dart';
 import '../discrete_mathematics/general_algebraic_systems/number/double.dart';
-import '../discrete_mathematics/linear_algebra/vector/vector.dart';
+import '../discrete_mathematics/linear_algebra/tensor/tensor1/vector.dart';
 import '../mixins/copyable_mixin.dart';
 import 'exceptions/complex_exception.dart';
 
@@ -153,9 +153,6 @@ class Complex with CopyableMixin<Complex> {
     return Complex(re: re / denominator, im: -im / denominator);
   }
 
-  @override
-  Complex copy() => Complex(re: re, im: im);
-
   /// Checks if this complex number have only real part
   bool isReal() => im == 0;
 
@@ -177,5 +174,8 @@ class Complex with CopyableMixin<Complex> {
   int get hashCode => hash2(re.hashCode, im.hashCode);
 
   @override
-  String toString() => '$re + $im * i';
+  Complex copy() => Complex(re: re, im: im);
+
+  @override
+  String toString() => '$re + ${im}i';
 }

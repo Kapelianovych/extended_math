@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:data/matrix.dart' as dd;
 
-import '../../../utils/convert.dart';
-import '../exceptions/matrix_exception.dart';
-import '../vector/vector.dart';
+import '../../../../utils/convert.dart';
+import '../../exceptions/matrix_exception.dart';
+import '../../tensor/tensor1/vector.dart';
 import 'matrix.dart';
 
 /// Class for work with numeric square matrix
@@ -29,7 +29,7 @@ class SquareMatrix extends Matrix {
             fillRandom: fillRandom, identity: identity);
 
   /// Creates an identity matrix
-  SquareMatrix.identity(int number) : super.identity(number, number);
+  SquareMatrix.identity(int number) : this.generate(number, identity: true);
 
   /// Gets determinant of matrix
   num determinant() {

@@ -4,32 +4,27 @@ import 'package:data/matrix.dart' as dd;
 import 'package:quiver/core.dart';
 
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
-import '../../../../mixins/copyable_mixin.dart';
 import '../../../../utils/convert.dart';
 import '../../../general_algebraic_systems/number/base/number.dart';
 import '../../../general_algebraic_systems/number/exception/division_by_zero_exception.dart';
 import '../../exceptions/matrix_exception.dart';
-import '../../vector/base/vector_base.dart';
-import '../../vector/vector.dart';
-import '../diagonal_matrix.dart';
-import '../matrix.dart';
-import '../square_matrix.dart';
+import '../../tensor/tensor1/vector.dart';
+import '../base/tensor_base.dart';
+import 'diagonal_matrix.dart';
+import 'square_matrix.dart';
 
-/// Base class for matrix
-abstract class MatrixBase with CopyableMixin<MatrixBase> {
-  /// Default constructor that don't accept [_data]
-  MatrixBase();
-
-  /// Constructor that accept [_data]
-  MatrixBase.init(this._data);
+/// Class for work with numeric matrix
+class Matrix extends TensorBase {
+  /// Constructor accept array of arrays of num numbers
+  Matrix(this._data) : super(2);
 
   /// Generate matrix with specified [rows] and [cols]
   ///
   /// If [fillRandom] is true, then matrix will filled with random numbers,
   /// and if [fillRandom] is false and [identity] is true - creates an identity matrix,
   /// otherwise matrix will have all values defaults to 0
-  MatrixBase.generate(int rows, int cols,
-      {bool fillRandom = false, bool identity = false}) {
+  Matrix.generate(int rows, int cols,
+      {bool fillRandom = false, bool identity = false}) : super(2) {
     if (fillRandom == true) {
       _data = <List<num>>[];
 
@@ -56,10 +51,13 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
     }
   }
 
+  /// Creates an identity matrix
+  factory Matrix.identity(int rows, int cols) => Matrix.generate(rows, cols, identity: true);
+
   /// Raw data of matrix
   List<List<num>> _data;
 
-  /// Gets [_data] of this matrix
+  /// Gets copy of data of this matrix
   List<List<num>> get data => _data.map((r) => r.toList()).toList();
 
   /// Rows count of matrix
@@ -113,7 +111,7 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
   }
 
   /// Multiply matrix by number
-  MatrixBase _multiplyBy(num multiplier) {
+  Matrix _multiplyBy(num multiplier) {
     List<num> m(List<num> row) =>
         row.map((value) => value * multiplier).toList();
     return Matrix(_data.map(m).toList());
@@ -123,25 +121,82 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
   ///
   /// In order for the matrix `this` to be multiplied by the matrix [matrix], it is necessary
   /// that the number of columns of the matrix `this` be equal to the number of rows of the matrix [matrix].
-  MatrixBase matrixProduct(covariant MatrixBase matrix);
+  Matrix matrixProduct(Matrix matrix) {
+    if (columns == matrix.rows) {
+      return Matrix(data.map((row) {
+        final result = <num>[];
+        final resultTmp = <num>[];
+
+        for (var i = 1; i <= matrix.columns; i++) {
+          final mCol = matrix.columnAt(i);
+          resultTmp.clear();
+
+          for (var j = 0; j < columns; j++) {
+            resultTmp.add(row[j] * mCol[j]);
+          }
+
+          result.add(resultTmp.reduce((f, s) => f + s));
+        }
+
+        return result;
+      }).toList());
+    } else {
+      throw MatrixException(
+          'Columns of first matrix don\'t match rows of second!');
+    }
+  }
 
   /// Multiply this matrix by another [matrix] by the Adamart (Schur) method
   ///
   /// Takes two matrices of the same dimensions and produces another matrix where each element
   ///  `i`, `j` is the product of elements `i`, `j` of the original two matrices.
-  MatrixBase hadamardProduct(covariant MatrixBase matrix);
+  Matrix hadamardProduct(Matrix matrix) {
+    if (columns == matrix.columns && rows == matrix.rows) {
+      final m = Matrix.generate(rows, columns);
+      for (var i = 1; i <= rows; i++) {
+        for (var j = 1; j <= columns; j++) {
+          m.setItem(i, j, itemAt(i, j) * matrix.itemAt(i, j));
+        }
+      }
+      return m;
+    } else {
+      throw MatrixException('Multipied matrices doesn\'t match!');
+    }
+  }
 
   /// Transform matrix with given [t] function
-  MatrixBase transform(num t(num v));
+  Matrix transform(num t(num v)) =>
+      Matrix(data.map((row) => row.map(t).toList()).toList());
 
   /// Transpose matrix
-  MatrixBase transpose();
+  Matrix transpose() {
+    final transposedMatrix = Matrix.generate(columns, rows);
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        transposedMatrix.setItem(j, i, itemAt(i, j));
+      }
+    }
+    return transposedMatrix;
+  }
 
   /// Add [vector] to this matrix
   ///
   /// The [vector] is added to each row of this matrix.
   /// Columns of matrix should be equal to items count of vector.
-  MatrixBase addVector(covariant VectorBase vector);
+  Matrix addVector(Vector vector) {
+    if (columns == vector.itemCount) {
+      final newMatrix = Matrix.generate(rows, columns);
+      for (var r = 1; r <= rows; r++) {
+        for (var c = 1; c <= columns; c++) {
+          newMatrix.setItem(r, c, itemAt(r, c) + vector.itemAt(c));
+        }
+      }
+      return this + newMatrix;
+    } else {
+      throw MatrixException(
+          'Columns of matrix should be equal to items count of vector!');
+    }
+  }
 
   /// Replaces row with given [newRow] at the specified [index]
   ///
@@ -291,7 +346,13 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
   /// Gets submatrix of this matrix
   ///
   /// All parameters may be in range from 1 to end of matrix inclusively.
-  MatrixBase submatrix(int rowFrom, int rowTo, int colFrom, int colTo);
+  Matrix submatrix(int rowFrom, int rowTo, int colFrom, int colTo) {
+    final newData = data
+        .sublist(rowFrom - 1, rowTo)
+        .map((row) => row.sublist(colFrom - 1, colTo))
+        .toList();
+    return Matrix(newData);
+  }
 
   /// Converts this matrix to square matrix
   ///
@@ -307,11 +368,65 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
     }
   }
 
-  /// Gets specified row of matrix as vector
-  VectorBase rowAsVector(int row);
+  /// Eliminates this matrix using elemantary operations
+  ///
+  /// Elimination will be done using Gaussian method.
+  /// This matrix eliminates to upper triangle matrix.
+  Matrix gaussian() {
+    final eliminatedMatrix = Matrix(data);
+
+    for (var i = 1; i <= min(rows, columns); i++) {
+      var counts = 0;
+      for (var row in eliminatedMatrix.data) {
+        counts += row.where((v) => v != 0).length;
+      }
+      final mainCounts =
+          eliminatedMatrix.mainDiagonal().data.where((v) => v != 0).length;
+
+      if (isUpperTriangle() && counts == mainCounts) {
+        return eliminatedMatrix;
+      }
+
+      if (eliminatedMatrix.itemAt(i, i) == 0) {
+        final col = eliminatedMatrix.columnAt(i);
+        final row = eliminatedMatrix.rowAt(i);
+
+        final indexCol = row.indexWhere((n) => n != 0, i - 1);
+        final indexRow = col.indexWhere((n) => n != 0, i - 1);
+
+        if (indexRow != -1) {
+          eliminatedMatrix.swapRows(i, indexRow + 1);
+        } else if (indexCol != -1) {
+          eliminatedMatrix.swapColumns(i, indexCol + 1);
+        }
+      }
+
+      final choosedRow = eliminatedMatrix.rowAt(i);
+
+      for (var j = i + 1; j <= rows; j++) {
+        // For avoiding NaN if main diagonal contains mostly with 0
+        if (eliminatedMatrix.itemAt(i, i) == 0) {
+          continue;
+        }
+
+        final diff =
+            eliminatedMatrix.itemAt(j, i) / eliminatedMatrix.itemAt(i, i);
+
+        final tmpRow = Vector(choosedRow).transform((v) => v * -diff) +
+            Vector(eliminatedMatrix.rowAt(j));
+
+        eliminatedMatrix.replaceRow(j, tmpRow.data);
+      }
+    }
+
+    return eliminatedMatrix;
+  }
 
   /// Gets specified column of matrix as vector
-  VectorBase columnAsVector(int column);
+  Vector columnAsVector(int column) => Vector(columnAt(column));
+
+  /// Gets specified row of matrix as vector
+  Vector rowAsVector(int row) => Vector(rowAt(row));
 
   /// Calculates trace operator of this matrix
   num trace() {
@@ -322,12 +437,6 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
     return sum;
   }
 
-  /// Eliminates this matrix using elemantary operations
-  ///
-  /// Elimination will be done using Gaussian method.
-  /// This matrix eliminates to upper triangle matrix.
-  MatrixBase gaussian();
-
   /// Gets rang of this matrix
   int rank() => gaussian().mainDiagonal().data.where((e) => e != 0).length;
 
@@ -336,13 +445,13 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
   /// Returns `Map` that contains `values`, `leftVectors` and `rightVectors` with corresponding values.
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
-  Map<String, MatrixBase> svd() {
+  Map<String, Matrix> svd() {
     final m = toMatrixDartData(this);
     final result = dd.singularValue(m);
     final singularValues = fromMatrixDartData(result.S);
     final leftSingularVectors = fromMatrixDartData(result.U);
     final rightSingularVectors = fromMatrixDartData(result.V);
-    return <String, MatrixBase>{
+    return <String, Matrix>{
       'values': singularValues,
       'leftVectors': leftSingularVectors,
       'rightVectors': rightSingularVectors
@@ -352,29 +461,37 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
   /// Add values of [matrix] to corresponding values of this matrix
   ///
   /// The matrices should be of the same dimension
-  MatrixBase operator +(covariant MatrixBase matrix);
+  Matrix operator +(Matrix matrix) {
+    final newMatrix = Matrix.generate(rows, columns);
+    for (var i = 1; i <= rows; i++) {
+      for (var j = 1; j <= columns; j++) {
+        newMatrix.setItem(i, j, itemAt(i, j) + matrix.itemAt(i, j));
+      }
+    }
+    return newMatrix;
+  }
 
   /// Subtract values of [matrix] from corresponding values of this matrix
   ///
   /// The matrices should be of the same dimension
-  MatrixBase operator -(covariant MatrixBase matrix) => this + -matrix;
+  Matrix operator -(Matrix matrix) => this + -matrix;
 
   /// Unary minus of this matrix
-  MatrixBase operator -() => transform((v) => -v);
+  Matrix operator -() => transform((v) => -v);
 
   /// Multiply this matrix by [other]
   ///
   /// [other] may be one of three types:
   ///     1. num (and subclasses)
-  ///     2. MatrixBase (and subclasses)
+  ///     2. Matrix (and subclasses)
   ///     3. Number (and subclasses)
   ///
   /// Otherwise returns `null`.
-  MatrixBase operator *(Object other) {
-    MatrixBase m;
+  Matrix operator *(Object other) {
+    Matrix m;
     if (other is num) {
       m = _multiplyBy(other);
-    } else if (other is MatrixBase) {
+    } else if (other is Matrix) {
       m = hadamardProduct(other);
     } else if (other is Number) {
       m = _multiplyBy(other.toDouble());
@@ -384,8 +501,8 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
 
   /// Divide this matrix by number of by [other] matrix
   /// if `this` matrix and [other] are square matrix.
-  MatrixBase operator /(Object other) {
-    MatrixBase m;
+  Matrix operator /(Object other) {
+    Matrix m;
     if (other is num) {
       if (other == 0) {
         throw DivisionByZeroException();
@@ -404,11 +521,14 @@ abstract class MatrixBase with CopyableMixin<MatrixBase> {
 
   @override
   bool operator ==(Object other) =>
-      other is MatrixBase && hashCode == other.hashCode;
+      other is Matrix && hashCode == other.hashCode;
 
   @override
   int get hashCode => hashObjects(_data);
 
   @override
   String toString() => '$_data';
+
+  @override
+  Matrix copy() => Matrix(data);
 }

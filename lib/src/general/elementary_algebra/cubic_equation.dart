@@ -92,5 +92,5 @@ class CubicEquation extends EquationBase {
       (a * pow(x, 3) + b * pow(x, 2) + c * x + d) == 0;
 
   @override
-  String toString() => '$a * x3 + $b * x2 + $c * x + $d';
+  String toString() => '${a}x^3 + ${b}x^2 + ${c}x + $d';
 }

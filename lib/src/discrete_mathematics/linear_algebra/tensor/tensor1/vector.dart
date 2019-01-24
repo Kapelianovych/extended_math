@@ -2,24 +2,22 @@ import 'dart:math';
 
 import 'package:quiver/core.dart';
 
-import '../../../../mixins/copyable_mixin.dart';
 import '../../../general_algebraic_systems/number/base/number.dart';
 import '../../../general_algebraic_systems/number/exception/division_by_zero_exception.dart';
 import '../../exceptions/vector_exception.dart';
-import '../../matrix/base/matrix_base.dart';
+import '../base/tensor_base.dart';
+import '../tensor2/matrix.dart';
+import '../tensor2/square_matrix.dart';
 
-/// Base class for vector
-abstract class VectorBase with CopyableMixin<VectorBase> {
-  /// Default constructor that don't accept data
-  VectorBase();
-
-  /// Constructor that accept [_data]
-  VectorBase.init(this._data);
+/// Class for work with vectors
+class Vector extends TensorBase {
+  /// Inits data for vector
+  Vector(this._data) : super(1);
 
   /// Data for vector
   List<num> _data;
 
-  /// Gets [_data] of this vector
+  /// Gets data of this vector
   List<num> get data => _data.toList();
 
   /// Count of vector's numbers
@@ -71,26 +69,49 @@ abstract class VectorBase with CopyableMixin<VectorBase> {
   num maxNorm() => norm(double.infinity);
 
   /// Multiply this vector by [vector] using dot product algorithm
-  num dotProduct(covariant VectorBase vector) =>
+  num dotProduct(Vector vector) =>
       toMatrixRow().matrixProduct(vector.toMatrixColumn()).itemAt(1, 1);
+
+  /// Converts this vector to matrix with one column
+  Matrix toMatrixColumn() {
+    final matrix = _data.map((value) => <num>[value]).toList();
+    return Matrix(matrix);
+  }
+
+  /// Convert this vector to martix with one row
+  Matrix toMatrixRow() => Matrix(<List<num>>[_data]);
 
   /// Gets cross product of this vector and another [vector]
   ///
   /// Only suited for three-dimensional Euclidean space.
   /// [itemCount] of both vectors must be equal to 3.
-  VectorBase crossProduct(covariant VectorBase vector);
-
-  /// Convert this vector to martix with one row
-  MatrixBase toMatrixRow();
-
-  /// Converts this vector to matrix with one column
-  MatrixBase toMatrixColumn();
+  Vector crossProduct(Vector vector) {
+    if (itemCount == 3 && vector.itemCount == 3) {
+      final v = <num>[];
+      for (var i = 1; i <= 3; i++) {
+        final m = SquareMatrix(<List<num>>[
+          <num>[1, 1, 1],
+          _data,
+          vector._data
+        ]);
+        m
+          ..removeRow(1)
+          ..removeColumn(i);
+        v.add(m.determinant());
+      }
+      return Vector(v);
+    } else {
+      throw VectorException(
+          'Vectors should be in three-dimensional Euclidean space.'
+          'Found $itemCount and ${vector.itemCount}');
+    }
+  }
 
   /// Get angle between this vector and another [vector]
   ///
   /// Dafault unit for measuring angle is `radian`.
   /// If [degrees] is true - result will have the degrees unit.
-  num angleBetween(covariant VectorBase vector, {bool degrees = false}) {
+  double angleBetween(Vector vector, {bool degrees = false}) {
     final dot = dotProduct(vector);
     final magnitudes = euclideanNorm() * vector.euclideanNorm();
     if (degrees == false) {
@@ -103,29 +124,35 @@ abstract class VectorBase with CopyableMixin<VectorBase> {
   }
 
   /// Gets Hadamard product of vectors
-  VectorBase hadamardProduct(covariant VectorBase vector);
+  Vector hadamardProduct(Vector vector) {
+    final _data = <num>[];
+    for (var i = 1; i <= itemCount; i++) {
+      _data.add(itemAt(i) * vector.itemAt(i));
+    }
+    return Vector(_data);
+  }
 
   /// Transform each element of this vector and return transformed vector
-  VectorBase transform(num t(num value));
+  Vector transform(num t(num value)) => Vector(_data.map(t).toList());
 
   /// Checks if vector is unit vector
   bool isUnit() => euclideanNorm() == 1;
 
   /// Checks if this vector and [vector] are orthogonal to each other
-  bool isOrthogonalTo(covariant VectorBase vector) => dotProduct(vector) == 0;
+  bool isOrthogonalTo(Vector vector) => dotProduct(vector) == 0;
 
   /// Checks if this vector and [vector] are orthonormal
-  bool isOrthonormalWith(covariant VectorBase vector) =>
+  bool isOrthonormalWith(Vector vector) =>
       isOrthogonalTo(vector) && isUnit() && vector.isUnit();
 
   /// Multiplies this vector by number or other vector
   ///
   /// When multiplying two vectors, Hadamard's product is used.
-  VectorBase operator *(Object other) {
-    VectorBase v;
+  Vector operator *(Object other) {
+    Vector v;
     if (other is num) {
       v = transform((v) => v * other);
-    } else if (other is VectorBase) {
+    } else if (other is Vector) {
       v = hadamardProduct(other);
     } else if (other is Number) {
       v = transform((v) => v * other.toDouble());
@@ -134,8 +161,8 @@ abstract class VectorBase with CopyableMixin<VectorBase> {
   }
 
   /// Divides corresponding values of this vactors by [other]
-  VectorBase operator /(Object other) {
-    VectorBase v;
+  Vector operator /(Object other) {
+    Vector v;
     if (other is num) {
       if (other == 0) {
         throw DivisionByZeroException();
@@ -150,22 +177,35 @@ abstract class VectorBase with CopyableMixin<VectorBase> {
     return v;
   }
 
-  /// Add values of this vector to [vector]'s values
-  VectorBase operator +(covariant VectorBase vector);
-
   /// Gets unary minus of this vector
-  VectorBase operator -() => transform((v) => -v);
+  Vector operator -() => transform((v) => -v);
+
+  /// Add values of this vector to [vector]'s values
+  Vector operator +(Vector vector) {
+    if (itemCount == vector.itemCount) {
+      final tmpData = <num>[];
+      for (var i = 1; i <= itemCount; i++) {
+        tmpData.add(itemAt(i) + vector.itemAt(i));
+      }
+      return Vector(tmpData);
+    } else {
+      throw VectorException('Count of vector\'s numbers isn\'t equal!');
+    }
+  }
 
   /// Subtract [vector]'s values from values of this vector
-  VectorBase operator -(covariant VectorBase vector) => this + -vector;
+  Vector operator -(Vector vector) => this + -vector;
 
   @override
   bool operator ==(Object other) =>
-      other is VectorBase && hashCode == other.hashCode;
+      other is Vector && hashCode == other.hashCode;
 
   @override
   int get hashCode => hashObjects(_data);
 
   @override
   String toString() => '$_data';
+
+  @override
+  Vector copy() => Vector(_data);
 }

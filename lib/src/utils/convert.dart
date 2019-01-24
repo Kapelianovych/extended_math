@@ -1,11 +1,10 @@
 import 'package:data/matrix.dart' as dd;
 import 'package:data/type.dart';
 
-import '../discrete_mathematics/linear_algebra/matrix/base/matrix_base.dart';
-import '../discrete_mathematics/linear_algebra/matrix/matrix.dart';
+import '../discrete_mathematics/linear_algebra/tensor/tensor2/matrix.dart';
 
 /// Converts matrix of `dart-data` library to matrix of this library
-MatrixBase fromMatrixDartData(dd.Matrix<num> ddMatrix) {
+Matrix fromMatrixDartData(dd.Matrix<num> ddMatrix) {
   final m = Matrix.generate(ddMatrix.rowCount, ddMatrix.colCount);
   for (var r = 1; r <= ddMatrix.rowCount; r++) {
     for (var c = 1; c <= ddMatrix.colCount; c++) {
@@ -16,7 +15,7 @@ MatrixBase fromMatrixDartData(dd.Matrix<num> ddMatrix) {
 }
 
 /// Converts matrix of this library to matrix of `dart-data` library
-dd.Matrix<num> toMatrixDartData(MatrixBase matrix) {
+dd.Matrix<num> toMatrixDartData(Matrix matrix) {
   final m = dd.Matrix.builder
       .withType(DataType.numeric)
       .call(matrix.rows, matrix.columns);

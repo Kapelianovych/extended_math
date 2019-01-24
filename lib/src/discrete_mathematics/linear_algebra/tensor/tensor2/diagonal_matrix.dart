@@ -1,4 +1,4 @@
-import '../../../applied_mathematics/probability_theory/numbers_generator.dart';
+import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
 import 'square_matrix.dart';
 
 /// Class for work with numeric diagonal matrix
@@ -27,7 +27,7 @@ class DiagonalMatrix extends SquareMatrix {
 
   @override
   DiagonalMatrix inverse() {
-    final newData = List<List<num>>.of(data);
+    final newData = data;
     for (var i = 1; i <= rows; i++) {
       newData[i - 1][i - 1] = 1 / newData[i - 1][i - 1];
     }

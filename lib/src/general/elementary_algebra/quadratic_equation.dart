@@ -52,5 +52,5 @@ class QuadraticEquation extends EquationBase {
   bool evaluateForZero(num x) => (a * pow(x, 2) + b * x + c) == 0;
 
   @override
-  String toString() => '$a * x2 + $b * x + $c';
+  String toString() => '${a}x^2 + ${b}x + $c';
 }
