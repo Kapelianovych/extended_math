@@ -22,6 +22,8 @@ class Double extends Number {
   /// Double(4.876026).preciseTo(1) == Double(4.9);
   /// Double(4.876026).preciseTo(2) == Double(4.88);
   /// Double(4.876026).preciseTo(3) == Double(4.876);
+  /// Double(0.876026).preciseTo(3) == Double(0.876);
+  /// Double(0.076026).preciseTo(3) == Double(0.076);
   /// ```
   /// [count] should be positive integer number.
   Double preciseTo(int count) {
@@ -34,12 +36,22 @@ class Double extends Number {
     if (count == 0) {
       return Double(_value.roundToDouble());
     } else {
-      var result = _value * pow(10, splittedNumber[1].length);
-
-      while ('${result.toInt()}'.length != count + splittedNumber[0].length) {
+      // Numbers like 0.0...082736... transform to 100...082736... integers
+      var result = double.parse(
+        '${splittedNumber[0] == '0' ? '1' : ''}$_value'
+        .split('').where((n) => n != '.').join());
+      // Precise [result]
+      while ('${result.toInt()}'.length != count + splittedNumber[0].length + (splittedNumber[0] == '0' ? 1 : 0)) {
         result = (result / 10).roundToDouble();
       }
-      return Double(result / pow(10, count));
+
+      result /= pow(10, count);
+      // Remove 1 from [result] if original number is like 0.0...0987...
+      if (splittedNumber[0] == '0') {
+        result = double.parse('$result'.substring(1));
+      }
+
+      return Double(result);
     }
   }
 }

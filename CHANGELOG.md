@@ -1,4 +1,8 @@
-# 0.0.16
+# 0.0.16+1
+
+- Fix `preciseTo()` methof of `Double` class.
+
+## 0.0.16
 
 - Add `Tensor3` class for work with three-dimensional tensors.
 - Remove `VectorBase`, `MatrixBase` classes.
