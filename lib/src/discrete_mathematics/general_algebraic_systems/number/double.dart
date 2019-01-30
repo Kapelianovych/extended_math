@@ -37,11 +37,15 @@ class Double extends Number {
       return Double(_value.roundToDouble());
     } else {
       // Numbers like 0.0...082736... transform to 100...082736... integers
-      var result = double.parse(
-        '${splittedNumber[0] == '0' ? '1' : ''}$_value'
-        .split('').where((n) => n != '.').join());
+      var result = double.parse('${splittedNumber[0] == '0' ? '1' : ''}$_value'
+          .split('')
+          .where((n) => n != '.')
+          .join());
       // Precise [result]
-      while ('${result.toInt()}'.length != count + splittedNumber[0].length + (splittedNumber[0] == '0' ? 1 : 0)) {
+      while ('${result.toInt()}'.length !=
+          count +
+              splittedNumber[0].length +
+              (splittedNumber[0] == '0' ? 1 : 0)) {
         result = (result / 10).roundToDouble();
       }
 

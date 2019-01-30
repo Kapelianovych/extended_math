@@ -19,6 +19,7 @@ At the moment library have 4 sections:
         * Number theory
     4. Applied mathematics
         * Probability theory
+        * Statistic
 
 Each section don't have full implementation yet.
 See [dartdoc](https://pub.dartlang.org/documentation/extended_math/latest/) for which functionality are implemented.

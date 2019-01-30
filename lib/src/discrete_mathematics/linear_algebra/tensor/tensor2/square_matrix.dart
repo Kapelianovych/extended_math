@@ -35,7 +35,7 @@ class SquareMatrix extends Matrix {
   num determinant() {
     final firstRow = rowAt(1);
 
-    if (itemCount == 1) {
+    if (itemsCount == 1) {
       return itemAt(1, 1);
     } else {
       num res = 0;
@@ -114,14 +114,14 @@ class SquareMatrix extends Matrix {
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   Map<num, Vector> eigenDecomposition() {
-    final thisCopy = SquareMatrix(data).transform((v) => v.toDouble());
+    final thisCopy = SquareMatrix(data).map((v) => v.toDouble());
     final m = toMatrixDartData(thisCopy);
     final ddResult = dd.eigenvalue(m);
     final eigenValues = fromMatrixDartData(ddResult.D).mainDiagonal();
     final eigenVectors = fromMatrixDartData(ddResult.V);
 
     final result = <num, Vector>{};
-    for (var i = 1; i <= eigenValues.itemCount; i++) {
+    for (var i = 1; i <= eigenValues.itemsCount; i++) {
       result[eigenValues.itemAt(i)] = eigenVectors.rowAsVector(i);
     }
     return result;
@@ -164,7 +164,7 @@ class SquareMatrix extends Matrix {
       for (var j = i + 1; j <= rows; j++) {
         final diff =
             eliminatedMatrix.itemAt(j, i) / eliminatedMatrix.itemAt(i, i);
-        final tmpRow = Vector(choosedRow).transform((v) => v * -diff) +
+        final tmpRow = Vector(choosedRow).map((v) => v * -diff) +
             Vector(eliminatedMatrix.rowAt(j));
 
         result[j - 1] += result[i - 1] * -diff;
@@ -176,9 +176,9 @@ class SquareMatrix extends Matrix {
       final choosedRow = eliminatedMatrix.rowAt(i);
 
       for (var j = i - 1; j >= 1; j--) {
-        final tmpRow = Vector(choosedRow)
-                .transform((v) => v * -eliminatedMatrix.itemAt(j, i)) +
-            Vector(eliminatedMatrix.columnAt(j));
+        final tmpRow =
+            Vector(choosedRow).map((v) => v * -eliminatedMatrix.itemAt(j, i)) +
+                Vector(eliminatedMatrix.columnAt(j));
 
         result[j - 1] += result[i - 1] * -eliminatedMatrix.itemAt(j, i);
         eliminatedMatrix.replaceRow(j, tmpRow.data);

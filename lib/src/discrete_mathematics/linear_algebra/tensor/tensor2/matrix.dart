@@ -6,7 +6,7 @@ import 'package:quiver/core.dart';
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
 import '../../../../utils/convert.dart';
 import '../../../general_algebraic_systems/number/base/number.dart';
-import '../../../general_algebraic_systems/number/exception/division_by_zero_exception.dart';
+import '../../../general_algebraic_systems/number/exceptions/division_by_zero_exception.dart';
 import '../../exceptions/matrix_exception.dart';
 import '../../tensor/tensor1/vector.dart';
 import '../base/tensor_base.dart';
@@ -59,8 +59,11 @@ class Matrix extends TensorBase {
   /// Raw data of matrix
   List<List<num>> _data;
 
-  /// Gets copy of data of this matrix
+  @override
   List<List<num>> get data => _data.map((r) => r.toList()).toList();
+
+  @override
+  Map<String, int> get shape => <String, int>{'width': columns, 'length': rows};
 
   /// Rows count of matrix
   int get rows => _data.length;
@@ -68,8 +71,8 @@ class Matrix extends TensorBase {
   /// Columns count of matrix
   int get columns => _data[0].length;
 
-  /// Count of all numbers of matrix
-  int get itemCount => rows * columns;
+  @override
+  int get itemsCount => rows * columns;
 
   /// Gets number at specified [row] and [column]
   ///
@@ -110,13 +113,6 @@ class Matrix extends TensorBase {
       removedColumn.add(_data[i - 1].removeAt(column - 1));
     }
     return removedColumn;
-  }
-
-  /// Multiply matrix by number
-  Matrix _multiplyBy(num multiplier) {
-    List<num> m(List<num> row) =>
-        row.map((value) => value * multiplier).toList();
-    return Matrix(_data.map(m).toList());
   }
 
   /// Multiply this matrix by another [matrix]
@@ -166,10 +162,6 @@ class Matrix extends TensorBase {
     }
   }
 
-  /// Transform matrix with given [t] function
-  Matrix transform(num t(num v)) =>
-      Matrix(data.map((row) => row.map(t).toList()).toList());
-
   /// Transpose matrix
   Matrix transpose() {
     final transposedMatrix = Matrix.generate(columns, rows);
@@ -186,7 +178,7 @@ class Matrix extends TensorBase {
   /// The [vector] is added to each row of this matrix.
   /// Columns of matrix should be equal to items count of vector.
   Matrix addVector(Vector vector) {
-    if (columns == vector.itemCount) {
+    if (columns == vector.itemsCount) {
       final newMatrix = Matrix.generate(rows, columns);
       for (var r = 1; r <= rows; r++) {
         for (var c = 1; c <= columns; c++) {
@@ -414,7 +406,7 @@ class Matrix extends TensorBase {
         final diff =
             eliminatedMatrix.itemAt(j, i) / eliminatedMatrix.itemAt(i, i);
 
-        final tmpRow = Vector(choosedRow).transform((v) => v * -diff) +
+        final tmpRow = Vector(choosedRow).map((v) => v * -diff) +
             Vector(eliminatedMatrix.rowAt(j));
 
         eliminatedMatrix.replaceRow(j, tmpRow.data);
@@ -460,26 +452,28 @@ class Matrix extends TensorBase {
     };
   }
 
-  /// Add values of [matrix] to corresponding values of this matrix
+  /// Add values of [other] to corresponding values of this matrix
   ///
-  /// The matrices should be of the same dimension
-  Matrix operator +(Matrix matrix) {
+  /// The matrices should be of the same dimension.
+  @override
+  Matrix operator +(Matrix other) {
     final newMatrix = Matrix.generate(rows, columns);
     for (var i = 1; i <= rows; i++) {
       for (var j = 1; j <= columns; j++) {
-        newMatrix.setItem(i, j, itemAt(i, j) + matrix.itemAt(i, j));
+        newMatrix.setItem(i, j, itemAt(i, j) + other.itemAt(i, j));
       }
     }
     return newMatrix;
   }
 
-  /// Subtract values of [matrix] from corresponding values of this matrix
+  /// Subtract values of [other] from corresponding values of this matrix
   ///
-  /// The matrices should be of the same dimension
-  Matrix operator -(Matrix matrix) => this + -matrix;
+  /// The matrices should be of the same dimension.
+  @override
+  Matrix operator -(Matrix other) => this + -other;
 
-  /// Unary minus of this matrix
-  Matrix operator -() => transform((v) => -v);
+  @override
+  Matrix operator -() => map((v) => -v);
 
   /// Multiply this matrix by [other]
   ///
@@ -489,20 +483,22 @@ class Matrix extends TensorBase {
   ///     3. Number (and subclasses)
   ///
   /// Otherwise returns `null`.
+  @override
   Matrix operator *(Object other) {
     Matrix m;
     if (other is num) {
-      m = _multiplyBy(other);
+      m = copy().map((v) => v * other);
     } else if (other is Matrix) {
       m = hadamardProduct(other);
     } else if (other is Number) {
-      m = _multiplyBy(other.toDouble());
+      m = copy().map((v) => v * other.data);
     }
     return m;
   }
 
   /// Divide this matrix by number of by [other] matrix
   /// if `this` matrix and [other] are square matrix.
+  @override
   Matrix operator /(Object other) {
     Matrix m;
     if (other is num) {
@@ -513,10 +509,10 @@ class Matrix extends TensorBase {
     } else if (this is SquareMatrix && other is SquareMatrix) {
       m = this * other.inverse();
     } else if (other is Number) {
-      if (other.toDouble() == 0) {
+      if (other.data == 0) {
         throw DivisionByZeroException();
       }
-      m = this * (1 / other.toDouble());
+      m = this * (1 / other.data);
     }
     return m;
   }
@@ -529,8 +525,48 @@ class Matrix extends TensorBase {
   int get hashCode => hashObjects(_data);
 
   @override
-  String toString() => '$_data';
+  Matrix map(num f(num number)) =>
+      Matrix(data.map((row) => row.map(f).toList()).toList());
+
+  @override
+  num reduce(num f(num prev, num next)) {
+    var list = <num>[];
+    for (var row in data) {
+      list = list.followedBy(row).toList();
+    }
+    return list.reduce(f);
+  }
+
+  @override
+  bool every(bool f(num number)) {
+    var list = <num>[];
+    for (var row in data) {
+      list = list.followedBy(row).toList();
+    }
+    return list.every(f);
+  }
+
+  @override
+  bool any(bool f(num number)) {
+    var list = <num>[];
+    for (var row in data) {
+      list = list.followedBy(row).toList();
+    }
+    return list.any(f);
+  }
+
+  @override
+  List<num> toList() {
+    var list = <num>[];
+    for (var row in data) {
+      list = list.followedBy(row).toList();
+    }
+    return list;
+  }
 
   @override
   Matrix copy() => Matrix(data);
+
+  @override
+  String toString() => '$_data';
 }
