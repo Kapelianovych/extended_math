@@ -1,6 +1,14 @@
-# 0.0.16+1
+# 0.0.17
 
-- Fix `preciseTo()` methof of `Double` class.
+- Add `reduce()`, `any()`, `every()`, `map()`, `toList()` methods to `TensorBase` class.
+- Add `TensorBase.generate` constructor and to its subclasses.
+- Rename `transform()` method of `Vactor` and `Matrix` to `map()`.
+- Add `statistic` subsection with `Mean` class.
+- Add `itemAt()` and `setItem()` methods to `Tensor3` and `Tensor4` classes.
+
+## 0.0.16+1
+
+- Fix `preciseTo()` method of `Double` class.
 
 ## 0.0.16
 

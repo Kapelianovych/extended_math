@@ -1,22 +1,32 @@
 import 'dart:math';
 
-import '../../../../mixins/copyable_mixin.dart';
+import '../../../linear_algebra/tensor/base/tensor_base.dart';
 import '../double.dart';
-import '../exception/division_by_zero_exception.dart';
+import '../exceptions/division_by_zero_exception.dart';
 
 /// Class that provide type in equivalence of Dart's `num`
 ///
 /// This class doesn't replace `num` type but implement methods that don't exist in.
-class Number with CopyableMixin<Number> {
+class Number extends TensorBase {
   /// Creates instance of [Number] by accepting number or it will be equal to 0
-  Number(this._value);
+  Number(this._value) : super(0);
 
   /// Internal value of number
   num _value;
 
+  @override
+  int get itemsCount => 1;
+
+  @override
+  num get data => _value;
+
+  @override
+  Map<String, int> get shape =>
+      <String, int>{}; // Empty because numbers haven't shape
+
   /// Gets nth root of this number
   ///
-  /// [degree] may bo only positive integer number.
+  /// [degree] may be only positive integer number.
   Double rootOf(int degree) {
     if (_value == 0) {
       return Double(0);
@@ -48,22 +58,24 @@ class Number with CopyableMixin<Number> {
   /// Add this to [other]
   ///
   /// [other] can be either `num` or [Number].
+  @override
   Number operator +(Object other) {
     Number n;
     if (other is num) {
       n = Number(_value + other);
     } else if (other is Number) {
-      n = Number(_value + other._value);
+      n = Number(_value + other.data);
     }
     return n;
   }
 
-  /// Negate operator
+  @override
   Number operator -() => Number(-_value);
 
   /// Subtract [other] from this
   ///
   /// [other] can be either `num` or [Number].
+  @override
   Number operator -(Object other) {
     Number n;
     if (other is num) {
@@ -77,12 +89,13 @@ class Number with CopyableMixin<Number> {
   /// Multiply this by [other]
   ///
   /// [other] can be either `num` or [Number].
+  @override
   Number operator *(Object other) {
     Number n;
     if (other is num) {
       n = Number(_value * other);
     } else if (other is Number) {
-      n = Number(_value * other._value);
+      n = Number(_value * other.data);
     }
     return n;
   }
@@ -90,18 +103,19 @@ class Number with CopyableMixin<Number> {
   /// Divide this by [other]
   ///
   /// [other] can be either `num` or [Number].
-  Number operator /(Object other) {
-    Number n;
+  @override
+  Double operator /(Object other) {
+    Double n;
     if (other is num) {
       if (other == 0) {
         throw DivisionByZeroException();
       }
-      n = Number(_value / other);
+      n = Double(_value / other);
     } else if (other is Number) {
-      if (other._value == 0) {
+      if (other.data == 0) {
         throw DivisionByZeroException();
       }
-      n = Number(_value / other._value);
+      n = Double(_value / other.data);
     }
     return n;
   }
@@ -112,13 +126,28 @@ class Number with CopyableMixin<Number> {
     if (other is num) {
       result = _value == other;
     } else if (other is Number) {
-      result = _value == other._value;
+      result = _value == other.data;
     }
     return result;
   }
 
   @override
   int get hashCode => _value.hashCode;
+
+  @override
+  Number map(num f(num number)) => Number(toList().map(f).single);
+
+  @override
+  bool every(bool f(num number)) => toList().every(f);
+
+  @override
+  bool any(bool f(num number)) => every(f);
+
+  @override
+  num reduce(num f(num prev, num next)) => toList().reduce(f);
+
+  @override
+  List<num> toList() => <num>[_value];
 
   @override
   String toString() => '$_value';
