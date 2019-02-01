@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../../../../complex_analysis/complex.dart';
 import '../../../linear_algebra/tensor/base/tensor_base.dart';
 import '../double.dart';
 import '../exceptions/division_by_zero_exception.dart';
@@ -50,10 +51,10 @@ class Number extends TensorBase {
   Number copy() => Number(_value);
 
   /// Truncates this [_value] to an integer and returns the result as an `int`
-  int toInt() => _value.toInt();
+  int toInt() => data.toInt();
 
   /// Returns the result as an `double`
-  double toDouble() => _value.toDouble();
+  double toDouble() => data.toDouble();
 
   /// Add this to [other]
   ///
@@ -148,6 +149,9 @@ class Number extends TensorBase {
 
   @override
   List<num> toList() => <num>[_value];
+
+  /// Converts this number to complex number
+  Complex toComplex() => Complex(re: data);
 
   @override
   String toString() => '$_value';

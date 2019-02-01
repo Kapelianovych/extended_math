@@ -440,7 +440,7 @@ class Matrix extends TensorBase {
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   Map<String, Matrix> svd() {
-    final m = toMatrixDartData(this);
+    final m = toMatrixDartData(copy());
     final result = dd.singularValue(m);
     final singularValues = fromMatrixDartData(result.S);
     final leftSingularVectors = fromMatrixDartData(result.U);
@@ -451,6 +451,11 @@ class Matrix extends TensorBase {
       'rightVectors': rightSingularVectors
     };
   }
+
+  /// Calculates the ratio `C` of the largest to smallest singular value in the singular value decomposition of a matrix
+  ///
+  /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
+  double condition() => dd.singularValue(toMatrixDartData(copy())).cond;
 
   /// Add values of [other] to corresponding values of this matrix
   ///

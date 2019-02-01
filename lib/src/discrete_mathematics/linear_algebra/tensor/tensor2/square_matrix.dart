@@ -40,7 +40,7 @@ class SquareMatrix extends Matrix {
     } else {
       num res = 0;
       for (var i = 1; i <= columns; i++) {
-        final changedMatrix = SquareMatrix(data);
+        final changedMatrix = copy();
         changedMatrix
           ..removeRow(1)
           ..removeColumn(i);
@@ -89,7 +89,7 @@ class SquareMatrix extends Matrix {
       throw MatrixException(
           'The inverse is impossible because determinant of matrix equal to zero!');
     } else {
-      final origin = SquareMatrix(data);
+      final origin = copy();
 
       final matrixOfCofactors = SquareMatrix.generate(rows);
       for (var i = 1; i <= rows; i++) {
@@ -114,7 +114,7 @@ class SquareMatrix extends Matrix {
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   Map<num, Vector> eigenDecomposition() {
-    final thisCopy = SquareMatrix(data).map((v) => v.toDouble());
+    final thisCopy = copy().map((v) => v.toDouble());
     final m = toMatrixDartData(thisCopy);
     final ddResult = dd.eigenvalue(m);
     final eigenValues = fromMatrixDartData(ddResult.D).mainDiagonal();
@@ -130,8 +130,8 @@ class SquareMatrix extends Matrix {
   /// Performs Gaussian-Jordan elimination of this matrix and [equalTo] as right-side of augmented matrix
   ///
   /// [equalTo] should be equal to [rows].
-  Vector eliminate(List<double> equalTo) {
-    final eliminatedMatrix = SquareMatrix(data);
+  Vector eliminate(List<num> equalTo) {
+    final eliminatedMatrix = copy();
     final result = equalTo;
 
     for (var i = 1; i <= rows; i++) {
@@ -178,7 +178,7 @@ class SquareMatrix extends Matrix {
       for (var j = i - 1; j >= 1; j--) {
         final tmpRow =
             Vector(choosedRow).map((v) => v * -eliminatedMatrix.itemAt(j, i)) +
-                Vector(eliminatedMatrix.columnAt(j));
+                Vector(eliminatedMatrix.rowAt(j));
 
         result[j - 1] += result[i - 1] * -eliminatedMatrix.itemAt(j, i);
         eliminatedMatrix.replaceRow(j, tmpRow.data);

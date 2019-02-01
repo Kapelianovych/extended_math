@@ -1,4 +1,12 @@
-# 0.0.17
+# 0.0.18
+
+- Add `lerp()` method to `TensorBase` class.
+- Add `condition()` method to `Matrix` class.
+- Fix `eliminate()` method of `SquareMatrix` class.
+- Add `toComplex()` method to `Number` class;
+- Add some internal helper methods.
+
+## 0.0.17
 
 - Add `reduce()`, `any()`, `every()`, `map()`, `toList()` methods to `TensorBase` class.
 - Add `TensorBase.generate` constructor and to its subclasses.
