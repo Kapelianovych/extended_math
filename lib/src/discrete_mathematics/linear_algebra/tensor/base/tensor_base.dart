@@ -1,4 +1,5 @@
 import '../../../../mixins/copyable_mixin.dart';
+import '../../../../utils/equals.dart';
 import '../../../general_algebraic_systems/number/base/number.dart';
 import '../../exceptions/tensor_exception.dart';
 import '../tensor1/vector.dart';
@@ -123,6 +124,24 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
     } else {
       throw TensorException(
           'Tensor cannot be converted to Tensor4, because dimension of this tensor isn\'t equal to 4!');
+    }
+  }
+
+  /// Constructs tensor that is linear interpolated between this tensor and [other]
+  ///
+  /// Constructs new data points within the range of a discrete set of known data points.
+  /// [a] (alpha) may be in range from 0 to 1 inclusively. Otherwise throws [TensorException].
+  TensorBase lerp(TensorBase other, double a) {
+    if (dimension != other.dimension && !isMapsEqual(shape, other.shape)) {
+      throw ArgumentError('Tensors aren\'t equals!');
+    }
+
+    if (a >= 0 && a <= 1) {
+      return copy() * (1 - a) + other * a;
+    } else {
+      throw TensorException(
+          'Calculated tensor isn\'t within the range of a discrete set of known data points (tensors).\n'
+          'a ($a) is out of range [0, 1]!');
     }
   }
 
