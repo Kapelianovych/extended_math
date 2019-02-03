@@ -353,7 +353,7 @@ class Matrix extends TensorBase {
   /// Elimination will be done using Gaussian method.
   /// This matrix eliminates to upper triangle matrix.
   Matrix gaussian() {
-    // Function checks for equaling values under main diagonal to zeroes 
+    // Function checks for equaling values under main diagonal to zeroes
     bool isEliminatedByGaussian() {
       final minCount = min(rows, columns);
 
@@ -454,7 +454,7 @@ class Matrix extends TensorBase {
   }
 
   /// Calculates QR decomposition of this matrix
-  /// 
+  ///
   /// Returns `Map` with `q` key points to **orthogonal matrix (Q)**
   /// and `r` key points to ** upper triangular matrix (R)**.
   /// Rows of matrix must be qreat or equal to columns, otherwise method returns `Map`,
@@ -487,10 +487,7 @@ class Matrix extends TensorBase {
       }
     }
 
-    return <String, Matrix>{
-      'q': q,
-      'r': r
-    };
+    return <String, Matrix>{'q': q, 'r': r};
   }
 
   /// Calculates the ratio `C` of the largest to smallest singular value in the singular value decomposition of a matrix

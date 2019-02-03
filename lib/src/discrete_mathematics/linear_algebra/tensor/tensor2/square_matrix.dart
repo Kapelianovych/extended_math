@@ -70,21 +70,27 @@ class SquareMatrix extends Matrix {
   }
 
   /// Checks if this matrix is positive definite
-  bool isPositiveDefinite() => isSymmetric() && eigen().keys.every((k) => k > 0);
+  bool isPositiveDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k > 0);
 
   /// Checks if this matrix is positive semi-definite
-  bool isPositiveSemiDefinite() => isSymmetric() && eigen().keys.every((k) => k >= 0);
+  bool isPositiveSemiDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k >= 0);
 
   /// Checks if this matrix is negative definite
-  bool isNegativeDefinite() => isSymmetric() && eigen().keys.every((k) => k < 0);
+  bool isNegativeDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k < 0);
 
   /// Checks if this matrix is negative semi-definite
-  bool isNegativeSemiDefinite() => isSymmetric() && eigen().keys.every((k) => k <= 0);
+  bool isNegativeSemiDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k <= 0);
 
   /// Checks if this matrix is indefinite
   bool isIndefinite() {
     final eigValues = eigen().keys;
-    return isSymmetric() && eigValues.any((k) => k < 0) && eigValues.any((k) => k > 0);
+    return isSymmetric() &&
+        eigValues.any((k) => k < 0) &&
+        eigValues.any((k) => k > 0);
   }
 
   /// Checks if this matrix is orthogonal
@@ -101,7 +107,6 @@ class SquareMatrix extends Matrix {
     }
     return true;
   }
-
 
   /// Checks if this matrix is upper triangular
   bool isUpperTriangle() {
@@ -172,9 +177,9 @@ class SquareMatrix extends Matrix {
   }
 
   /// Calculates Cholesky decomposition of this `positive definite matrix`, otherwise returns `null`
-  /// 
+  ///
   /// Returns only upper triangular matrix. To get second matrix `transpose` returned matrix.
-  /// 
+  ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   SquareMatrix cholesky() {
     SquareMatrix m;
@@ -187,8 +192,8 @@ class SquareMatrix extends Matrix {
   }
 
   /// Calculates LU decomposition of this matrix with partial pivoting
-  /// 
-  /// Returns `Map` object where `upper` key contains **upper triangular matrix**, 
+  ///
+  /// Returns `Map` object where `upper` key contains **upper triangular matrix**,
   /// `lower` key contains **lower triangular matrix**, `pivote` key contains **permutation matrix**.
   Map<String, SquareMatrix> lu() {
     final thisCopy = copy();
@@ -198,7 +203,8 @@ class SquareMatrix extends Matrix {
       for (var r = c + 1; r <= rows; r++) {
         final divide = thisCopy.itemAt(r, c) / thisCopy.itemAt(c, c);
         lower.setItem(r, c, divide);
-        thisCopy.replaceRow(r, (thisCopy.rowAsVector(c) * -divide + thisCopy.rowAsVector(r)).data);
+        thisCopy.replaceRow(r,
+            (thisCopy.rowAsVector(c) * -divide + thisCopy.rowAsVector(r)).data);
       }
     }
 
@@ -212,7 +218,7 @@ class SquareMatrix extends Matrix {
     };
   }
 
-  /// Rearranging the rows of `A`, prior to the `LU` decomposition, in a way that the largest element of 
+  /// Rearranging the rows of `A`, prior to the `LU` decomposition, in a way that the largest element of
   /// each column gets onto the diagonal of `A`
   SquareMatrix _pivotize() {
     final m = copy();
@@ -224,15 +230,14 @@ class SquareMatrix extends Matrix {
 
       for (var j = i; j < m.rows; j++) {
         if (m.itemAt(j, i) > maxm) {
-            maxm = m.itemAt(j, i);
-            row = j;
+          maxm = m.itemAt(j, i);
+          row = j;
         }
       }
 
       if (i != row) {
         final tmp = id.rowAt(i);
-        id..replaceRow(i, id.rowAt(row))
-          ..replaceRow(row, tmp);
+        id..replaceRow(i, id.rowAt(row))..replaceRow(row, tmp);
       }
     }
     return id;
