@@ -1,4 +1,14 @@
-# 0.0.18
+# 0.0.19
+
+- Moves `isUpperTriangular()` method to `SquareMatrix` class.
+- Add `isLowerTriangular()`, `cholesky()`, `isIndefinite()`, `lu()` method to `SquareMatrix` class.
+- Add `qr()` method to `Matrix` class.
+- Add `isPositiveDefinite()`, `isPositiveSemiDefinite()`, `isNegativeDefinite()` and
+  `isNegativeSemiDefinite()` methods to `SquareMatrix` class.
+- Fix `inverse()` method of `SquareMatrix` class.
+- Rename `eigenDecomposition()` to `eigen()` method of `SquareMatrix` class.
+
+## 0.0.18
 
 - Add `lerp()` method to `TensorBase` class.
 - Add `condition()` method to `Matrix` class.

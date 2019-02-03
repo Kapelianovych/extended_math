@@ -4,7 +4,8 @@ import 'package:data/matrix.dart' as dd;
 
 import '../../../../utils/convert.dart';
 import '../../exceptions/matrix_exception.dart';
-import '../../tensor/tensor1/vector.dart';
+import '../base/tensor_base.dart';
+import '../tensor1/vector.dart';
 import 'matrix.dart';
 
 /// Class for work with numeric square matrix
@@ -28,7 +29,7 @@ class SquareMatrix extends Matrix {
       : super.generate(number, number,
             fillRandom: fillRandom, identity: identity);
 
-  /// Creates an identity matrix
+  /// Creates an identity matrix with the specified [number] of rows/columns
   SquareMatrix.identity(int number) : this.generate(number, identity: true);
 
   /// Gets determinant of matrix
@@ -68,6 +69,30 @@ class SquareMatrix extends Matrix {
     return true;
   }
 
+  /// Checks if this matrix is positive definite
+  bool isPositiveDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k > 0);
+
+  /// Checks if this matrix is positive semi-definite
+  bool isPositiveSemiDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k >= 0);
+
+  /// Checks if this matrix is negative definite
+  bool isNegativeDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k < 0);
+
+  /// Checks if this matrix is negative semi-definite
+  bool isNegativeSemiDefinite() =>
+      isSymmetric() && eigen().keys.every((k) => k <= 0);
+
+  /// Checks if this matrix is indefinite
+  bool isIndefinite() {
+    final eigValues = eigen().keys;
+    return isSymmetric() &&
+        eigValues.any((k) => k < 0) &&
+        eigValues.any((k) => k > 0);
+  }
+
   /// Checks if this matrix is orthogonal
   bool isOrthogonal() {
     final inversed = inverse();
@@ -83,17 +108,41 @@ class SquareMatrix extends Matrix {
     return true;
   }
 
+  /// Checks if this matrix is upper triangular
+  bool isUpperTriangle() {
+    for (var i = 1; i <= rows; i++) {
+      final allNull = columnAt(i).skip(i).every((n) => n == 0);
+      if (!allNull) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /// Checks if this matrix is lower triangular
+  bool isLowerTriangle() {
+    for (var i = 1; i <= rows; i++) {
+      final allNull = columnAt(i).take(i - 1).every((n) => n == 0);
+      if (!allNull) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   /// Inverse and return inversed matrix
   SquareMatrix inverse() {
     if (isSingular()) {
       throw MatrixException(
           'The inverse is impossible because determinant of matrix equal to zero!');
     } else {
-      final origin = copy();
-
       final matrixOfCofactors = SquareMatrix.generate(rows);
+
       for (var i = 1; i <= rows; i++) {
         for (var j = 1; j <= columns; j++) {
+          final origin = copy();
           origin
             ..removeRow(i)
             ..removeColumn(j);
@@ -113,7 +162,7 @@ class SquareMatrix extends Matrix {
   /// Returns `Map` object where `Map.keys` are `eigenvalues` and `Map.values` are `eigenvectors`.
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
-  Map<num, Vector> eigenDecomposition() {
+  Map<num, Vector> eigen() {
     final thisCopy = copy().map((v) => v.toDouble());
     final m = toMatrixDartData(thisCopy);
     final ddResult = dd.eigenvalue(m);
@@ -125,6 +174,73 @@ class SquareMatrix extends Matrix {
       result[eigenValues.itemAt(i)] = eigenVectors.rowAsVector(i);
     }
     return result;
+  }
+
+  /// Calculates Cholesky decomposition of this `positive definite matrix`, otherwise returns `null`
+  ///
+  /// Returns only upper triangular matrix. To get second matrix `transpose` returned matrix.
+  ///
+  /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
+  SquareMatrix cholesky() {
+    SquareMatrix m;
+    if (isPositiveDefinite()) {
+      final ddMatrix = toMatrixDartData(copy());
+      final result = dd.cholesky(ddMatrix).L;
+      m = fromMatrixDartData(result).toSquareMatrix();
+    }
+    return m;
+  }
+
+  /// Calculates LU decomposition of this matrix with partial pivoting
+  ///
+  /// Returns `Map` object where `upper` key contains **upper triangular matrix**,
+  /// `lower` key contains **lower triangular matrix**, `pivote` key contains **permutation matrix**.
+  Map<String, SquareMatrix> lu() {
+    final thisCopy = copy();
+    final lower = SquareMatrix.identity(rows);
+
+    for (var c = 1; c < columns; c++) {
+      for (var r = c + 1; r <= rows; r++) {
+        final divide = thisCopy.itemAt(r, c) / thisCopy.itemAt(c, c);
+        lower.setItem(r, c, divide);
+        thisCopy.replaceRow(r,
+            (thisCopy.rowAsVector(c) * -divide + thisCopy.rowAsVector(r)).data);
+      }
+    }
+
+    final upper = gaussian().toSquareMatrix();
+    final pivote = _pivotize();
+
+    return <String, SquareMatrix>{
+      'upper': upper,
+      'lower': lower,
+      'pivote': pivote
+    };
+  }
+
+  /// Rearranging the rows of `A`, prior to the `LU` decomposition, in a way that the largest element of
+  /// each column gets onto the diagonal of `A`
+  SquareMatrix _pivotize() {
+    final m = copy();
+    final id = SquareMatrix.identity(m.rows);
+
+    for (var i = 1; i <= m.rows; i++) {
+      var maxm = m.itemAt(i, i);
+      var row = i;
+
+      for (var j = i; j < m.rows; j++) {
+        if (m.itemAt(j, i) > maxm) {
+          maxm = m.itemAt(j, i);
+          row = j;
+        }
+      }
+
+      if (i != row) {
+        final tmp = id.rowAt(i);
+        id..replaceRow(i, id.rowAt(row))..replaceRow(row, tmp);
+      }
+    }
+    return id;
   }
 
   /// Performs Gaussian-Jordan elimination of this matrix and [equalTo] as right-side of augmented matrix

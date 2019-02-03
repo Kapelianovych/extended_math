@@ -115,7 +115,7 @@ class Matrix extends TensorBase {
     return removedColumn;
   }
 
-  /// Multiply this matrix by another [matrix]
+  /// Multiply this matrix by another [matrix] using matrix product algorithm
   ///
   /// In order for the matrix `this` to be multiplied by the matrix [matrix], it is necessary
   /// that the number of columns of the matrix `this` be equal to the number of rows of the matrix [matrix].
@@ -296,20 +296,6 @@ class Matrix extends TensorBase {
   /// Checks if this is identity matrix
   bool isIdentity() => isDiagonal(checkIdentity: true);
 
-  /// Checks if this matrix is eliminated by Gaussian method
-  bool isUpperTriangle() {
-    final minCount = min(rows, columns);
-
-    for (var i = 1; i <= minCount; i++) {
-      final allNull = columnAt(i).skip(i).every((n) => n == 0);
-      if (!allNull) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   /// Gets main diagonal of this matrix
   Vector mainDiagonal() {
     final data = <num>[];
@@ -367,17 +353,32 @@ class Matrix extends TensorBase {
   /// Elimination will be done using Gaussian method.
   /// This matrix eliminates to upper triangle matrix.
   Matrix gaussian() {
-    final eliminatedMatrix = Matrix(data);
+    // Function checks for equaling values under main diagonal to zeroes
+    bool isEliminatedByGaussian() {
+      final minCount = min(rows, columns);
+
+      for (var i = 1; i <= minCount; i++) {
+        final allNull = columnAt(i).skip(i).every((n) => n == 0);
+        if (!allNull) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    // Main code starts here
+    final eliminatedMatrix = copy();
 
     for (var i = 1; i <= min(rows, columns); i++) {
-      var counts = 0;
+      var nonNullCounts = 0;
       for (var row in eliminatedMatrix.data) {
-        counts += row.where((v) => v != 0).length;
+        nonNullCounts += row.where((v) => v != 0).length;
       }
-      final mainCounts =
+      final mainNonNullCounts =
           eliminatedMatrix.mainDiagonal().data.where((v) => v != 0).length;
 
-      if (isUpperTriangle() && counts == mainCounts) {
+      if (isEliminatedByGaussian() && nonNullCounts == mainNonNullCounts) {
         return eliminatedMatrix;
       }
 
@@ -450,6 +451,43 @@ class Matrix extends TensorBase {
       'leftVectors': leftSingularVectors,
       'rightVectors': rightSingularVectors
     };
+  }
+
+  /// Calculates QR decomposition of this matrix
+  ///
+  /// Returns `Map` with `q` key points to **orthogonal matrix (Q)**
+  /// and `r` key points to ** upper triangular matrix (R)**.
+  /// Rows of matrix must be qreat or equal to columns, otherwise method returns `Map`,
+  /// which keys point to `null`.
+  Map<String, Matrix> qr() {
+    final r = SquareMatrix.generate(columns);
+    final q = Matrix.generate(rows, columns);
+    final a = copy();
+
+    if (rows >= columns) {
+      for (var k = 1; k <= columns; k++) {
+        var s = 0.0;
+        for (var j = 1; j <= rows; j++) {
+          s += pow(a.itemAt(j, k), 2);
+        }
+        r.setItem(k, k, sqrt(s));
+        for (var j = 1; j <= rows; j++) {
+          q.setItem(j, k, a.itemAt(j, k) / r.itemAt(k, k));
+        }
+        for (var i = k + 1; i <= columns; i++) {
+          var ss = 0.0;
+          for (var j = 1; j <= rows; j++) {
+            ss += a.itemAt(j, i) * q.itemAt(j, k);
+          }
+          r.setItem(k, i, ss);
+          for (var j = 1; j <= rows; j++) {
+            a.setItem(j, i, a.itemAt(j, i) - r.itemAt(k, i) * q.itemAt(j, k));
+          }
+        }
+      }
+    }
+
+    return <String, Matrix>{'q': q, 'r': r};
   }
 
   /// Calculates the ratio `C` of the largest to smallest singular value in the singular value decomposition of a matrix
