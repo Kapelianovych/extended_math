@@ -22,7 +22,7 @@ void main() {
   final double det = v3.determinant();
 
   // Computes eigenvalues and eigenvectors of square matrix
-  final Map<num, Vector> result = v3.eigenDecomposition();
+  final Map<num, Vector> result = v3.eigen();
 
   final m = Matrix(<List<double>>[
     <double>[2, -1, 5],
