@@ -2,7 +2,7 @@ import 'dart:math';
 
 /// Class that represent methods of unoform distribution
 class UniformDistribution {
-  /// Creates instance of [UniformDistribution] with boundaries of possible value's interval 
+  /// Creates instance of [UniformDistribution] with boundaries of possible value's interval
   UniformDistribution(this.value, {this.a = 0, this.b = 1});
 
   /// Variable's value
@@ -17,7 +17,7 @@ class UniformDistribution {
   /// Computes density of continuous uniform distribution
   double density() => value >= a && value <= b ? 1 / (b - a) : 0;
 
-  /// Computes cumulative distribution of a real-valued random variable 
+  /// Computes cumulative distribution of a real-valued random variable
   double cdf() {
     if (value < a) {
       return 0;
@@ -31,7 +31,8 @@ class UniformDistribution {
   /// Computes nth([degree]) raw moment of distribution
   double rawMoment([int degree = 1]) {
     if (degree <= 0) {
-      throw ArgumentError.value(degree, 'degree', 'Degree must be greater than zero!');
+      throw ArgumentError.value(
+          degree, 'degree', 'Degree must be greater than zero!');
     }
 
     final pre = 1 / (degree + 1);
@@ -45,7 +46,8 @@ class UniformDistribution {
   /// Computes nth([degree]) central moment of distribution
   double centralMoment([int degree = 1]) {
     if (degree <= 0) {
-      throw ArgumentError.value(degree, 'degree', 'Degree must be greater than zero!');
+      throw ArgumentError.value(
+          degree, 'degree', 'Degree must be greater than zero!');
     }
 
     final up = pow(a - b, degree) + pow(b - a, degree);
