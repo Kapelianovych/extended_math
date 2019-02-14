@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../../discrete_mathematics/general_algebraic_systems/number/base/number.dart';
 import '../../discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
+import '../../utils/equals.dart';
 import 'exceptions/mean_exception.dart';
 
 /// Class that can compute the mean value of a discrete set of numbers
@@ -24,10 +25,9 @@ class Mean {
   /// If provided, [weights] must have the same shape as the number's set.
   double arithmetic({TensorBase weights}) {
     var set = _set.copy();
-    var w = weights;
-    w ??= TensorBase.generate(set.shape, (_) => 1);
+    final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (set.itemsCount != w.itemsCount) {
+    if (!isMapsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }
@@ -43,10 +43,9 @@ class Mean {
   /// If provided, [weights] must have the same shape as the number's set.
   double geometric({TensorBase weights}) {
     final set = _set.copy();
-    var w = weights;
-    w ??= TensorBase.generate(set.shape, (_) => 1);
+    final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (set.itemsCount != w.itemsCount) {
+    if (!isMapsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }
@@ -68,10 +67,9 @@ class Mean {
   /// If provided, [weights] must have the same shape as the number's set.
   double harmonic({TensorBase weights}) {
     final set = _set.copy();
-    var w = weights;
-    w ??= TensorBase.generate(set.shape, (_) => 1);
+    final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (set.itemsCount != w.itemsCount) {
+    if (!isMapsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }

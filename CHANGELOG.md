@@ -1,4 +1,9 @@
-# 0.0.19
+# 0.0.20
+
+- Add `UniformDistributions` class.
+- Change some lines of code in `Mean` class.
+
+## 0.0.19
 
 - Moves `isUpperTriangular()` method to `SquareMatrix` class.
 - Add `isLowerTriangular()`, `cholesky()`, `isIndefinite()`, `lu()` method to `SquareMatrix` class.
