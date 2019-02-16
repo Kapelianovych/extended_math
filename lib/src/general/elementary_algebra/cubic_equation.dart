@@ -52,7 +52,7 @@ class CubicEquation extends EquationBase {
 
       for (var item in possibleX) {
         for (var i = 1; i <= 2; i++) {
-          if (evaluateForZero(pow(-1, i) * item)) {
+          if (evaluate(pow(-1, i) * item, 0)) {
             result['x1'] = Complex(re: pow(-1, i) * item);
           }
         }
@@ -88,8 +88,8 @@ class CubicEquation extends EquationBase {
   num discriminant() => (pow(q, 2) / 4) + (pow(p, 3) / 27);
 
   @override
-  bool evaluateForZero(num x) =>
-      (a * pow(x, 3) + b * pow(x, 2) + c * x + d) == 0;
+  bool evaluate(num x, num equalTo) =>
+      (a * pow(x, 3) + b * pow(x, 2) + c * x + d) == equalTo;
 
   @override
   String toString() => '${a}x^3 + ${b}x^2 + ${c}x + $d';

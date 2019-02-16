@@ -14,7 +14,7 @@
 library extended_math;
 
 export 'src/applied_mathematics/probability_theory/numbers_generator.dart';
-export 'src/applied_mathematics/probability_theory/probability_distributions/uniform_distribution.dart';
+export 'src/applied_mathematics/probability_theory/probability_distributions/continuous_uniform_distribution.dart';
 export 'src/applied_mathematics/probability_theory/theory_of_probability_distributions.dart';
 export 'src/applied_mathematics/statistic/exceptions/mean_exception.dart';
 export 'src/applied_mathematics/statistic/mean.dart';

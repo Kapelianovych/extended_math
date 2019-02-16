@@ -49,7 +49,7 @@ class QuadraticEquation extends EquationBase {
   num discriminant() => pow(b, 2) - 4 * a * c;
 
   @override
-  bool evaluateForZero(num x) => (a * pow(x, 2) + b * x + c) == 0;
+  bool evaluate(num x, num equalTo) => (a * pow(x, 2) + b * x + c) == equalTo;
 
   @override
   String toString() => '${a}x^2 + ${b}x + $c';

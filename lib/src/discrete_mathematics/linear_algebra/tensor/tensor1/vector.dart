@@ -28,7 +28,7 @@ class Vector extends TensorBase {
   Map<String, int> get shape => <String, int>{'width': itemsCount};
 
   @override
-  int get itemsCount => _data.length;
+  int get itemsCount => data.length;
 
   /// Gets length of this vector
   num get length => euclideanNorm();
@@ -36,13 +36,13 @@ class Vector extends TensorBase {
   /// Gets number at specified [index]
   ///
   /// [index] is in range from 1 to end inclusively.
-  num itemAt(int index) => _data[index - 1];
+  num itemAt(int index) => data[index - 1];
 
   /// Sets [item] in specified [position] of vector
   ///
   /// [position] should starts from 1.
   void setItem(int position, num item) {
-    _data[position - 1] = item;
+    data[position - 1] = item;
   }
 
   /// Gets norm of vector alse known as vector's length
@@ -54,7 +54,7 @@ class Vector extends TensorBase {
       throw VectorException('P must be greater or equal to 1! Given $p.');
     } else if (n.isInfinite) {
       var res = itemAt(1);
-      for (var i in _data) {
+      for (var i in data) {
         if (res < i) {
           res = i;
         }
@@ -62,7 +62,7 @@ class Vector extends TensorBase {
       return res;
     } else {
       var sum = 0.0;
-      for (var item in _data) {
+      for (var item in data) {
         sum += pow(item, n);
       }
       return pow(sum, 1 / n);
@@ -81,12 +81,12 @@ class Vector extends TensorBase {
 
   /// Converts this vector to matrix with one column
   Matrix toMatrixColumn() {
-    final matrix = _data.map((value) => <num>[value]).toList();
+    final matrix = data.map((value) => <num>[value]).toList();
     return Matrix(matrix);
   }
 
   /// Convert this vector to martix with one row
-  Matrix toMatrixRow() => Matrix(<List<num>>[_data]);
+  Matrix toMatrixRow() => Matrix(<List<num>>[data]);
 
   /// Gets cross product of this vector and another [vector]
   ///
@@ -98,8 +98,8 @@ class Vector extends TensorBase {
       for (var i = 1; i <= 3; i++) {
         final m = SquareMatrix(<List<num>>[
           <num>[1, 1, 1],
-          _data,
-          vector._data
+          data,
+          vector.data
         ]);
         m
           ..removeRow(1)
@@ -132,11 +132,11 @@ class Vector extends TensorBase {
 
   /// Gets Hadamard product of vectors
   Vector hadamardProduct(Vector vector) {
-    final _data = <num>[];
+    final data = <num>[];
     for (var i = 1; i <= itemsCount; i++) {
-      _data.add(itemAt(i) * vector.itemAt(i));
+      data.add(itemAt(i) * vector.itemAt(i));
     }
-    return Vector(_data);
+    return Vector(data);
   }
 
   /// Checks if vector is unit vector
@@ -199,16 +199,16 @@ class Vector extends TensorBase {
   Vector operator -(Vector other) => this + -other;
 
   @override
-  Vector map(num f(num number)) => Vector(_data.map(f).toList());
+  Vector map(num f(num number)) => Vector(data.map(f).toList());
 
   @override
-  num reduce(num f(num prev, num next)) => _data.reduce(f);
+  num reduce(num f(num prev, num next)) => data.reduce(f);
 
   @override
-  bool every(bool f(num number)) => _data.every(f);
+  bool every(bool f(num number)) => data.every(f);
 
   @override
-  bool any(bool f(num number)) => _data.any(f);
+  bool any(bool f(num number)) => data.any(f);
 
   @override
   List<num> toList() => data;
@@ -218,11 +218,11 @@ class Vector extends TensorBase {
       other is Vector && hashCode == other.hashCode;
 
   @override
-  int get hashCode => hashObjects(_data);
+  int get hashCode => hashObjects(data);
 
   @override
-  Vector copy() => Vector(_data);
+  Vector copy() => Vector(data);
 
   @override
-  String toString() => '$_data';
+  String toString() => '$data';
 }

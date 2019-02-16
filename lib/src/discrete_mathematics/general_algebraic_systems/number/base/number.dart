@@ -27,8 +27,8 @@ class Number extends TensorBase {
 
   /// Gets nth root of this number
   ///
-  /// [degree] may be only positive integer number.
-  Double rootOf(int degree) {
+  /// [degree] may be only positive number.
+  Double rootOf(num degree) {
     if (_value == 0) {
       return Double(0);
     }

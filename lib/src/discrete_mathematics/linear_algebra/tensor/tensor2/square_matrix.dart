@@ -4,7 +4,6 @@ import 'package:data/matrix.dart' as dd;
 
 import '../../../../utils/convert.dart';
 import '../../exceptions/matrix_exception.dart';
-import '../base/tensor_base.dart';
 import '../tensor1/vector.dart';
 import 'matrix.dart';
 

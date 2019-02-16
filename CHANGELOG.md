@@ -1,4 +1,11 @@
-# 0.0.20
+# 0.0.21
+
+- Fix `rootOf()` method of `Number` class to accept positive integer of double number as degree.
+- Some small fix in the code, that don't touch functionality.
+- Completely rewrite README to give more information about package.
+- Rename `UniformDistributions` into `ContinuousUniformDistributions` class.
+
+## 0.0.20
 
 - Add `UniformDistributions` class.
 - Change some lines of code in `Mean` class.

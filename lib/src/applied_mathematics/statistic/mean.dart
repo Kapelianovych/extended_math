@@ -5,7 +5,7 @@ import '../../discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
 import '../../utils/equals.dart';
 import 'exceptions/mean_exception.dart';
 
-/// Class that can compute the mean value of a discrete set of numbers
+/// Class that can computes the mean value of a discrete set of numbers
 class Mean {
   /// Create instanse of [Mean] with set of positive real numbers
   Mean(TensorBase numbers) {

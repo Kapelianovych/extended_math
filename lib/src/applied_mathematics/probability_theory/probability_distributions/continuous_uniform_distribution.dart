@@ -1,9 +1,9 @@
 import 'dart:math';
 
 /// Class that represent methods of unoform distribution
-class UniformDistribution {
-  /// Creates instance of [UniformDistribution] with boundaries of possible value's interval
-  UniformDistribution(this.value, {this.a = 0, this.b = 1});
+class ContinuousUniformDistribution {
+  /// Creates instance of [ContinuousUniformDistribution] with boundaries of possible value's interval
+  ContinuousUniformDistribution(this.value, {this.a = 0, this.b = 1});
 
   /// Variable's value
   num value;
@@ -28,8 +28,8 @@ class UniformDistribution {
     }
   }
 
-  /// Computes nth([degree]) raw moment of distribution
-  double rawMoment([int degree = 1]) {
+  /// Computes nth([degree]) moment of distribution
+  double moment([int degree = 1]) {
     if (degree <= 0) {
       throw ArgumentError.value(
           degree, 'degree', 'Degree must be greater than zero!');

@@ -10,6 +10,6 @@ abstract class EquationBase {
   /// Gets discriminant of equation
   num discriminant();
 
-  /// Evaluates the expression for zero
-  bool evaluateForZero(num x);
+  /// Evaluates the expression with given [x] to [equalTo] value
+  bool evaluate(num x, num equalTo);
 }

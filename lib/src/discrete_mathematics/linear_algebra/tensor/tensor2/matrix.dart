@@ -66,10 +66,10 @@ class Matrix extends TensorBase {
   Map<String, int> get shape => <String, int>{'width': columns, 'length': rows};
 
   /// Rows count of matrix
-  int get rows => _data.length;
+  int get rows => data.length;
 
   /// Columns count of matrix
-  int get columns => _data[0].length;
+  int get columns => data[0].length;
 
   @override
   int get itemsCount => rows * columns;
@@ -77,7 +77,7 @@ class Matrix extends TensorBase {
   /// Gets number at specified [row] and [column]
   ///
   /// [row] and [column] are in range from 1 to end inclusively.
-  num itemAt(int row, int column) => _data[row - 1][column - 1];
+  num itemAt(int row, int column) => data[row - 1][column - 1];
 
   /// Set number to specified [value], replace old value if exist
   ///
@@ -89,7 +89,7 @@ class Matrix extends TensorBase {
   List<num> columnAt(int number) {
     final col = <num>[];
 
-    for (var row in _data) {
+    for (var row in data) {
       col.add(row[number - 1]);
     }
 
@@ -97,7 +97,7 @@ class Matrix extends TensorBase {
   }
 
   /// Gets specified row in range from 1 to end inclusively.
-  List<num> rowAt(int number) => _data[number - 1].toList();
+  List<num> rowAt(int number) => data[number - 1].toList();
 
   /// Removes specified row
   ///
@@ -262,7 +262,7 @@ class Matrix extends TensorBase {
   /// Gets Frobenius norm of matrix
   num frobeniusNorm() {
     var sum = 0.0;
-    for (var row in _data) {
+    for (var row in data) {
       for (var val in row) {
         sum += pow(val, 2);
       }
@@ -337,12 +337,12 @@ class Matrix extends TensorBase {
   /// Converts this matrix to square matrix
   ///
   /// Throws `MatrixException` if [rows] isn't equal to [columns]
-  SquareMatrix toSquareMatrix() => SquareMatrix(_data);
+  SquareMatrix toSquareMatrix() => SquareMatrix(data);
 
   /// Converts this matrix to diagonal matrix
   DiagonalMatrix toDiagonalMatrix() {
     if (isDiagonal()) {
-      return DiagonalMatrix(_data);
+      return DiagonalMatrix(data);
     } else {
       throw MatrixException('This matrix isn\'t diagonal!');
     }
@@ -432,7 +432,7 @@ class Matrix extends TensorBase {
     return sum;
   }
 
-  /// Gets rang of this matrix
+  /// Gets rank of this matrix
   int rank() => gaussian().mainDiagonal().data.where((e) => e != 0).length;
 
   /// Singular value decomposition for this matrix
@@ -565,7 +565,7 @@ class Matrix extends TensorBase {
       other is Matrix && hashCode == other.hashCode;
 
   @override
-  int get hashCode => hashObjects(_data);
+  int get hashCode => hashObjects(data);
 
   @override
   Matrix map(num f(num number)) =>
@@ -611,5 +611,5 @@ class Matrix extends TensorBase {
   Matrix copy() => Matrix(data);
 
   @override
-  String toString() => '$_data';
+  String toString() => '$data';
 }

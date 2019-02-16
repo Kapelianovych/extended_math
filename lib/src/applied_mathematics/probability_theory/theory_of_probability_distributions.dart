@@ -18,10 +18,10 @@ class TheoryOfProbabilityDistributions {
   /// Probabilities of [values]
   TensorBase _probabilities;
 
-  /// Getter for [_probabilities] that return copy
+  /// Getter for [_values] that return their copy
   TensorBase get values => _values.copy();
 
-  /// Getter for [_values] that return copy
+  /// Getter for [_probabilities] that return their copy
   TensorBase get probabilities => _probabilities.copy();
 
   /// Computes expected value for all possible [values] of a random number for finite case with its probabilities
