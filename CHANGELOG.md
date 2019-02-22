@@ -1,4 +1,11 @@
-# 0.0.21
+# 0.0.22
+
+- Move `Mean` class to `CentralTendency`.
+- Add `median()`, `mode()`, `minimum()`, `maximum()` methods to `CentralTendency` class.
+- Fix `setItem()` of `Vector` class.
+- Add `subvector()`, `insert()` to `Vector` class.
+
+## 0.0.21
 
 - Fix `rootOf()` method of `Number` class to accept positive integer of double number as degree.
 - Some small fix in the code, that don't touch functionality.

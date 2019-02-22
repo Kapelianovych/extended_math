@@ -33,7 +33,7 @@ At the moment library have 4 sections:
     + [Numbers generator](#Numbers-generator)
     + [Theory of probability distributions](#Theory-of-probability-distributions)
   + [Statistic](#Statistic)
-    + [Mean](#Mean)
+    + [CentralTendency](#Central-tendency)
 
 Each section don't have full implementation yet.
 See here or [dartdoc](https://pub.dartlang.org/documentation/extended_math/latest/) for which functionality are implemented.
@@ -539,7 +539,7 @@ void main() {
 
 Statistics is a branch of mathematics dealing with data collection, organization, analysis, interpretation and presentation.
 
-#### Mean
+#### Central tendency
 
 Class that can computes the mean value of a discrete set of numbers:
 
@@ -547,11 +547,13 @@ Class that can computes the mean value of a discrete set of numbers:
 import 'package:extended_math/extended_math.dart';
 
 void main() {
-  final c = Mean(Vector(<num>[8, 5, 3]));
+  final c = CentralTendency(Vector(<num>[8, 5, 3]));
   print(c.arithmetic()); // 5.333333333333333
   print(c.geometric()); // 4.932424148661106
   print(c.harmonic()); // 4.556962025316456
   print(c.quadratic()); // 5.715476066494082
+  print(c.maximum()); // 8
+  print(c.minimum()); // 3
 
   // It is common algorithm for all above means
   print(c.generalized(2)); // 5.715476068195464
@@ -564,7 +566,7 @@ Also you can provide weights of numbers in set:
 import 'package:extended_math/extended_math.dart';
 
 void main() {
-  final c = Mean(Vector(<num>[8, 5, 3]));
+  final c = CentralTendency(Vector(<num>[8, 5, 3]));
   print(c.arithmetic(weights: Vector(<num>[.25, .5, .25]))); // 5.25
   print(c.geometric(weights: Vector(<num>[.25, .5, .25]))); // 4.949232003839765
   print(c.harmonic(weights: Vector(<num>[.25, .5, .25]))); // 4.660194174757281
@@ -572,6 +574,18 @@ void main() {
 
   // It is common algorithm for all above means
   print(c.generalized(2)); // 5.715476068195464
+}
+```
+
++ computes mode and median:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  final c = CentralTendency(Vector(<num>[2, 5, 3, -6, 5, 2]));
+  print(c.mode()); // {2, 5}
+  print(c.median()); // -1.5
 }
 ```
 
