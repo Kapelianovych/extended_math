@@ -5,9 +5,9 @@ import '../../discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
 import '../../utils/equals.dart';
 import 'exceptions/mean_exception.dart';
 
-/// **Central tendency** (or measure of central tendency) is a central or 
-/// typical value for a probability distribution. It may also be called 
-/// a center or location of the distribution. Colloquially, measures of 
+/// **Central tendency** (or measure of central tendency) is a central or
+/// typical value for a probability distribution. It may also be called
+/// a center or location of the distribution. Colloquially, measures of
 /// central tendency are often called averages
 class CentralTendency {
   /// Create instanse of [CentralTendency] with set of real numbers
@@ -111,19 +111,17 @@ class CentralTendency {
     return Number(underRoot).rootOf(degree).toDouble();
   }
 
-  /// Gets minima of the set of numbers - equivalent to [generalized] with 
+  /// Gets minima of the set of numbers - equivalent to [generalized] with
   /// degree equal to `-Infinity`
   num minimum() {
-    final list = _set.toList()
-      ..sort();
+    final list = _set.toList()..sort();
     return list.first;
   }
 
-  /// Gets maxima of the set of numbers - equivalent to [generalized] with 
+  /// Gets maxima of the set of numbers - equivalent to [generalized] with
   /// degree equal to `Infinity`
   num maximum() {
-    final list = _set.toList()
-      ..sort();
+    final list = _set.toList()..sort();
     return list.last;
   }
 
@@ -131,7 +129,7 @@ class CentralTendency {
   /// of a [_set]
   num median() {
     final list = _set.toList();
-    final center =list.length ~/ 2;
+    final center = list.length ~/ 2;
     if (list.length % 2 == 0) {
       return (list.elementAt(center - 1) + list.elementAt(center)) / 2;
     } else {

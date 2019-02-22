@@ -46,9 +46,9 @@ class Vector extends TensorBase {
   }
 
   /// Inserts item to specified [position] and this [Vector] growth by one item
-  /// 
+  ///
   /// [position] may be in range from 1 to end inclusively.
-  /// In order to insert [item] to end of [Vector] set position to 
+  /// In order to insert [item] to end of [Vector] set position to
   /// **length + 1**:
   /// ```dart
   /// final v = Vector(<num>[1, 2, 3]);
@@ -59,7 +59,7 @@ class Vector extends TensorBase {
 
   /// Gets norm of vector alse known as vector's length
   ///
-  /// [p] should have only integer value, if not - any fractional digits will 
+  /// [p] should have only integer value, if not - any fractional digits will
   /// be discarded.
   num norm(double p) {
     final n = p.truncateToDouble();
@@ -144,10 +144,10 @@ class Vector extends TensorBase {
   }
 
   /// Gets subvector from this [Vector]
-  /// 
+  ///
   /// [start] and [end] may be in range from 1 to end inclusively.
   Vector subvector(int start, [int end]) =>
-    Vector(data.sublist(start - 1, end != null ? end : null));
+      Vector(data.sublist(start - 1, end != null ? end : null));
 
   /// Gets Hadamard product of vectors
   Vector hadamardProduct(Vector vector) {
