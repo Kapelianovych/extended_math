@@ -35,6 +35,10 @@ At the moment library have 4 sections:
     + [Central tendency](#Central-tendency)
     + [Dispersion](#Dispersion)
     + [Shape of probability distributions](#Shape-of-probability-distributions)
+    + [Quantiles](#Quantiles)
+      + [Quantile](#Quantile)
+      + [Quartile](#Quartile)
+      + [Percentile](#Percentile)
 
 Each section don't have full implementation yet.
 See here or [dartdoc](https://pub.dartlang.org/documentation/extended_math/latest/) for which functionality are implemented.
@@ -592,6 +596,18 @@ void main() {
 }
 ```
 
++ computes interquartile range (IQR):
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  const t = Vector(
+    <num>[7, 7, 21, 25, 31, 31, 47, 75, 87, 115, 116, 119, 119, 155, 177]);
+  print(Dispersion(t).iqr()); // 94
+}
+```
+
 #### ShapeOfProbabilityDistribution
 
 The concept of the shape of a probability distribution arises in questions of finding an appropriate distribution to use to model the statistical properties of a population, given a sample from that population.
@@ -607,6 +623,50 @@ void main() {
   print(t.skewness()); // 0.23906314692954517
   print(t.kurtosis()); // 1.5
   print(t.kurtosis(excess: true)); // -1.5
+}
+```
+
+#### Quantiles
+
+In statistics and probability quantiles are cut points dividing the range of a probability distribution into continuous intervals with equal probabilities, or dividing the observations in a sample in the same way.
+
+##### Quantile
+
+Base class for all quantiles.
+
+##### Quartile
+
+A quartile is a type of quantile.
+
++ computes first, second and third quartiles:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  const t = Vector(
+    <num>[7, 7, 21, 25, 31, 31, 47, 75, 87, 115, 116, 119, 119, 155, 177]);
+  print(Quartile(t).calculate()); // [25, 75, 119]
+  print(Quartile(t, method: 'two').calculate()); // [28.0, 75, 117.5]
+  print(Quartile(t, method: 'three').calculate()); // [26.5, 75, 118.25]
+}
+```
+
+##### Percentile
+
+A percentile (or a centile) is a measure used in statistics indicating the value below which a given percentage of observations in a group of observations falls. For example, the 20th percentile is the value (or score) below which 20% of the observations may be found.
+
++ computes value and ordinal rank:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  const t = Vector(
+    <num>[7, 7, 21, 25, 31, 31, 47, 75, 87, 115, 116, 119, 119, 155, 177]);
+  final p = Percentile(t, 33);
+  print(p.ordinalRank()); // 5
+  print(p.value()); // 31
 }
 ```
 

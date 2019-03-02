@@ -21,6 +21,10 @@ export 'src/applied_mathematics/probability_theory/numbers_generator.dart';
 export 'src/applied_mathematics/statistic/central_tendency.dart';
 export 'src/applied_mathematics/statistic/dispersion.dart';
 export 'src/applied_mathematics/statistic/exceptions/mean_exception.dart';
+export 'src/applied_mathematics/statistic/exceptions/quantile_exception.dart';
+export 'src/applied_mathematics/statistic/quantiles/base/quantile.dart';
+export 'src/applied_mathematics/statistic/quantiles/percentile.dart';
+export 'src/applied_mathematics/statistic/quantiles/quartile.dart';
 export 'src/applied_mathematics/statistic/shape_of_probability_distribution.dart';
 
 export 'src/complex_analysis/complex.dart';

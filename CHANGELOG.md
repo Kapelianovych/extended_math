@@ -1,4 +1,10 @@
-# 0.0.23
+# 0.0.24
+
+- Add `iqr()` method to `Dispersion` class.
+- Add `Quantile`, `Quartile` and `Percentile` classes.
+- Improved README.
+
+## 0.0.23
 
 - Replace `setItem()` by `insert()` of `Vector` class.
 - Rename `dotProduct()` by `dot()`, `crossProduct()` by `cross()` of `Vector` class.

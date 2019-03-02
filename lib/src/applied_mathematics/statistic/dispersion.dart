@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../../discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
+import 'quantiles/quartile.dart';
 
 /// Class that contains methods from theory of probability distributions
 class Dispersion {
@@ -48,5 +49,18 @@ class Dispersion {
             .reduce((f, s) => f + s);
         return summ - pow(mu, 2);
     }
+  }
+
+  /// Calculates `interquartile range` (IQR) of [_values]
+  /// 
+  /// [method] to calculate quartiles [may have 3 values]
+  /// (https://en.wikipedia.org/wiki/Quartile):
+  /// 
+  ///     1. one (default)
+  ///     1. two
+  ///     1. three
+  num iqr({String method = 'one'}) {
+    final q = Quartile(_values, method: method);
+    return q.third - q.first;
   }
 }
