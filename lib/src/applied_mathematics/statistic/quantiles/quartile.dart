@@ -13,9 +13,9 @@ class Quartile extends Quantile {
   final TensorBase data;
 
   /// Method to compute quartiles
-  /// 
+  ///
   /// [May have 3 values](https://en.wikipedia.org/wiki/Quartile):
-  /// 
+  ///
   ///     1. one (default)
   ///     1. two
   ///     1. three
@@ -45,22 +45,20 @@ class Quartile extends Quantile {
         }
 
         final isFourPlusOne = (listData.length - 1) % 4 == 0;
-        final equalIndex = isFourPlusOne 
-          ? (listData.length - 1) ~/ 4 
-          : (listData.length - 3) ~/ 4;
+        final equalIndex = isFourPlusOne
+            ? (listData.length - 1) ~/ 4
+            : (listData.length - 3) ~/ 4;
         num first = 0;
         num third = 0;
 
         if (isFourPlusOne) {
-          first = listData[equalIndex - 1] * .75 
-            + listData[equalIndex] * .25;
-          third = listData[3 * equalIndex] * .25 
-            + listData[3 * equalIndex + 1] * .75;
+          first = listData[equalIndex - 1] * .75 + listData[equalIndex] * .25;
+          third = listData[3 * equalIndex] * .25 +
+              listData[3 * equalIndex + 1] * .75;
         } else {
-          first = listData[equalIndex] * .75 
-            + listData[equalIndex + 1] * .25;
-          third = listData[3 * equalIndex + 1] * .25 
-            + listData[3 * equalIndex + 2] * .75;
+          first = listData[equalIndex] * .75 + listData[equalIndex + 1] * .25;
+          third = listData[3 * equalIndex + 1] * .25 +
+              listData[3 * equalIndex + 2] * .75;
         }
 
         result
@@ -80,16 +78,13 @@ class Quartile extends Quantile {
 
     final half = listData.length / 2;
 
-    final first = listData
-          .sublist(0, method == 'one' ? half.floor() : half.ceil());
-    final third = listData
-          .sublist(method == 'one' ? half.ceil() : half.floor());
+    final first =
+        listData.sublist(0, method == 'one' ? half.floor() : half.ceil());
+    final third =
+        listData.sublist(method == 'one' ? half.ceil() : half.floor());
     result
-      ..insert(0, CentralTendency(
-        Vector(first)).median()
-      )
-      ..add(CentralTendency(
-        Vector(third)).median());
+      ..insert(0, CentralTendency(Vector(first)).median())
+      ..add(CentralTendency(Vector(third)).median());
     return result;
   }
 }

@@ -52,10 +52,10 @@ class Dispersion {
   }
 
   /// Calculates `interquartile range` (IQR) of [_values]
-  /// 
+  ///
   /// [method] to calculate quartiles [may have 3 values]
   /// (https://en.wikipedia.org/wiki/Quartile):
-  /// 
+  ///
   ///     1. one (default)
   ///     1. two
   ///     1. three
