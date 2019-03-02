@@ -1,4 +1,5 @@
-/// An exception that trows when performing improper operations with complex numbers
+/// An exception that trows when performing improper operations
+/// with complex numbers
 class ComplexException implements Exception {
   /// Take [message] that describe reason of exception
   ComplexException(this.message);

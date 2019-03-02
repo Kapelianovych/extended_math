@@ -1,28 +1,36 @@
 import 'dart:math';
 
-/// Class that represent methods of unoform distribution
-class ContinuousUniformDistribution {
-  /// Creates instance of [ContinuousUniformDistribution] with boundaries of possible value's interval
-  ContinuousUniformDistribution(this.value, {this.a = 0, this.b = 1});
+/// Class that represent methods of continuous uniform distribution
+class UniformDistribution {
+  /// Creates instance of [UniformDistribution] with
+  /// boundaries of possible [value]'s interval from lower [l]
+  /// to upper [u] and with random [value]
+  UniformDistribution(this.value, {this.l = 0, this.u = 1});
 
-  /// Variable's value
+  /// Variables's value
   num value;
 
   /// Minimum value of random variable
-  num a;
+  final num l;
 
   /// Maximum value of random variable
-  num b;
+  final num u;
+
+  /// Skewness of continuous uniform distribution
+  final int skewness = 0;
+
+  /// Excess kurtosis of continuous uniform distribution
+  final double excessKurtosis = -6 / 5;
 
   /// Computes density of continuous uniform distribution
-  double density() => value >= a && value <= b ? 1 / (b - a) : 0;
+  double density() => value >= l && value <= u ? 1 / (u - l) : 0;
 
   /// Computes cumulative distribution of a real-valued random variable
   double cdf() {
-    if (value < a) {
+    if (value < l) {
       return 0;
-    } else if (value >= a && value <= b) {
-      return (value - a) / (b - a);
+    } else if (value >= l && value <= u) {
+      return (value - l) / (u - l);
     } else {
       return 1;
     }
@@ -38,7 +46,7 @@ class ContinuousUniformDistribution {
     final pre = 1 / (degree + 1);
     var res = 0.0;
     for (var i = 0; i <= degree; i++) {
-      res += pow(a, i) * pow(b, degree - i);
+      res += pow(l, i) * pow(u, degree - i);
     }
     return pre * res;
   }
@@ -50,7 +58,7 @@ class ContinuousUniformDistribution {
           degree, 'degree', 'Degree must be greater than zero!');
     }
 
-    final up = pow(a - b, degree) + pow(b - a, degree);
+    final up = pow(l - u, degree) + pow(u - l, degree);
     final down = pow(2, degree + 1) * (degree + 1);
     return up / down;
   }

@@ -8,7 +8,8 @@ import 'exceptions/equation_exception.dart';
 class QuadraticEquation extends EquationBase {
   /// Accepts coefficients [a], [b] and [c]
   ///
-  /// [a] value shouldn't be equal to zero. Otherwise the [EquationException] is thrown.
+  /// [a] value shouldn't be equal to zero. Otherwise
+  /// the [EquationException] is thrown.
   QuadraticEquation({this.a = 1, this.b = 0, this.c = 0}) {
     if (a == 0) {
       throw EquationException('Coefficient a shouldn\'t be equal to zero!');

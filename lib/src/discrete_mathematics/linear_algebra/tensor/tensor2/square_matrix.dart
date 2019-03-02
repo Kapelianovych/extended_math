@@ -134,8 +134,8 @@ class SquareMatrix extends Matrix {
   /// Inverse and return inversed matrix
   SquareMatrix inverse() {
     if (isSingular()) {
-      throw MatrixException(
-          'The inverse is impossible because determinant of matrix equal to zero!');
+      throw MatrixException('The inverse is impossible because determinant '
+          'of matrix equal to zero!');
     } else {
       final matrixOfCofactors = SquareMatrix.generate(rows);
 
@@ -158,7 +158,8 @@ class SquareMatrix extends Matrix {
 
   /// Gets eigenvalues and eigenvectors of this matrix
   ///
-  /// Returns `Map` object where `Map.keys` are `eigenvalues` and `Map.values` are `eigenvectors`.
+  /// Returns `Map` object where `Map.keys` are `eigenvalues` and
+  /// `Map.values` are `eigenvectors`.
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   Map<num, Vector> eigen() {
@@ -175,9 +176,11 @@ class SquareMatrix extends Matrix {
     return result;
   }
 
-  /// Calculates Cholesky decomposition of this `positive definite matrix`, otherwise returns `null`
+  /// Calculates Cholesky decomposition of this `positive definite matrix`,
+  /// otherwise returns `null`
   ///
-  /// Returns only upper triangular matrix. To get second matrix `transpose` returned matrix.
+  /// Returns only upper triangular matrix. To get second matrix
+  /// `transpose` returned matrix.
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   SquareMatrix cholesky() {
@@ -192,8 +195,9 @@ class SquareMatrix extends Matrix {
 
   /// Calculates LU decomposition of this matrix with partial pivoting
   ///
-  /// Returns `Map` object where `upper` key contains **upper triangular matrix**,
-  /// `lower` key contains **lower triangular matrix**, `pivote` key contains **permutation matrix**.
+  /// Returns `Map` object where `upper` key contains
+  /// **upper triangular matrix**, `lower` key contains **lower triangular
+  /// matrix**, `pivote` key contains **permutation matrix**.
   Map<String, SquareMatrix> lu() {
     final thisCopy = copy();
     final lower = SquareMatrix.identity(rows);
@@ -217,8 +221,9 @@ class SquareMatrix extends Matrix {
     };
   }
 
-  /// Rearranging the rows of `A`, prior to the `LU` decomposition, in a way that the largest element of
-  /// each column gets onto the diagonal of `A`
+  /// Rearranging the rows of `A`, prior to the `LU` decomposition, in
+  /// a way that the largest element of each column gets onto
+  /// the diagonal of `A`
   SquareMatrix _pivotize() {
     final m = copy();
     final id = SquareMatrix.identity(m.rows);
@@ -242,7 +247,8 @@ class SquareMatrix extends Matrix {
     return id;
   }
 
-  /// Performs Gaussian-Jordan elimination of this matrix and [equalTo] as right-side of augmented matrix
+  /// Performs Gaussian-Jordan elimination of this matrix and [equalTo]
+  /// as right-side of augmented matrix
   ///
   /// [equalTo] should be equal to [rows].
   Vector eliminate(List<num> equalTo) {

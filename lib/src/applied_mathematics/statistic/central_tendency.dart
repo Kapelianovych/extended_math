@@ -11,10 +11,10 @@ import 'exceptions/mean_exception.dart';
 /// central tendency are often called averages
 class CentralTendency {
   /// Create instanse of [CentralTendency] with set of real numbers
-  CentralTendency(this._set);
+  const CentralTendency(this._set);
 
   /// Set of numbers
-  TensorBase _set;
+  final TensorBase _set;
 
   /// Computes arithmetic mean of set numbers
   ///
@@ -142,14 +142,14 @@ class CentralTendency {
     final list = _set.toList();
     final numbers = list.toSet();
 
-    final result = Set<num>();
+    final result = <num>{};
     final maxCount = <num, int>{};
 
     for (final item in numbers) {
       maxCount[item] = list.where((e) => e == item).length;
     }
 
-    var max = maxCount.values.toList()..sort();
+    final max = maxCount.values.toList()..sort();
     final maxEntries = maxCount.entries.where((e) => e.value == max.last);
 
     result.addAll(maxEntries.map((e) => e.key));

@@ -7,13 +7,14 @@ import '../exceptions/division_by_zero_exception.dart';
 
 /// Class that provide type in equivalence of Dart's `num`
 ///
-/// This class doesn't replace `num` type but implement methods that don't exist in.
+/// This class doesn't replace `num` type but implement
+/// methods that don't exist in.
 class Number extends TensorBase {
   /// Creates instance of [Number] by accepting number or it will be equal to 0
-  Number(this._value) : super(0);
+  const Number(this._value) : super(0);
 
   /// Internal value of number
-  num _value;
+  final num _value;
 
   @override
   int get itemsCount => 1;
@@ -136,16 +137,16 @@ class Number extends TensorBase {
   int get hashCode => _value.hashCode;
 
   @override
-  Number map(num f(num number)) => Number(toList().map(f).single);
+  Number map(num Function(num number) f) => Number(toList().map(f).single);
 
   @override
-  bool every(bool f(num number)) => toList().every(f);
+  bool every(bool Function(num number) f) => toList().every(f);
 
   @override
-  bool any(bool f(num number)) => every(f);
+  bool any(bool Function(num number) f) => every(f);
 
   @override
-  num reduce(num f(num prev, num next)) => toList().reduce(f);
+  num reduce(num Function(num prev, num next) f) => toList().reduce(f);
 
   @override
   List<num> toList() => <num>[_value];

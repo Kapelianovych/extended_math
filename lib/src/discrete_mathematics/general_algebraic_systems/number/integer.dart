@@ -3,24 +3,23 @@ import 'base/number.dart';
 
 /// Class that provide type in equivalence of Dart's `int`
 ///
-/// This class doesn't replace `int` type but implement methods that don't exist in.
+/// This class doesn't replace `int` type but implement
+/// methods that don't exist in.
 class Integer extends Number {
   /// Creates instance of [Integer] number
-  Integer(int value) : super(value) {
-    _value = value;
-  }
+  Integer(int value) : super(value);
 
-  /// Internal value fo [Integer]
-  int _value;
+  @override
+  int get data => super.data.toInt();
 
   /// Gets unique prime numbers of this number
   Set<int> factorizate() {
-    final result = Set<int>();
+    final result = <int>{};
 
     if (isPrime()) {
-      result.addAll(<int>[1, _value]);
+      result.addAll(<int>[1, data]);
     } else {
-      var o = _value.toDouble();
+      var o = data.toDouble();
       var counter = 0;
 
       while (!Integer(o.toInt()).isPrime()) {
@@ -38,8 +37,8 @@ class Integer extends Number {
 
   /// Checks if number is prime
   bool isPrime() {
-    for (var item in primes) {
-      if (_value % item == 0 && _value != item) {
+    for (final item in primes) {
+      if (data % item == 0 && data != item) {
         return false;
       }
     }

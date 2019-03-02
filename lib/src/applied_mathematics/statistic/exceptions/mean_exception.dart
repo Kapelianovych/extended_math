@@ -1,4 +1,5 @@
-/// An exception that trows when performing unaccepted opetation or operation under unaccepted values
+/// An exception that trows when performing unaccepted operation
+/// or operation under unaccepted values
 class MeanException implements Exception {
   /// Creates instance of [MeanException]
   MeanException(this.message);

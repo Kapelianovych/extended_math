@@ -1,4 +1,16 @@
-# 0.0.22
+# 0.0.23
+
+- Replace `setItem()` by `insert()` of `Vector` class.
+- Rename `dotProduct()` by `dot()`, `crossProduct()` by `cross()` of `Vector` class.
+- Small fix of style and internal values in classes.
+- Make most constructors of classes as `const`.
+- Rename `ContinuousUniformDistributions` to `UniformDistribution` and add to it `skewness` and `excessKurtosis` constants.
+- Change `std()` and `variance()` of `TheoryOfProbabilityDistributions` to calculate `sample` and `population` types.
+- Add `ShapeOfProbabilityDistribution` and `skewness()`, `kurtosis()`, `moment()` to it.
+- Move `TheoryOfProbabilityDistributions` class to `Dispersion` class.
+- Change README.
+
+## 0.0.22
 
 - Move `Mean` class to `CentralTendency`.
 - Add `median()`, `mode()`, `minimum()`, `maximum()` methods to `CentralTendency` class.

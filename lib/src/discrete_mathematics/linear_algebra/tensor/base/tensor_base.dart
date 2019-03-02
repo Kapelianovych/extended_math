@@ -10,7 +10,7 @@ import '../tensor4.dart';
 /// Base class for tensors
 abstract class TensorBase with CopyableMixin<TensorBase> {
   /// Creates instanse of TensorBase with dimensions
-  TensorBase(this._dimension);
+  const TensorBase(this.dimension);
 
   /// Generates tensor for specific [shape] and [generator]
   ///
@@ -23,7 +23,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// - [2, 3] -> `Matrix` with 2 rows and 3 columns
   /// - [4, 2, 5] -> `Tensor3` with 4 width, 2 length and 5 depth
   factory TensorBase.generate(
-      Map<String, int> shape, num generator(num number)) {
+      Map<String, int> shape, num Function(num number) generator) {
     switch (shape.length) {
       case 1:
         return Vector(List<num>.generate(shape['width'], generator));
@@ -48,10 +48,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   }
 
   /// Holds rank of this tensor
-  int _dimension;
-
-  /// Gets dimendion of this tensor
-  int get dimension => _dimension;
+  final int dimension;
 
   /// Gets numbers count of data
   int get itemsCount;
@@ -66,71 +63,78 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   Map<String, int> get shape;
 
   /// Reduces data to number with provided [f] reduce function
-  num reduce(num f(num prev, num next));
+  num reduce(num Function(num prev, num next) f);
 
   /// Tests if any number of data satisfies test function [f]
-  bool any(bool f(num number));
+  bool any(bool Function(num number) f);
 
   /// Tests if every number of data satisfies test function [f]
-  bool every(bool f(num number));
+  bool every(bool Function(num number) f);
 
   /// Transform each element of data and return transformed data
-  TensorBase map(num f(num number));
+  TensorBase map(num Function(num number) f);
 
-  /// Converts this tensor to [Number] if dimension is equal to 0, otherwise throws [TensorException]
+  /// Converts this tensor to [Number] if dimension is equal to 0,
+  /// otherwise throws [TensorException]
   Number toScalar() {
     if (dimension == 0) {
       return Number(data);
     } else {
-      throw TensorException(
-          'Tensor cannot be converted to Number, because dimension of this tensor isn\'t equal to 0!');
+      throw TensorException('Tensor cannot be converted to Number, because '
+          'dimension of this tensor isn\'t equal to 0!');
     }
   }
 
-  /// Converts this tensor to [Vector] if dimension is equal to 1, otherwise throws [TensorException]
+  /// Converts this tensor to [Vector] if dimension is equal to 1,
+  /// otherwise throws [TensorException]
   Vector toVector() {
     if (dimension == 1) {
       return Vector(data);
     } else {
-      throw TensorException(
-          'Tensor cannot be converted to Vector, because dimension of this tensor isn\'t equal to 1!');
+      throw TensorException('Tensor cannot be converted to Vector, because '
+          'dimension of this tensor isn\'t equal to 1!');
     }
   }
 
-  /// Converts this tensor to [Matrix] if dimension is equal to 2, otherwise throws [TensorException]
+  /// Converts this tensor to [Matrix] if dimension is equal to 2,
+  /// otherwise throws [TensorException]
   Matrix toMatrix() {
     if (dimension == 2) {
       return Matrix(data);
     } else {
-      throw TensorException(
-          'Tensor cannot be converted to Matrix, because dimension of this tensor isn\'t equal to 2!');
+      throw TensorException('Tensor cannot be converted to Matrix, because '
+          'dimension of this tensor isn\'t equal to 2!');
     }
   }
 
-  /// Converts this tensor to [Tensor3] if dimension is equal to 3, otherwise throws [TensorException]
+  /// Converts this tensor to [Tensor3] if dimension is equal to 3,
+  /// otherwise throws [TensorException]
   Tensor3 toTensor3() {
     if (dimension == 3) {
       return Tensor3(data);
     } else {
-      throw TensorException(
-          'Tensor cannot be converted to Tensor3, because dimension of this tensor isn\'t equal to 3!');
+      throw TensorException('Tensor cannot be converted to Tensor3, because '
+          'dimension of this tensor isn\'t equal to 3!');
     }
   }
 
-  /// Converts this tensor to [Tensor4] if dimension is equal to 4, otherwise throws [TensorException]
+  /// Converts this tensor to [Tensor4] if dimension is equal to 4,
+  /// otherwise throws [TensorException]
   Tensor4 toTensor4() {
     if (dimension == 4) {
       return Tensor4(data);
     } else {
-      throw TensorException(
-          'Tensor cannot be converted to Tensor4, because dimension of this tensor isn\'t equal to 4!');
+      throw TensorException('Tensor cannot be converted to Tensor4, because '
+          'dimension of this tensor isn\'t equal to 4!');
     }
   }
 
-  /// Constructs tensor that is linear interpolated between this tensor and [other]
+  /// Constructs tensor that is linear interpolated between this
+  /// tensor and [other]
   ///
-  /// Constructs new data points within the range of a discrete set of known data points.
-  /// [a] (alpha) may be in range from 0 to 1 inclusively. Otherwise throws [TensorException].
+  /// Constructs new data points within the range of a discrete set
+  /// of known data points [a] (alpha) may be in range from 0 to 1
+  /// inclusively. Otherwise throws [TensorException].
   TensorBase lerp(TensorBase other, double a) {
     if (dimension != other.dimension && !isMapsEqual(shape, other.shape)) {
       throw ArgumentError('Tensors aren\'t equals!');
@@ -140,7 +144,8 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
       return copy() * (1 - a) + other * a;
     } else {
       throw TensorException(
-          'Calculated tensor isn\'t within the range of a discrete set of known data points (tensors).\n'
+          'Calculated tensor isn\'t within the range of a discrete '
+          'set of known data points (tensors).\n'
           'a ($a) is out of range [0, 1]!');
     }
   }

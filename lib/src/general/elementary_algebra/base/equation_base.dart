@@ -4,7 +4,8 @@ import '../../../complex_analysis/complex.dart';
 abstract class EquationBase {
   /// Calculates `x1...xn` for this expression
   ///
-  /// Any real roots are converted to [Complex] numbers and can be resolved with [Complex.toReal] method.
+  /// Any real roots are converted to [Complex] numbers and can
+  /// be resolved with [Complex.toReal] method.
   Map<String, Complex> calculate();
 
   /// Gets discriminant of equation

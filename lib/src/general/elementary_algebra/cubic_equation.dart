@@ -11,7 +11,8 @@ import 'quadratic_equation.dart';
 class CubicEquation extends EquationBase {
   /// Accepts coefficients [a], [b], [c] and [d]
   ///
-  /// All values shouldn't be equal to zero. Otherwise the [EquationException] is thrown.
+  /// All values shouldn't be equal to zero. Otherwise
+  /// the [EquationException] is thrown.
   CubicEquation({this.a = 1, this.b = 0, this.c = 0, this.d = 0}) {
     if (a == 0) {
       throw EquationException('Coefficient a shouldn\'t be equal to zero!');

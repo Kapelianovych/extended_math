@@ -6,7 +6,8 @@ class DiagonalMatrix extends SquareMatrix {
   /// Constructor accept array of arrays of num numbers
   ///
   /// Count of inner arrays must be equal to count of their elements!
-  /// All elements of matrix except elements of main diagonal must be equal to zero!
+  /// All elements of matrix except elements of main diagonal must
+  /// be equal to zero!
   DiagonalMatrix(List<List<num>> data) : super(data);
 
   /// Create identity matrix
@@ -14,8 +15,9 @@ class DiagonalMatrix extends SquareMatrix {
 
   /// Generate matrix with specified [number] of rows and columns
   ///
-  /// If [fillRandom] is true, then main diagonal of matrix will filled with random numbers,
-  /// otherwise main diagonal of matrix will have all values defaults to 1.
+  /// If [fillRandom] is true, then main diagonal of matrix will
+  /// filled with random numbers, otherwise main diagonal of
+  /// matrix will have all values defaults to 1.
   DiagonalMatrix.generate(int number, {bool fillRandom = false})
       : super.identity(number) {
     if (fillRandom == true) {

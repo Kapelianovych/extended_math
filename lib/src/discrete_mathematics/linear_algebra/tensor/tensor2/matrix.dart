@@ -16,26 +16,23 @@ import 'square_matrix.dart';
 /// Class for work with numeric matrix
 class Matrix extends TensorBase {
   /// Constructor accept array of arrays of num numbers
-  Matrix(this._data) : super(2);
+  const Matrix(this._data) : super(2);
 
   /// Generate matrix with specified [rows] and [cols]
   ///
   /// If [fillRandom] is true, then matrix will filled with random numbers,
-  /// and if [fillRandom] is false and [identity] is true - creates an identity matrix,
-  /// otherwise matrix will have all values defaults to 0
+  /// and if [fillRandom] is false and [identity] is true - creates an
+  /// identity matrix, otherwise matrix will have all values defaults to 0.
   Matrix.generate(int rows, int cols,
       {bool fillRandom = false, bool identity = false})
-      : super(2) {
+      : _data = <List<num>>[],
+        super(2) {
     if (fillRandom == true) {
-      _data = <List<num>>[];
-
       for (var j = 0; j < rows; j++) {
         _data.add(
             NumbersGenerator().doubleIterableSync(cols).take(cols).toList());
       }
     } else {
-      final emptyData = <List<num>>[];
-
       for (var i = 0; i < rows; i++) {
         final emptyRow = <num>[];
         for (var j = 0; j < cols; j++) {
@@ -46,9 +43,8 @@ class Matrix extends TensorBase {
           emptyRow[i] = 1;
         }
 
-        emptyData.add(emptyRow);
+        _data.add(emptyRow);
       }
-      _data = emptyData;
     }
   }
 
@@ -57,7 +53,7 @@ class Matrix extends TensorBase {
       Matrix.generate(rows, cols, identity: true);
 
   /// Raw data of matrix
-  List<List<num>> _data;
+  final List<List<num>> _data;
 
   @override
   List<List<num>> get data => _data.map((r) => r.toList()).toList();
@@ -89,7 +85,7 @@ class Matrix extends TensorBase {
   List<num> columnAt(int number) {
     final col = <num>[];
 
-    for (var row in data) {
+    for (final row in data) {
       col.add(row[number - 1]);
     }
 
@@ -117,8 +113,9 @@ class Matrix extends TensorBase {
 
   /// Multiply this matrix by another [matrix] using matrix product algorithm
   ///
-  /// In order for the matrix `this` to be multiplied by the matrix [matrix], it is necessary
-  /// that the number of columns of the matrix `this` be equal to the number of rows of the matrix [matrix].
+  /// In order for the matrix `this` to be multiplied by the matrix [matrix],
+  /// it is necessary that the number of columns of the matrix `this` be equal
+  /// to the number of rows of the matrix [matrix].
   Matrix matrixProduct(Matrix matrix) {
     if (columns == matrix.rows) {
       return Matrix(data.map((row) {
@@ -146,8 +143,9 @@ class Matrix extends TensorBase {
 
   /// Multiply this matrix by another [matrix] by the Adamart (Schur) method
   ///
-  /// Takes two matrices of the same dimensions and produces another matrix where each element
-  ///  `i`, `j` is the product of elements `i`, `j` of the original two matrices.
+  /// Takes two matrices of the same dimensions and produces another matrix
+  /// where each element `i`, `j` is the product of elements `i`, `j` of
+  /// the original two matrices.
   Matrix hadamardProduct(Matrix matrix) {
     if (columns == matrix.columns && rows == matrix.rows) {
       final m = Matrix.generate(rows, columns);
@@ -262,8 +260,8 @@ class Matrix extends TensorBase {
   /// Gets Frobenius norm of matrix
   num frobeniusNorm() {
     var sum = 0.0;
-    for (var row in data) {
-      for (var val in row) {
+    for (final row in data) {
+      for (final val in row) {
         sum += pow(val, 2);
       }
     }
@@ -426,7 +424,7 @@ class Matrix extends TensorBase {
   /// Calculates trace operator of this matrix
   num trace() {
     var sum = 0.0;
-    for (var item in mainDiagonal().data) {
+    for (final item in mainDiagonal().data) {
       sum += item;
     }
     return sum;
@@ -437,7 +435,8 @@ class Matrix extends TensorBase {
 
   /// Singular value decomposition for this matrix
   ///
-  /// Returns `Map` that contains `values`, `leftVectors` and `rightVectors` with corresponding values.
+  /// Returns `Map` that contains `values`, `leftVectors` and `rightVectors`
+  /// with corresponding values.
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   Map<String, Matrix> svd() {
@@ -457,8 +456,8 @@ class Matrix extends TensorBase {
   ///
   /// Returns `Map` with `q` key points to **orthogonal matrix (Q)**
   /// and `r` key points to ** upper triangular matrix (R)**.
-  /// Rows of matrix must be qreat or equal to columns, otherwise method returns `Map`,
-  /// which keys point to `null`.
+  /// Rows of matrix must be qreat or equal to columns, otherwise
+  /// method returns `Map`, which keys point to `null`.
   Map<String, Matrix> qr() {
     final r = SquareMatrix.generate(columns);
     final q = Matrix.generate(rows, columns);
@@ -490,7 +489,8 @@ class Matrix extends TensorBase {
     return <String, Matrix>{'q': q, 'r': r};
   }
 
-  /// Calculates the ratio `C` of the largest to smallest singular value in the singular value decomposition of a matrix
+  /// Calculates the ratio `C` of the largest to smallest singular value in
+  /// the singular value decomposition of a matrix
   ///
   /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
   double condition() => dd.singularValue(toMatrixDartData(copy())).cond;
@@ -568,31 +568,31 @@ class Matrix extends TensorBase {
   int get hashCode => hashObjects(data);
 
   @override
-  Matrix map(num f(num number)) =>
+  Matrix map(num Function(num number) f) =>
       Matrix(data.map((row) => row.map(f).toList()).toList());
 
   @override
-  num reduce(num f(num prev, num next)) {
+  num reduce(num Function(num prev, num next) f) {
     var list = <num>[];
-    for (var row in data) {
+    for (final row in data) {
       list = list.followedBy(row).toList();
     }
     return list.reduce(f);
   }
 
   @override
-  bool every(bool f(num number)) {
+  bool every(bool Function(num number) f) {
     var list = <num>[];
-    for (var row in data) {
+    for (final row in data) {
       list = list.followedBy(row).toList();
     }
     return list.every(f);
   }
 
   @override
-  bool any(bool f(num number)) {
+  bool any(bool Function(num number) f) {
     var list = <num>[];
-    for (var row in data) {
+    for (final row in data) {
       list = list.followedBy(row).toList();
     }
     return list.any(f);
@@ -601,7 +601,7 @@ class Matrix extends TensorBase {
   @override
   List<num> toList() {
     var list = <num>[];
-    for (var row in data) {
+    for (final row in data) {
       list = list.followedBy(row).toList();
     }
     return list;

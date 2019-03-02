@@ -29,11 +29,12 @@ At the moment library have 4 sections:
 + [Applied mathematics](#Applied-mathematics)
   + [Probability theory](#Probability-theory)
     + [Probability distributions](#Probability-distributions)
-      + [Continuous uniform distribution](#Continuous-uniform-distribution)
+      + [Uniform distribution](#Uniform-distribution)
     + [Numbers generator](#Numbers-generator)
-    + [Theory of probability distributions](#Theory-of-probability-distributions)
   + [Statistic](#Statistic)
-    + [CentralTendency](#Central-tendency)
+    + [Central tendency](#Central-tendency)
+    + [Dispersion](#Dispersion)
+    + [Shape of probability distributions](#Shape-of-probability-distributions)
 
 Each section don't have full implementation yet.
 See here or [dartdoc](https://pub.dartlang.org/documentation/extended_math/latest/) for which functionality are implemented.
@@ -450,7 +451,7 @@ import 'package:extended_math/extended_math.dart';
 void main() {
   final c = Tensor3(<List<List<num>>>[
     <List<num>>[
-      <num>[4, 5]], 
+      <num>[4, 5]],
       <List<num>>[<num>[7, 1]
     ]
   ]);
@@ -474,9 +475,9 @@ Applied mathematics is the application of mathematical methods by different fiel
 
 A probability distribution is a mathematical function that provides the probabilities of occurrence of different possible outcomes in an experiment.
 
-##### Continuous uniform distribution
+##### Uniform distribution
 
-the continuous uniform distribution or rectangular distribution is a family of symmetric probability distributions such that for each member of the family, all intervals of the same length on the distribution's support are equally probable.
+The continuous uniform distribution is a family of symmetric probability distributions such that for each member of the family, all intervals of the same length on the distribution's support are equally probable.
 
 + computes density, cumulative distribution function (CDF), moments (central and common):
 
@@ -484,7 +485,7 @@ the continuous uniform distribution or rectangular distribution is a family of s
 import 'package:extended_math/extended_math.dart';
 
 void main() {
-  final c = ContinuousUniformDistribution(3, a: -9, b: 45);
+  final c = UniformDistribution(3, l: -9, u: 45);
   print(c.density()); // 0.018518518518518517
   print(c.cdf()); // 0.2222222222222222
   print(c.centralMoment(3)); // 0
@@ -515,23 +516,6 @@ void main() {
   final c = NumbersGenerator();
   print(c.intIterableSync(10, 5, from: 1).take(5)); // (2, 3, 1, 3, 8)
   print(c.doubleIterableSync(10, to: 5, from: 1).take(5)); // (3.3772583795670412, 3.2489709159796276, 4.761700666599024, 4.425092938268564, 1.1353964008448607)
-}
-```
-
-#### Theory of probability distributions
-
-Class that contains methods from theory of probability distributions:
-
-+ gets expected value (mean), standard deviation, variance of set of random numbers:
-
-```dart
-import 'package:extended_math/extended_math.dart';
-
-void main() {
-  final c = TheoryOfProbabilityDistributions(Vector(<num>[8, 5, 3]));
-  print(c.expectedValue()); // 5.333333333333333
-  print(c.sd()); // 2.054804667656325
-  print(c.variance()); // 4.222222222222221
 }
 ```
 
@@ -586,6 +570,43 @@ void main() {
   final c = CentralTendency(Vector(<num>[2, 5, 3, -6, 5, 2]));
   print(c.mode()); // {2, 5}
   print(c.median()); // -1.5
+}
+```
+
+#### Dispersion
+
+Dispersion (also called variability, scatter, or spread) is the extent to which a distribution is stretched or squeezed.[1] Common examples of measures of statistical dispersion are the `variance`, `standard deviation`, and `interquartile range`:
+
++ gets expected value (mean), standard deviation (population and sample), variance (population and sample) of set of random numbers:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  final c = Dispersion(Vector(<num>[8, 5, 3]));
+  print(c.expectedValue()); // 5.333333333333333
+  print(c.std()); // 2.054804667656325
+  print(t.std(type: 'sample')); // 2.516611478423583
+  print(c.variance()); // 4.222222222222221
+  print(t.variance(type: 'sample')); // 6.333333333333333
+}
+```
+
+#### ShapeOfProbabilityDistribution
+
+The concept of the shape of a probability distribution arises in questions of finding an appropriate distribution to use to model the statistical properties of a population, given a sample from that population.
+
++ computes `skewness`, `moment` and `kurtosis` (normal and excess):
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  const t = ShapeOfProbabilityDistribution(Vector(<num>[8, 5, 3]));
+  print(t.moment(2)); // 4.222222222222222
+  print(t.skewness()); // 0.23906314692954517
+  print(t.kurtosis()); // 1.5
+  print(t.kurtosis(excess: true)); // -1.5
 }
 ```
 

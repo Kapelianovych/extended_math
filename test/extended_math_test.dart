@@ -1,7 +1,9 @@
 import 'package:extended_math/extended_math.dart';
 
 void main() {
-  final c = CentralTendency(Vector(<num>[2, 5, 3, -6, 5, 2]));
-  print(c.mode()); // {2, 5}
-  print(c.median()); // -1.5
+  const t = ShapeOfProbabilityDistribution(Vector(<num>[8, 5, 3]));
+  print(t.moment(2));
+  print(t.skewness());
+  print(t.kurtosis());
+  print(t.kurtosis(excess: true));
 }

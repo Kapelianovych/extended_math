@@ -4,15 +4,14 @@ import 'base/number.dart';
 
 /// Class that provide type in equivalence of Dart's `double`
 ///
-/// This class doesn't replace `double` type but implement methods that don't exist in.
+/// This class doesn't replace `double` type but implement
+/// methods that don't exist in.
 class Double extends Number {
   /// Creates instance of [Double] number
-  Double(double value) : super(value) {
-    _value = value;
-  }
+  const Double(double value) : super(value);
 
-  /// Internal value fo [Double]
-  double _value;
+  @override
+  double get data => super.data.toDouble();
 
   /// Returns [Double] number precised to [count] number after point
   ///
@@ -27,17 +26,17 @@ class Double extends Number {
   /// ```
   /// [count] should be positive integer number.
   Double preciseTo(int count) {
-    final splittedNumber = '$_value'.split('.');
+    final splittedNumber = '$data'.split('.');
 
     if (splittedNumber[1] == '0') {
-      return Double(_value);
+      return Double(data);
     }
 
     if (count == 0) {
-      return Double(_value.roundToDouble());
+      return Double(data.roundToDouble());
     } else {
       // Numbers like 0.0...082736... transform to 100...082736... integers
-      var result = double.parse('${splittedNumber[0] == '0' ? '1' : ''}$_value'
+      var result = double.parse('${splittedNumber[0] == '0' ? '1' : ''}$data'
           .split('')
           .where((n) => n != '.')
           .join());

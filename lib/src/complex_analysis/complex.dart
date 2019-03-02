@@ -11,13 +11,13 @@ import 'exceptions/complex_exception.dart';
 /// Defines type for number i of complex analysis
 class Complex with CopyableMixin<Complex> {
   /// Creates instance of complex number with [re] and [in] equals to zero
-  Complex({this.re = 0, this.im = 0});
+  const Complex({this.re = 0, this.im = 0});
 
   /// Real part of i
-  num re;
+  final num re;
 
   /// Imaginary part of i
-  num im;
+  final num im;
 
   /// Module of this
   num get module => Vector(<num>[re, im]).length;
@@ -128,7 +128,8 @@ class Complex with CopyableMixin<Complex> {
 
   /// Gets roots of this by given [root]
   ///
-  /// [root] must not be equal to zero. Otherwise [ComplexException] will be thrown.
+  /// [root] must not be equal to zero. Otherwise [ComplexException]
+  /// will be thrown.
   List<Complex> rootsOf(int root) {
     final result = <Complex>[];
     if (root == 0) {
@@ -161,8 +162,8 @@ class Complex with CopyableMixin<Complex> {
     if (isReal()) {
       return re;
     } else {
-      throw ComplexException(
-          'This complex number have imaginary part and cannot be converted to real number!');
+      throw ComplexException('This complex number have imaginary part '
+          'and cannot be converted to real number!');
     }
   }
 
