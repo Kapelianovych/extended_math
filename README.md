@@ -43,6 +43,8 @@ At the moment library have 4 sections:
 Each section don't have full implementation yet.
 See here or [dartdoc](https://pub.dartlang.org/documentation/extended_math/latest/) for which functionality are implemented.
 
+Library also exports `dart:math`. So you don't need import it by yourself.
+
 Sections are created according to [Mathematics Subject Classification](https://en.wikipedia.org/wiki/Mathematics_Subject_Classification).
 
 ### General mathematics
@@ -74,6 +76,18 @@ void main() {
   print(q); // 1x^3 + 2x^2 + 4x + -30
   print(q.discriminant()); // 257.8888888888889
   print(q.calculate()); // {x1: 1.2128213086426722 + 0i, x2: -1.6064106543213361 + -2.305650223617183i, x3: -1.6064106543213361 + 2.305650223617183i}
+}
+```
+
++ computes `hypot`:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main(List<String> args) {
+  final a = 3;
+  final b = 4;
+  print(hypot(3, 4)); // 5
 }
 ```
 
@@ -365,7 +379,24 @@ import 'package:extended_math/extended_math.dart';
 void main() {
   final c = Matrix(<List<num>>[<num>[4, 6], <num>[7.4, 0.687]]);
   print(c.svd()); // {values: [[9.347549513876027, 0.0], [0.0, 4.455927185854372]], leftVectors: [[0.689976140659287, 0.7238321112805896], [0.7238321112805896, -0.689976140659287]], rightVectors: [[0.8682769932446228, -0.49607969420454756], [0.49607969420454756, 0.8682769932446228]]}
-  print(c.qr()); // {q: [[0.47551703436547405, 0.8797065135761271], [0.8797065135761271, -0.47551703436547416]], r: [[8.411896337925237, 3.4574605810196437], [0, 4.951558878847681]]}
+  print(c.qr()); // {Q: [[0.47551703436547405, 0.8797065135761271], [0.8797065135761271, -0.47551703436547416]], R: [[8.411896337925237, 3.4574605810196437], [0, 4.951558878847681]]}
+}
+```
+
++ computes `norm`, `infinityNorm` and `spectralNorm`:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main(List<String> args) {
+  final m = SquareMatrix(<List<num>>[
+    <num>[4, 12, -16],
+    <num>[12, 37, -43],
+    <num>[-16, -43, 98],
+  ]);
+  print(m.norm(3)); // 105.14932646039733
+  print(m.infinityNorm()); // 157
+  print(m.spectralNorm()); // 123.4772317901316
 }
 ```
 
@@ -638,7 +669,7 @@ Base class for all quantiles.
 
 A quartile is a type of quantile.
 
-+ computes first, second and third quartiles:
++ computes first, second and third [quartiles](https://en.wikipedia.org/wiki/Quartile):
 
 ```dart
 import 'package:extended_math/extended_math.dart';

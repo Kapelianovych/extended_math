@@ -1,4 +1,12 @@
-# 0.0.24
+# 0.0.25
+
+- Removed `data` dependency due to package version of Dart SDK restriction.
+- Add `UnaryOperations` section with `hypot()`.
+- Change signature of `insert()` of `Vector` and add `add()`.
+- Add `norm()`, `infinityNorm()`, `spectralNorm()` and `condition()` to `Matrix`.
+- Library also exports `dart:math`;
+
+## 0.0.24
 
 - Add `iqr()` method to `Dispersion` class.
 - Add `Quantile`, `Quartile` and `Percentile` classes.

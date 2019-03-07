@@ -1,4 +1,4 @@
-import '../../../complex_analysis/complex.dart';
+import '../../../../complex_analysis/complex.dart';
 
 /// Class defining methods for equation expressions
 abstract class EquationBase {

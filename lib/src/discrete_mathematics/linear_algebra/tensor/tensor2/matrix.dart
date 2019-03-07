@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:data/matrix.dart' as dd;
 import 'package:quiver/core.dart';
 
 import '../../../../applied_mathematics/probability_theory/numbers_generator.dart';
-import '../../../../utils/convert.dart';
+import '../../../../applied_mathematics/statistic/central_tendency.dart';
+import '../../../../general/elementary_algebra/unary_operations.dart';
 import '../../../general_algebraic_systems/number/base/number.dart';
 import '../../../general_algebraic_systems/number/exceptions/division_by_zero_exception.dart';
 import '../../exceptions/matrix_exception.dart';
@@ -258,15 +258,7 @@ class Matrix extends TensorBase {
   }
 
   /// Gets Frobenius norm of matrix
-  num frobeniusNorm() {
-    var sum = 0.0;
-    for (final row in data) {
-      for (final val in row) {
-        sum += pow(val, 2);
-      }
-    }
-    return sqrt(sum);
-  }
+  double frobeniusNorm() => norm(2);
 
   /// Checks if this matrix is square
   bool isSquare() => rows == columns;
@@ -433,29 +425,455 @@ class Matrix extends TensorBase {
   /// Gets rank of this matrix
   int rank() => gaussian().mainDiagonal().data.where((e) => e != 0).length;
 
-  /// Singular value decomposition for this matrix
+  /// Singular value decomposition for this matrix.
   ///
-  /// Returns `Map` that contains `values`, `leftVectors` and `rightVectors`
-  /// with corresponding values.
+  /// Singular-value decomposition (SVD) is a factorization of a real or
+  /// complex matrix. It is the generalization of the eigendecomposition
+  /// of a positive semidefinite normal matrix (for example, a symmetric
+  /// matrix with positive eigenvalues) to any m×n matrix via an extension
+  /// of the polar decomposition.
   ///
-  /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
+  /// Returns `Map` that contains `E` (singular values), `U` (left-singular
+  /// vectors) and `V` (right-singular vectors) with corresponding values.
+  ///
+  /// Created from [Jama's implemetation](https://github.com/fiji/Jama/blob/master/src/main/java/Jama/SingularValueDecomposition.java).
   Map<String, Matrix> svd() {
-    final m = toMatrixDartData(copy());
-    final result = dd.singularValue(m);
-    final singularValues = fromMatrixDartData(result.S);
-    final leftSingularVectors = fromMatrixDartData(result.U);
-    final rightSingularVectors = fromMatrixDartData(result.V);
+    // Row and column dimensions
+    final m = rows;
+    final n = columns;
+    final nu = max(m, n);
+
+    final a = data;
+
+    // arrays for internal storage of u and V
+    final u = Matrix.generate(m, nu).data;
+    final v = SquareMatrix.generate(n).data;
+
+    // array for internal storage of singular values
+    final s = List<num>(min(m + 1, n));
+    final e = List<num>(n);
+    final work = List<num>(m);
+    bool wantu = true;
+    bool wantv = true;
+
+    // Reduce a to bidiagonal form, storing the diagonal elements
+    // in s and the super-diagonal elements in e.
+
+    int nct = min(m - 1, n);
+    int nrt = max(0, min(n - 2, m));
+    for (int k = 0; k < max(nct, nrt); k++) {
+      if (k < nct) {
+        // Compute the transformation for the k-th column and
+        // place the k-th diagonal in s[k].
+        // Compute 2-norm of k-th column without under/overflow.
+        s[k] = 0;
+        for (int i = k; i < m; i++) {
+          s[k] = hypot(s[k], a[i][k]);
+        }
+        if (s[k] != 0.0) {
+          if (a[k][k] < 0.0) {
+            s[k] = -s[k];
+          }
+          for (int i = k; i < m; i++) {
+            a[i][k] /= s[k];
+          }
+          a[k][k] += 1.0;
+        }
+        s[k] = -s[k];
+      }
+      for (int j = k + 1; j < n; j++) {
+        if ((k < nct) && (s[k] != 0.0)) {
+          // apply the transformation.
+
+          double t = 0;
+          for (int i = k; i < m; i++) {
+            t += a[i][k] * a[i][j];
+          }
+          t = -t / a[k][k];
+          for (int i = k; i < m; i++) {
+            a[i][j] += t * a[i][k];
+          }
+        }
+
+        // Place the k-th row of a into e for the
+        // subsequent calculation of the row transformation.
+
+        e[j] = a[k][j];
+      }
+      if (wantu && (k < nct)) {
+        // Place the transformation in U for subsequent back
+        // multiplication.
+
+        for (int i = k; i < m; i++) {
+          u[i][k] = a[i][k];
+        }
+      }
+      if (k < nrt) {
+        // Compute the k-th row transformation and place the
+        // k-th super-diagonal in e[k].
+        // Compute 2-norm without under/overflow.
+        e[k] = 0;
+        for (int i = k + 1; i < n; i++) {
+          e[k] = hypot(e[k], e[i]);
+        }
+        if (e[k] != 0.0) {
+          if (e[k + 1] < 0.0) {
+            e[k] = -e[k];
+          }
+          for (int i = k + 1; i < n; i++) {
+            e[i] /= e[k];
+          }
+          e[k + 1] += 1.0;
+        }
+        e[k] = -e[k];
+        if ((k + 1 < m) && (e[k] != 0.0)) {
+          // apply the transformation.
+
+          for (int i = k + 1; i < m; i++) {
+            work[i] = 0.0;
+          }
+          for (int j = k + 1; j < n; j++) {
+            for (int i = k + 1; i < m; i++) {
+              work[i] += e[j] * a[i][j];
+            }
+          }
+          for (int j = k + 1; j < n; j++) {
+            double t = -e[j] / e[k + 1];
+            for (int i = k + 1; i < m; i++) {
+              a[i][j] += t * work[i];
+            }
+          }
+        }
+        if (wantv) {
+          // Place the transformation in V for subsequent
+          // back multiplication.
+
+          for (int i = k + 1; i < n; i++) {
+            v[i][k] = e[i];
+          }
+        }
+      }
+    }
+
+    // Set up the final bidiagonal matrix or order p.
+
+    int p = min(n, m + 1);
+    if (nct < n) {
+      s[nct] = a[nct][nct];
+    }
+    if (m < p) {
+      s[p - 1] = 0.0;
+    }
+    if (nrt + 1 < p) {
+      e[nrt] = a[nrt][p - 1];
+    }
+    e[p - 1] = 0.0;
+
+    // If required, generate u.
+
+    if (wantu) {
+      for (int j = nct; j < nu; j++) {
+        for (int i = 0; i < m; i++) {
+          u[i][j] = 0.0;
+        }
+        u[j][j] = 1.0;
+      }
+      for (int k = nct - 1; k >= 0; k--) {
+        if (s[k] != 0.0) {
+          for (int j = k + 1; j < nu; j++) {
+            double t = 0;
+            for (int i = k; i < m; i++) {
+              t += u[i][k] * u[i][j];
+            }
+            t = -t / u[k][k];
+            for (int i = k; i < m; i++) {
+              u[i][j] += t * u[i][k];
+            }
+          }
+          for (int i = k; i < m; i++) {
+            u[i][k] = -u[i][k];
+          }
+          u[k][k] = 1.0 + u[k][k];
+          for (int i = 0; i < k - 1; i++) {
+            u[i][k] = 0.0;
+          }
+        } else {
+          for (int i = 0; i < m; i++) {
+            u[i][k] = 0.0;
+          }
+          u[k][k] = 1.0;
+        }
+      }
+    }
+
+    // If required, generate V.
+
+    if (wantv) {
+      for (int k = n - 1; k >= 0; k--) {
+        if ((k < nrt) && (e[k] != 0.0)) {
+          for (int j = k + 1; j < nu; j++) {
+            double t = 0;
+            for (int i = k + 1; i < n; i++) {
+              t += v[i][k] * v[i][j];
+            }
+            t = -t / v[k + 1][k];
+            for (int i = k + 1; i < n; i++) {
+              v[i][j] += t * v[i][k];
+            }
+          }
+        }
+        for (int i = 0; i < n; i++) {
+          v[i][k] = 0.0;
+        }
+        v[k][k] = 1.0;
+      }
+    }
+
+    // Main iteration loop for the singular values.
+
+    int pp = p - 1;
+    int iter = 0;
+    double eps = pow(2.0, -52.0);
+    double tiny = pow(2.0, -966.0);
+    while (p > 0) {
+      int k, kase;
+
+      // Here is where a test for too many iterations would go.
+
+      // This section of the program inspects for
+      // negligible elements in the s and e arrays.  On
+      // completion the variables kase and k are set as follows.
+
+      // kase = 1     if s(p) and e[k-1] are negligible and k<p
+      // kase = 2     if s(k) is negligible and k<p
+      // kase = 3     if e[k-1] is negligible, k<p, and
+      //              s(k), ..., s(p) are not negligible (qr step).
+      // kase = 4     if e(p-1) is negligible (convergence).
+
+      for (k = p - 2; k >= -1; k--) {
+        if (k == -1) {
+          break;
+        }
+        if (e[k].abs() <= tiny + eps * (s[k].abs() + s[k + 1]).abs()) {
+          e[k] = 0.0;
+          break;
+        }
+      }
+      if (k == p - 2) {
+        kase = 4;
+      } else {
+        int ks;
+        for (ks = p - 1; ks >= k; ks--) {
+          if (ks == k) {
+            break;
+          }
+          double t = (ks != p ? e[ks].abs() : 0.0) +
+              (ks != k + 1 ? e[ks - 1].abs() : 0.0);
+          if (s[ks].abs() <= tiny + eps * t) {
+            s[ks] = 0.0;
+            break;
+          }
+        }
+        if (ks == k) {
+          kase = 3;
+        } else if (ks == p - 1) {
+          kase = 1;
+        } else {
+          kase = 2;
+          k = ks;
+        }
+      }
+      k++;
+
+      // Perform the task indicated by kase.
+
+      switch (kase) {
+
+        // Deflate negligible s(p).
+
+        case 1:
+          {
+            double f = e[p - 2];
+            e[p - 2] = 0.0;
+            for (int j = p - 2; j >= k; j--) {
+              double t = hypot(s[j], f);
+              double cs = s[j] / t;
+              double sn = f / t;
+              s[j] = t;
+              if (j != k) {
+                f = -sn * e[j - 1];
+                e[j - 1] = cs * e[j - 1];
+              }
+              if (wantv) {
+                for (int i = 0; i < n; i++) {
+                  t = cs * v[i][j] + sn * v[i][p - 1];
+                  v[i][p - 1] = -sn * v[i][j] + cs * v[i][p - 1];
+                  v[i][j] = t;
+                }
+              }
+            }
+          }
+          break;
+
+        // Split at negligible s(k).
+
+        case 2:
+          {
+            double f = e[k - 1];
+            e[k - 1] = 0.0;
+            for (int j = k; j < p; j++) {
+              double t = hypot(s[j], f);
+              double cs = s[j] / t;
+              double sn = f / t;
+              s[j] = t;
+              f = -sn * e[j];
+              e[j] = cs * e[j];
+              if (wantu) {
+                for (int i = 0; i < m; i++) {
+                  t = cs * u[i][j] + sn * u[i][k - 1];
+                  u[i][k - 1] = -sn * u[i][j] + cs * u[i][k - 1];
+                  u[i][j] = t;
+                }
+              }
+            }
+          }
+          break;
+
+        // Perform one qr step.
+
+        case 3:
+          {
+            // Calculate the shift.
+
+            double scale = max(
+                max(max(max(s[p - 1].abs(), s[p - 2].abs()), e[p - 2].abs()),
+                    s[k].abs()),
+                e[k].abs());
+            double sp = s[p - 1] / scale;
+            double spm1 = s[p - 2] / scale;
+            double epm1 = e[p - 2] / scale;
+            double sk = s[k] / scale;
+            double ek = e[k] / scale;
+            double b = ((spm1 + sp) * (spm1 - sp) + epm1 * epm1) / 2.0;
+            double c = (sp * epm1) * (sp * epm1);
+            double shift = 0.0;
+            if ((b != 0.0) | (c != 0.0)) {
+              shift = sqrt(b * b + c);
+              if (b < 0.0) {
+                shift = -shift;
+              }
+              shift = c / (b + shift);
+            }
+            double f = (sk + sp) * (sk - sp) + shift;
+            double g = sk * ek;
+
+            // Chase zeros.
+
+            for (int j = k; j < p - 1; j++) {
+              double t = hypot(f, g);
+              double cs = f / t;
+              double sn = g / t;
+              if (j != k) {
+                e[j - 1] = t;
+              }
+              f = cs * s[j] + sn * e[j];
+              e[j] = cs * e[j] - sn * s[j];
+              g = sn * s[j + 1];
+              s[j + 1] = cs * s[j + 1];
+              if (wantv) {
+                for (int i = 0; i < n; i++) {
+                  t = cs * v[i][j] + sn * v[i][j + 1];
+                  v[i][j + 1] = -sn * v[i][j] + cs * v[i][j + 1];
+                  v[i][j] = t;
+                }
+              }
+              t = hypot(f, g);
+              cs = f / t;
+              sn = g / t;
+              s[j] = t;
+              f = cs * e[j] + sn * s[j + 1];
+              s[j + 1] = -sn * e[j] + cs * s[j + 1];
+              g = sn * e[j + 1];
+              e[j + 1] = cs * e[j + 1];
+              if (wantu && (j < m - 1)) {
+                for (int i = 0; i < m; i++) {
+                  t = cs * u[i][j] + sn * u[i][j + 1];
+                  u[i][j + 1] = -sn * u[i][j] + cs * u[i][j + 1];
+                  u[i][j] = t;
+                }
+              }
+            }
+            e[p - 2] = f;
+            iter = iter + 1;
+          }
+          break;
+
+        // Convergence.
+
+        case 4:
+          {
+            // Make the singular values positive.
+
+            if (s[k] <= 0.0) {
+              s[k] = (s[k] < 0.0 ? -s[k] : 0.0);
+              if (wantv) {
+                for (int i = 0; i <= pp; i++) {
+                  v[i][k] = -v[i][k];
+                }
+              }
+            }
+
+            // Order the singular values.
+
+            while (k < pp) {
+              if (s[k] >= s[k + 1]) {
+                break;
+              }
+              double t = s[k];
+              s[k] = s[k + 1];
+              s[k + 1] = t;
+              if (wantv && (k < n - 1)) {
+                for (int i = 0; i < n; i++) {
+                  t = v[i][k + 1];
+                  v[i][k + 1] = v[i][k];
+                  v[i][k] = t;
+                }
+              }
+              if (wantu && (k < m - 1)) {
+                for (int i = 0; i < m; i++) {
+                  t = u[i][k + 1];
+                  u[i][k + 1] = u[i][k];
+                  u[i][k] = t;
+                }
+              }
+              k++;
+            }
+            iter = 0;
+            p--;
+          }
+          break;
+      }
+    }
+
+    final sAsMatrix = SquareMatrix.generate(n).data;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n; j++) {
+        sAsMatrix[i][j] = 0.0;
+      }
+      sAsMatrix[i][i] = s[i];
+    }
+
     return <String, Matrix>{
-      'values': singularValues,
-      'leftVectors': leftSingularVectors,
-      'rightVectors': rightSingularVectors
+      'E': Matrix(sAsMatrix),
+      'U': SquareMatrix(u),
+      'V': Matrix(v)
     };
   }
 
   /// Calculates QR decomposition of this matrix
   ///
-  /// Returns `Map` with `q` key points to **orthogonal matrix (Q)**
-  /// and `r` key points to ** upper triangular matrix (R)**.
+  /// Returns `Map` with `Q` key points to **orthogonal matrix (Q)**
+  /// and `R` key points to ** upper triangular matrix (R)**.
   /// Rows of matrix must be qreat or equal to columns, otherwise
   /// method returns `Map`, which keys point to `null`.
   Map<String, Matrix> qr() {
@@ -486,16 +904,62 @@ class Matrix extends TensorBase {
       }
     }
 
-    return <String, Matrix>{'q': q, 'r': r};
+    return <String, Matrix>{'Q': q, 'R': r};
+  }
+
+  /// Computes matrix norm
+  ///
+  /// Matrix norm is a vector norm in a vector space whose elements
+  /// (vectors) are matrices (of given dimensions).
+  ///
+  /// If [q] is provided method computes `Lp,q norm`.
+  double norm(int p, [int q]) {
+    final matrix = map((v) => pow(v.abs(), p));
+    if (q == null) {
+      return Number(matrix.reduce((f, s) => f + s)).rootOf(p).data;
+    } else {
+      var summ = Vector.generate(columns, (_) => 0);
+      for (final item in matrix.data) {
+        summ.insert(
+            Number(pow(item.reduce((f, s) => f + s), q)).rootOf(p).data);
+      }
+      return Number(summ.reduce((f, s) => f + s)).rootOf(p).data;
+    }
+  }
+
+  /// Computes infinity norm of this matrix
+  ///
+  /// Equal to [norm] with `p` equal to `Infinity`
+  num infinityNorm() {
+    num largest = 0;
+
+    for (var i = 1; i <= rows; i++) {
+      num sum = 0;
+      for (var j = 1; j <= columns; j++) {
+        sum += itemAt(i, j).abs(); // compute the row sum
+      }
+      if (sum > largest) {
+        largest = sum; // found a new row sum
+      }
+    }
+
+    return largest;
+  }
+
+  /// Computes spectral norm of this matrix
+  num spectralNorm() {
+    final singularValues = svd()['E'];
+    return CentralTendency(singularValues).maximum();
   }
 
   /// Calculates the ratio `C` of the largest to smallest singular value in
   /// the singular value decomposition of a matrix
-  ///
-  /// Uses [dart-data](https://pub.dartlang.org/packages/data) package of Lukas Renggli.
-  double condition() => dd.singularValue(toMatrixDartData(copy())).cond;
+  double condition() {
+    final c = CentralTendency(svd()['E']);
+    return c.maximum() / c.minimum();
+  }
 
-  /// Add values of [other] to corresponding values of this matrix
+  /// add values of [other] to corresponding values of this matrix
   ///
   /// The matrices should be of the same dimension.
   @override

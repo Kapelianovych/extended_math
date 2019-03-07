@@ -51,8 +51,11 @@ class Vector extends TensorBase {
   /// v.insert(4, v.data.length + 1);
   /// print(v); // [1, 2, 3, 4]
   /// ```
-  void insert(num item, {int position = 1, bool replace = false}) =>
+  void insert(num item, {int position = 1, bool replace = true}) =>
       replace ? _data[position - 1] = item : _data.insert(position - 1, item);
+
+  /// Sets item to end of this [Vector]
+  void add(num item) => _data.add(item);
 
   /// Gets norm of vector alse known as vector's length
   ///

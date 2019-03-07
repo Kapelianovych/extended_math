@@ -16,6 +16,8 @@
 /// [Mathematics Subject Classification](https://en.wikipedia.org/wiki/Mathematics_Subject_Classification).
 library extended_math;
 
+export 'dart:math';
+
 export 'src/applied_mathematics/probability_theory/continuous_probability_distributions/uniform_distribution.dart';
 export 'src/applied_mathematics/probability_theory/numbers_generator.dart';
 export 'src/applied_mathematics/statistic/central_tendency.dart';
@@ -45,7 +47,8 @@ export 'src/discrete_mathematics/linear_algebra/tensor/tensor2/square_matrix.dar
 export 'src/discrete_mathematics/linear_algebra/tensor/tensor3.dart';
 export 'src/discrete_mathematics/linear_algebra/tensor/tensor4.dart';
 
-export 'src/general/elementary_algebra/base/equation_base.dart';
-export 'src/general/elementary_algebra/cubic_equation.dart';
-export 'src/general/elementary_algebra/exceptions/equation_exception.dart';
-export 'src/general/elementary_algebra/quadratic_equation.dart';
+export 'src/general/elementary_algebra/equations/base/equation_base.dart';
+export 'src/general/elementary_algebra/equations/cubic_equation.dart';
+export 'src/general/elementary_algebra/equations/exceptions/equation_exception.dart';
+export 'src/general/elementary_algebra/equations/quadratic_equation.dart';
+export 'src/general/elementary_algebra/unary_operations.dart';

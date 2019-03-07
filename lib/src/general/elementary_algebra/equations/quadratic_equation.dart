@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../complex_analysis/complex.dart';
+import '../../../complex_analysis/complex.dart';
 import 'base/equation_base.dart';
 import 'exceptions/equation_exception.dart';
 
