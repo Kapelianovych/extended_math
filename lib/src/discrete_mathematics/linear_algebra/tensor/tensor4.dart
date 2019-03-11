@@ -217,13 +217,8 @@ class Tensor4 extends TensorBase {
   }
 
   @override
-  Tensor4 copy() {
-    final data = _data
-        .map((r) => r.map((z) => z.map((u) => u.toList()).toList()).toList())
-        .toList();
-    return Tensor4(data);
-  }
+  Tensor4 copy() => Tensor4(data);
 
   @override
-  String toString() => '$_data';
+  String toString() => '$data';
 }

@@ -29,8 +29,7 @@ class Matrix extends TensorBase {
         super(2) {
     if (fillRandom == true) {
       for (var j = 0; j < rows; j++) {
-        _data.add(
-            NumbersGenerator().doubleIterableSync(cols).take(cols).toList());
+        _data.add(NumbersGenerator().doubleIterableSync().take(cols).toList());
       }
     } else {
       for (var i = 0; i < rows; i++) {
@@ -146,7 +145,7 @@ class Matrix extends TensorBase {
   /// Takes two matrices of the same dimensions and produces another matrix
   /// where each element `i`, `j` is the product of elements `i`, `j` of
   /// the original two matrices.
-  Matrix hadamardProduct(Matrix matrix) {
+  Matrix hadamard(Matrix matrix) {
     if (columns == matrix.columns && rows == matrix.rows) {
       final m = Matrix.generate(rows, columns);
       for (var i = 1; i <= rows; i++) {
@@ -996,7 +995,7 @@ class Matrix extends TensorBase {
     if (other is num) {
       m = copy().map((v) => v * other);
     } else if (other is Matrix) {
-      m = hadamardProduct(other);
+      m = hadamard(other);
     } else if (other is Number) {
       m = copy().map((v) => v * other.data);
     }

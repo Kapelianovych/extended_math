@@ -1,4 +1,14 @@
-# 0.0.25
+# 0.0.26
+
+- Change signature of `intIterableSync()` and `doubleIterableSync()` of `NumbersGenerator` - now they can generate infinite count of numbers.
+- Replace `calculate()` with getter `all` in `Quartile` class.
+- Make `Integer` constructor const.
+- Add to `Vector` `[]` and `[]=` operators that behave like `List`s operators.
+- Change `hadamardProduct()` to `hadamard()` in `Vector` class.
+- Change `hadamardProduct()` to `hadamard()` in `Matrix` class.
+- Improve docs.
+
+## 0.0.25
 
 - Removed `data` dependency due to package version of Dart SDK restriction.
 - Add `UnaryOperations` section with `hypot()`.

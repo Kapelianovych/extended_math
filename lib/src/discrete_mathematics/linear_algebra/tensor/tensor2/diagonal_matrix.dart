@@ -22,7 +22,7 @@ class DiagonalMatrix extends SquareMatrix {
       : super.identity(number) {
     if (fillRandom == true) {
       for (var j = 1; j <= number; j++) {
-        setItem(j, j, NumbersGenerator().doubleIterableSync(1).take(1).single);
+        setItem(j, j, NumbersGenerator().doubleIterableSync().take(1).single);
       }
     }
   }

@@ -7,7 +7,7 @@ import 'base/number.dart';
 /// methods that don't exist in.
 class Integer extends Number {
   /// Creates instance of [Integer] number
-  Integer(int value) : super(value);
+  const Integer(int value) : super(value);
 
   @override
   int get data => super.data.toInt();

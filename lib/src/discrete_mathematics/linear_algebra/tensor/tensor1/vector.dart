@@ -45,10 +45,12 @@ class Vector extends TensorBase {
   /// otherwise [item] sets to specified position and width of [Vector]
   /// is growth by one.
   /// In order to insert [item] to end of [Vector] set position to
-  /// **length + 1**:
+  /// **length + 1** or use [add] method:
   /// ```dart
   /// final v = Vector(<num>[1, 2, 3]);
   /// v.insert(4, v.data.length + 1);
+  /// // or
+  /// v.add(4);
   /// print(v); // [1, 2, 3, 4]
   /// ```
   void insert(num item, {int position = 1, bool replace = true}) =>
@@ -150,7 +152,7 @@ class Vector extends TensorBase {
       Vector(data.sublist(start - 1, end != null ? end : null));
 
   /// Gets Hadamard product of vectors
-  Vector hadamardProduct(Vector vector) {
+  Vector hadamard(Vector vector) {
     final data = <num>[];
     for (var i = 1; i <= itemsCount; i++) {
       data.add(itemAt(i) * vector.itemAt(i));
@@ -174,7 +176,7 @@ class Vector extends TensorBase {
     if (other is num) {
       v = map((v) => v * other);
     } else if (other is Vector) {
-      v = hadamardProduct(other);
+      v = hadamard(other);
     } else if (other is Number) {
       v = map((v) => v * other.toDouble());
     }
@@ -200,6 +202,18 @@ class Vector extends TensorBase {
 
   @override
   Vector operator -() => map((v) => -v);
+
+  /// Gets item of this [Vector] at the specified [index]
+  ///
+  /// [index] starts from `0` to `length - 1`. The same range have
+  /// core [List].
+  num operator [](int index) => data[index];
+
+  /// Sets [value] to this [Vector] at the specified [index]
+  ///
+  /// [index] starts from `0` to `length - 1`. The same range have
+  /// core [List].
+  void operator []=(int index, num value) => _data[index] = value;
 
   @override
   Vector operator +(Vector other) {

@@ -189,6 +189,23 @@ Every tensor can transform their values with `map` method, test each value with 
 
 `Vector` class have various methods to work with self:
 
++ get, sets values:
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  final c = Vector(<num>[3, 5]);
+  print(c); // [3, 5]
+  print(c.itemAt(1)); // 3
+  c.insert(4, position: 2);
+  print(c); // [3, 4]
+  print(c[0]); // 3
+  c[0] = 2;
+  print(c); // [2, 4]
+}
+```
+
 + computes norm (norm is a function that assigns a strictly positive length or size to each vector in a vector space—except for the zero vector, which is assigned a length of zero):
 
 ```dart
@@ -211,10 +228,10 @@ import 'package:extended_math/extended_math.dart';
 void main() {
   final c = Vector(<num>[3, 5, 4]);
   final c2 = Vector(<num>[1, 9.5, 4.78]);
-  print(c.dotProduct(c2)); // 69.62
-  print(c.crossProduct(c2)); // [-14.099999999999998, 10.34, 23.5]
+  print(c.dot(c2)); // 69.62
+  print(c.cross(c2)); // [-14.099999999999998, 10.34, 23.5]
 
-  print(c.hadamardProduct(c2)); // [3, 47.5, 19.12]
+  print(c.hadamard(c2)); // [3, 47.5, 19.12]
   // or
   print(c * c2); // [3, 47.5, 19.12]
 }
@@ -549,8 +566,8 @@ import 'package:extended_math/extended_math.dart';
 
 void main() {
   final c = NumbersGenerator();
-  print(c.intIterableSync(10, 5, from: 1).take(5)); // (2, 3, 1, 3, 8)
-  print(c.doubleIterableSync(10, to: 5, from: 1).take(5)); // (3.3772583795670412, 3.2489709159796276, 4.761700666599024, 4.425092938268564, 1.1353964008448607)
+  print(c.intIterableSync(to: 5, from: 1).take(5)); // (2, 3, 1, 3, 8)
+  print(c.doubleIterableSync(to: 5, from: 1).take(5)); // (3.3772583795670412, 3.2489709159796276, 4.761700666599024, 4.425092938268564, 1.1353964008448607)
 }
 ```
 
@@ -677,9 +694,10 @@ import 'package:extended_math/extended_math.dart';
 void main() {
   const t = Vector(
     <num>[7, 7, 21, 25, 31, 31, 47, 75, 87, 115, 116, 119, 119, 155, 177]);
-  print(Quartile(t).calculate()); // [25, 75, 119]
-  print(Quartile(t, method: 'two').calculate()); // [28.0, 75, 117.5]
-  print(Quartile(t, method: 'three').calculate()); // [26.5, 75, 118.25]
+  print(Quartile(t).all); // [25, 75, 119]
+  print(Quartile(t, method: 'two').all); // [28.0, 75, 117.5]
+  print(Quartile(t, method: 'three').all); // [26.5, 75, 118.25]
+  print(Quartile(t).first); // 26.5
 }
 ```
 

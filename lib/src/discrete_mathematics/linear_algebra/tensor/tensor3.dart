@@ -200,12 +200,8 @@ class Tensor3 extends TensorBase {
   }
 
   @override
-  Tensor3 copy() {
-    final data =
-        _data.map((row) => row.map((z) => z.toList()).toList()).toList();
-    return Tensor3(data);
-  }
+  Tensor3 copy() => Tensor3(data);
 
   @override
-  String toString() => '$_data';
+  String toString() => '$data';
 }

@@ -22,16 +22,16 @@ class Quartile extends Quantile {
   String method;
 
   /// Gets `Q1` corresponding to [method]
-  num get first => calculate()[0];
+  num get first => all[0];
 
   /// Gets `Q2` corresponding to [method]
-  num get second => calculate()[1];
+  num get second => all[1];
 
   /// Gets `Q3` corresponding to [method]
-  num get third => calculate()[2];
+  num get third => all[2];
 
-  /// Calculate `Q1`, `Q2` and `Q3` corresponding to [method]
-  List<num> calculate() {
+  /// Gets `Q1`, `Q2` and `Q3` corresponding to [method]
+  List<num> get all {
     final listData = data.toList();
     final result = <num>[CentralTendency(data).median()];
 
