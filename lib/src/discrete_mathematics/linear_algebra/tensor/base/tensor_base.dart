@@ -1,5 +1,6 @@
+import 'package:quiver/collection.dart';
+
 import '../../../../mixins/copyable_mixin.dart';
-import '../../../../utils/equals.dart';
 import '../../../general_algebraic_systems/number/base/number.dart';
 import '../../exceptions/tensor_exception.dart';
 import '../tensor1/vector.dart';
@@ -136,7 +137,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// of known data points [a] (alpha) may be in range from 0 to 1
   /// inclusively. Otherwise throws [TensorException].
   TensorBase lerp(TensorBase other, double a) {
-    if (dimension != other.dimension && !isMapsEqual(shape, other.shape)) {
+    if (dimension != other.dimension && !mapsEqual(shape, other.shape)) {
       throw ArgumentError('Tensors aren\'t equals!');
     }
 

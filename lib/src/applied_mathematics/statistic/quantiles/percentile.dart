@@ -20,10 +20,7 @@ class Percentile extends Quantile {
   final TensorBase data;
 
   /// Gets sorted [data] in ascending order
-  List<num> get sortedData {
-    final sortedData = data.toList()..sort();
-    return sortedData;
-  }
+  List<num> get sortedData => data.toList()..sort();
 
   /// Holds number that define `kth-percentile`
   int number;

@@ -1,8 +1,9 @@
 import 'dart:math';
 
+import 'package:quiver/collection.dart';
+
 import '../../discrete_mathematics/general_algebraic_systems/number/base/number.dart';
 import '../../discrete_mathematics/linear_algebra/tensor/base/tensor_base.dart';
-import '../../utils/equals.dart';
 import 'exceptions/mean_exception.dart';
 
 /// **Central tendency** (or measure of central tendency) is a central or
@@ -28,7 +29,7 @@ class CentralTendency {
     var set = _set.copy();
     final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (!isMapsEqual(set.shape, w.shape)) {
+    if (!mapsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }
@@ -50,7 +51,7 @@ class CentralTendency {
     final set = _set.copy();
     final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (!isMapsEqual(set.shape, w.shape)) {
+    if (!mapsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }
@@ -78,7 +79,7 @@ class CentralTendency {
     final set = _set.copy();
     final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (!isMapsEqual(set.shape, w.shape)) {
+    if (!mapsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }

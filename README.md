@@ -27,6 +27,8 @@ At the moment library have 4 sections:
     + [Tensor4](#Tensor4)
   + [Number theory](#Number-theory)
 + [Applied mathematics](#Applied-mathematics)
+  + [Numerical analysis](#Numerical-analysis)
+    + [Secant method](#Secant-method)
   + [Probability theory](#Probability-theory)
     + [Probability distributions](#Probability-distributions)
       + [Uniform distribution](#Uniform-distribution)
@@ -523,7 +525,30 @@ This section doesn't provided yet (some functionality is in `Integer` class).
 
 Applied mathematics is the application of mathematical methods by different fields such as science, engineering, business, computer science, and industry.
 
-#### Probability destributions
+#### Numerical analysis
+
+`Numerical analysis` is the study of algorithms that use numerical approximation (as opposed to symbolic manipulations) for the problems of mathematical analysis (as distinguished from discrete mathematics).
+
+##### Secant method
+
+`The secant method` is a root-finding algorithm that uses a succession of roots of secant lines to better approximate a root of a function `f`.
+
+```dart
+import 'dart:math';
+
+import 'package:extended_math/extended_math.dart';
+
+void main(List<String> args) {
+  num equationFn(num value) {
+    return pow(value, 3) - 18 * value - 83;
+  }
+
+  final p = SecantMethod(equationFn, 2, 10, 0.001);
+  print(p.result()); // 5.705107053246152
+}
+```
+
+#### Probability distributions
 
 A probability distribution is a mathematical function that provides the probabilities of occurrence of different possible outcomes in an experiment.
 

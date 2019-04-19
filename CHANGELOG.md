@@ -1,4 +1,9 @@
-# 0.0.26
+# 0.0.27
+
+- Remove internal method that don't touch main functionality.
+- Add `Numerical analysis` section with `SecantMethod` for finding root of function.
+
+## 0.0.26
 
 - Change signature of `intIterableSync()` and `doubleIterableSync()` of `NumbersGenerator` - now they can generate infinite count of numbers.
 - Replace `calculate()` with getter `all` in `Quartile` class.
