@@ -29,6 +29,7 @@ At the moment library have 4 sections:
 + [Applied mathematics](#Applied-mathematics)
   + [Numerical analysis](#Numerical-analysis)
     + [Secant method](#Secant-method)
+    + [Newton's method](#Newton's-method)
   + [Probability theory](#Probability-theory)
     + [Probability distributions](#Probability-distributions)
       + [Uniform distribution](#Uniform-distribution)
@@ -534,8 +535,6 @@ Applied mathematics is the application of mathematical methods by different fiel
 `The secant method` is a root-finding algorithm that uses a succession of roots of secant lines to better approximate a root of a function `f`.
 
 ```dart
-import 'dart:math';
-
 import 'package:extended_math/extended_math.dart';
 
 void main(List<String> args) {
@@ -545,6 +544,26 @@ void main(List<String> args) {
 
   final p = SecantMethod(equationFn, 2, 10, 0.001);
   print(p.result()); // 5.705107053246152
+}
+```
+
+##### Newton's method
+
+**Newton's method**, also known as the **Newton–Raphson method**, named after Isaac Newton and Joseph Raphson, is a root-finding algorithm which produces successively better approximations to the roots (or zeroes) of a real-valued function.
+
+The most basic version starts with a single-variable function f defined for a real variable x, the function's derivative f ′, and an initial guess x0 for a root of f. If the function satisfies necessary assumptions and the initial guess is close, then a better approximation x1 is
+`x1 = x0 − f(x0) / f′(x0).`
+
+```dart
+import 'package:extended_math/extended_math.dart';
+
+void main() {
+  // expression == x^3 - 18*x -83
+  final n = NewtonsMethod(<num>[1, -18, -83], <int>[3, 1, 0]);
+  print(n.upperLimit()); // 84.0
+  print(n.lowerLimit()); // -84.0
+  print(n.findSignChange()); // [5.040000000000064, 6.720000000000064]
+  print(n.calculateFrom(10)); // 5.705115796346382
 }
 ```
 

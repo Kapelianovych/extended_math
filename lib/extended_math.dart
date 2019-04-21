@@ -18,6 +18,7 @@ library extended_math;
 
 export 'dart:math';
 
+export 'src/applied_mathematics/numerical_analysis/newtons_method.dart';
 export 'src/applied_mathematics/numerical_analysis/secant_method.dart';
 export 'src/applied_mathematics/probability_theory/continuous_probability_distributions/uniform_distribution.dart';
 export 'src/applied_mathematics/probability_theory/numbers_generator.dart';

@@ -1,4 +1,9 @@
-# 0.0.27
+# 0.0.28
+
+- Add `NewtonsMethod` to `Numerical analysis`.
+- Update README.
+
+## 0.0.27
 
 - Remove internal method that don't touch main functionality.
 - Add `Numerical analysis` section with `SecantMethod` for finding root of function.
