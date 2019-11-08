@@ -1,4 +1,9 @@
-# 0.0.28
+# 0.0.29
+
+- Correct `median` method of `CentralTendency` class.
+- Update SDK constraint.
+
+## 0.0.28
 
 - Add `NewtonsMethod` to `Numerical analysis`.
 - Update README.

@@ -129,7 +129,7 @@ class CentralTendency {
   /// Gets the value separating the higher half from the lower half
   /// of a [_set]
   num median() {
-    final list = _set.toList();
+    final list = _set.toList()..sort();
     final center = list.length ~/ 2;
     if (list.length % 2 == 0) {
       return (list.elementAt(center - 1) + list.elementAt(center)) / 2;
