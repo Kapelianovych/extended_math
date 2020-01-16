@@ -33,5 +33,5 @@ class Percentile extends Quantile {
   /// least [number] percent of the data is less than or equal to that value
   ///
   /// Calculated by the nearest-rank method.
-  num value() => sortedData[ordinalRank()];
+  num value() => sortedData[ordinalRank() - 1];
 }
