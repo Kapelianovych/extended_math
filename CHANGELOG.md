@@ -1,3 +1,7 @@
+# 0.0.29+1
+
+- Fix percentile index error in `Percentile.value` getter ([zeshuaro](https://github.com/zeshuaro)).
+
 # 0.0.29
 
 - Correct `median` method of `CentralTendency` class.
