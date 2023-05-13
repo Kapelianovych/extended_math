@@ -168,7 +168,7 @@ class SquareMatrix extends Matrix {
     /** Row and column dimension (square matrix).
    @serial matrix dimension.
    */
-    int n;
+    int n = columns;
 
     /** Symmetry flag.
    @serial internal symmetry flag.
@@ -178,22 +178,27 @@ class SquareMatrix extends Matrix {
     /** Arrays for internal storage of eigenvalues.
    @serial internal storage of eigenvalues.
    */
-    List<num> d, e;
+    List<double> d = List<double>.filled(n, 0), e = List<double>.filled(n, 0);
 
     /** Array for internal storage of eigenvectors.
    @serial internal storage of eigenvectors.
    */
-    List<List<num>> V;
+    List<List<double>> V = [];
 
     /** Array for internal storage of nonsymmetric Hessenberg form.
    @serial internal storage of nonsymmetric Hessenberg form.
    */
-    List<List<num>> H;
+    List<List<double>> H = [];
 
     /** Working storage for nonsymmetric algorithm.
    @serial working storage for nonsymmetric algorithm.
    */
-    List<num> ort;
+    List<double> ort = List<double>.filled(n, 0.0);
+
+    for (var i = 0; i < n; i++) {
+      V.add(List<double>.filled(n, 0.0));
+      H.add(List<double>.filled(n, 0.0));
+    }
 
 /* ------------------------
    Private Methods
@@ -328,7 +333,7 @@ class SquareMatrix extends Matrix {
 
       double f = 0.0;
       double tst1 = 0.0;
-      double eps = pow(2.0, -52.0);
+      double eps = pow(2.0, -52.0).toDouble();
       for (int l = 0; l < n; l++) {
         // Find small subdiagonal element
 
@@ -353,7 +358,7 @@ class SquareMatrix extends Matrix {
 
             double g = d[l];
             double p = (d[l + 1] - g) / (2.0 * e[l]);
-            double r = hypot(p, 1.0);
+            double r = hypot(p, 1.0).toDouble();
             if (p < 0) {
               r = -r;
             }
@@ -381,7 +386,7 @@ class SquareMatrix extends Matrix {
               s2 = s;
               g = c * e[i];
               h = c * p;
-              r = hypot(p, e[i]);
+              r = hypot(p, e[i]).toDouble();
               e[i + 1] = s * r;
               s = e[i] / r;
               c = p / r;
@@ -523,7 +528,7 @@ class SquareMatrix extends Matrix {
 
     // Complex scalar division.
 
-    double cdivr, cdivi;
+    double cdivr = 0, cdivi = 0;
     void cdiv(double xr, double xi, double yr, double yi) {
       double r, d;
       if (yr.abs() > yi.abs()) {
@@ -553,9 +558,9 @@ class SquareMatrix extends Matrix {
       int inn = nn - 1;
       int low = 0;
       int high = nn - 1;
-      double eps = pow(2.0, -52.0);
+      double eps = pow(2.0, -52.0).toDouble();
       double exshift = 0.0;
-      num p = 0, q = 0, r = 0, s = 0, z = 0, t, w, x, y;
+      double p = 0, q = 0, r = 0, s = 0, z = 0, t, w, x, y;
 
       // Store roots isolated by balanc and compute matrix norm
 
@@ -992,10 +997,6 @@ class SquareMatrix extends Matrix {
    */
 
     final A = data;
-    n = columns;
-    V = SquareMatrix.generate(n).data;
-    d = List<double>(n);
-    e = List<double>(n);
 
     issymmetric = true;
     for (int j = 0; (j < n) & issymmetric; j++) {
@@ -1007,7 +1008,7 @@ class SquareMatrix extends Matrix {
     if (issymmetric) {
       for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-          V[i][j] = A[i][j];
+          V[i][j] = A[i][j].toDouble();
         }
       }
 
@@ -1017,12 +1018,9 @@ class SquareMatrix extends Matrix {
       // Diagonalize.
       tql2();
     } else {
-      H = SquareMatrix.generate(n).data;
-      ort = List<double>(n);
-
       for (int j = 0; j < n; j++) {
         for (int i = 0; i < n; i++) {
-          H[i][j] = A[i][j];
+          H[i][j] = A[i][j].toDouble();
         }
       }
 
@@ -1064,7 +1062,7 @@ class SquareMatrix extends Matrix {
   ///
   /// Created from [Jama's implemetation](https://github.com/fiji/Jama/blob/master/src/main/java/Jama/CholeskyDecomposition.java).
   SquareMatrix cholesky() {
-    SquareMatrix m;
+    var m = SquareMatrix([]);
     if (isPositiveDefinite()) {
       /* ------------------------
    Class variables

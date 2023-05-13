@@ -1,3 +1,6 @@
+# 0.1.0
+- **Breaking change** svd returns a dart3 record (E, U, D) instead of a map {'E': E, 'U': U, 'D': D}
+- Fix null safety issues.
 # 0.0.29+1
 
 - Fix percentile index error in `Percentile.value` getter ([zeshuaro](https://github.com/zeshuaro)).

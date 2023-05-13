@@ -43,44 +43,45 @@ class CubicEquation extends EquationBase {
   }
 
   @override
-  Map<String, Complex> calculate() {
-    final result = <String, Complex>{};
+  List<Complex> calculate() {
+    final result = <Complex>[];
+    Complex? x1;
     final dis = discriminant();
 
     if (d != 0) {
-      final possibleX = Integer(d).factorizate();
+      final possibleX = Integer(d.round()).factorizate();
       possibleX.add(1);
 
       for (var item in possibleX) {
         for (var i = 1; i <= 2; i++) {
           if (evaluate(pow(-1, i) * item, 0)) {
-            result['x1'] = Complex(re: pow(-1, i) * item);
+            x1 = Complex(re: pow(-1, i) * item);
           }
         }
       }
     } else {
-      result['x1'] = Complex();
+      x1 = Complex();
     }
 
-    if (result.isEmpty) {
+    if (x1 == null) {
       final alpha =
           Double(-(q / 2) + sqrt(dis)).preciseTo(2).rootOf(3).toDouble();
       final beta =
           Double(-(q / 2) - sqrt(dis)).preciseTo(2).rootOf(3).toDouble();
       final z = alpha + beta;
       final x = z - b / (3 * a);
-      result['x1'] = Complex(re: x);
+      x1 = Complex(re: x);
     }
 
-    final tmpB = result['x1'] * a + b;
-    final tmpC = result['x1'] * tmpB + c;
+    result.add(x1);
+
+    final tmpB = x1 * a + b;
+    final tmpC = x1 * tmpB + c;
 
     final quadratic =
         QuadraticEquation(a: a, b: tmpB.toReal(), c: tmpC.toReal());
     final quadResult = quadratic.calculate();
-    for (var i = 1; i <= quadResult.length; i++) {
-      result['x${i + 1}'] = quadResult['x$i'];
-    }
+    result.addAll(quadResult);
 
     return result;
   }

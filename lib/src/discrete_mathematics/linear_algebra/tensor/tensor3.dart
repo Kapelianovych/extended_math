@@ -15,7 +15,7 @@ class Tensor3 extends TensorBase {
   factory Tensor3.generate(int width, int length, int depth,
           num Function(num number) generator) =>
       TensorBase.generate(
-              <String, int>{'width': width, 'length': length, 'depth': depth},
+              [width, length, depth],
               generator)
           .toTensor3();
 
@@ -38,8 +38,7 @@ class Tensor3 extends TensorBase {
       _data.map((r) => r.map((c) => c.toList()).toList()).toList();
 
   @override
-  Map<String, int> get shape =>
-      <String, int>{'width': width, 'length': length, 'depth': depth};
+  List<int> get shape => [width, length, depth];
 
   /// Gets two dimensional matrix in specified depth position
   ///
@@ -144,7 +143,7 @@ class Tensor3 extends TensorBase {
   /// Otherwise returns `null`.
   @override
   Tensor3 operator *(Object other) {
-    Tensor3 m;
+    var m = Tensor3([]);
     if (other is num) {
       m = copy().map((v) => v * other);
     } else if (other is Tensor3) {
@@ -166,7 +165,7 @@ class Tensor3 extends TensorBase {
   /// Divide this tensor by number of by [other]
   @override
   Tensor3 operator /(Object other) {
-    Tensor3 m;
+    var m = Tensor3([]);
     if (other is num) {
       if (other == 0) {
         throw DivisionByZeroException();

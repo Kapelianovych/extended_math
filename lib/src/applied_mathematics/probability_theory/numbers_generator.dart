@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:meta/meta.dart';
-
 /// Generator of random numbers
 ///
 /// It isn't extend `Random` of `dart:math`, but provide functionality
@@ -25,7 +23,7 @@ class NumbersGenerator {
   ///
   /// Generates `integer` number in range [from] - [to] inclusively.
   /// [from] should be less than [to].
-  Iterable<int> intIterableSync({@required int to, int from = 0}) sync* {
+  Iterable<int> intIterableSync({required int to, int from = 0}) sync* {
     while (true) {
       yield nextInt(to, from: from);
     }
