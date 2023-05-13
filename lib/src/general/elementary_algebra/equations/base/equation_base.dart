@@ -6,7 +6,7 @@ abstract class EquationBase {
   ///
   /// Any real roots are converted to [Complex] numbers and can
   /// be resolved with [Complex.toReal] method.
-  Map<String, Complex> calculate();
+  List<Complex> calculate();
 
   /// Gets discriminant of equation
   num discriminant();

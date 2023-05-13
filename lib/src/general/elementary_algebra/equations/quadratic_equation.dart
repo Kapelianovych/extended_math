@@ -26,21 +26,21 @@ class QuadraticEquation extends EquationBase {
   num c;
 
   @override
-  Map<String, Complex> calculate() {
-    final result = <String, Complex>{};
+  List<Complex> calculate() {
+    final result = <Complex>[];
     final dis = discriminant();
 
     if (dis > 0) {
       for (var i = 1; i <= 2; i++) {
-        result['x$i'] = Complex(re: (-b + pow(-1, i) * sqrt(dis)) / (2 * a));
+        result.add(Complex(re: (-b + pow(-1, i) * sqrt(dis)) / (2 * a)));
       }
     } else if (dis == 0) {
-      result['x'] = Complex(re: -b / (2 * a));
+      result.add(Complex(re: -b / (2 * a)));
     } else {
       for (var i = 1; i <= 2; i++) {
         final re = -b / (2 * a);
         final im = pow(-1, i) * sqrt(-dis) / (2 * a);
-        result['x$i'] = Complex(re: re, im: im);
+        result.add(Complex(re: re, im: im));
       }
     }
     return result;

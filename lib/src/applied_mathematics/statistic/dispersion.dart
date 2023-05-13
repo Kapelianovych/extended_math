@@ -10,7 +10,7 @@ class Dispersion {
   ///
   /// By default means that all values have an equal propabilities if
   /// it isn't so, you can provide your own.
-  Dispersion(this._values, {TensorBase probabilities})
+  Dispersion(this._values, {TensorBase? probabilities})
       : _probabilities = probabilities ??
             TensorBase.generate(_values.shape, (_) => 1 / _values.itemsCount);
 
@@ -28,7 +28,8 @@ class Dispersion {
 
   /// Computes expected value for all possible [values] of a random number
   /// for finite case with its probabilities
-  double expectedValue() => (values * probabilities).reduce((f, s) => f + s);
+  double expectedValue() =>
+      (values * probabilities).reduce((f, s) => f + s).toDouble();
 
   /// Computes `population` or `sample` [type]s of standard deviation of
   /// [values]
@@ -47,7 +48,7 @@ class Dispersion {
       default:
         final summ = (values.map((v) => pow(v, 2)) * probabilities)
             .reduce((f, s) => f + s);
-        return summ - pow(mu, 2);
+        return (summ - pow(mu, 2)).toDouble();
     }
   }
 

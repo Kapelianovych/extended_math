@@ -21,7 +21,7 @@ class CentralTendency {
   ///
   /// If [weights] isn't `null` then the weighted arithmetic mean are computed.
   /// If provided, [weights] must have the same shape as the number's set.
-  num arithmetic({TensorBase weights}) {
+  num arithmetic({TensorBase? weights}) {
     if (_set.any((e) => e <= 0)) {
       throw MeanException('All numbers in set must be greatest than zero!');
     }
@@ -29,7 +29,7 @@ class CentralTendency {
     var set = _set.copy();
     final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (!mapsEqual(set.shape, w.shape)) {
+    if (!listsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }
@@ -43,7 +43,7 @@ class CentralTendency {
   ///
   /// If [weights] isn't `null` then the weighted geometric mean are computed.
   /// If provided, [weights] must have the same shape as the number's set.
-  num geometric({TensorBase weights}) {
+  num geometric({TensorBase? weights}) {
     if (_set.any((e) => e <= 0)) {
       throw MeanException('All numbers in set must be greatest than zero!');
     }
@@ -51,7 +51,7 @@ class CentralTendency {
     final set = _set.copy();
     final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (!mapsEqual(set.shape, w.shape)) {
+    if (!listsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }
@@ -71,7 +71,7 @@ class CentralTendency {
   ///
   /// If [weights] isn't `null` then the weighted harmonic mean are computed.
   /// If provided, [weights] must have the same shape as the number's set.
-  num harmonic({TensorBase weights}) {
+  num harmonic({TensorBase? weights}) {
     if (_set.any((e) => e <= 0)) {
       throw MeanException('All numbers in set must be greatest than zero!');
     }
@@ -79,7 +79,7 @@ class CentralTendency {
     final set = _set.copy();
     final w = weights ?? TensorBase.generate(set.shape, (_) => 1);
 
-    if (!mapsEqual(set.shape, w.shape)) {
+    if (!listsEqual(set.shape, w.shape)) {
       throw ArgumentError.value(weights, 'weights',
           'Items count of weights don\'t match set of numbers!');
     }

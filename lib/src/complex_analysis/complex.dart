@@ -35,7 +35,7 @@ class Complex with CopyableMixin<Complex> {
   ///
   /// [other] can be either number or complex number.
   Complex operator +(Object other) {
-    Complex c;
+    var c = Complex();
     if (other is num) {
       c = Complex(re: re + other, im: im);
     } else if (other is Complex) {
@@ -50,7 +50,7 @@ class Complex with CopyableMixin<Complex> {
   ///
   /// [other] can be either number or complex number.
   Complex operator -(Object other) {
-    Complex c;
+    var c = Complex();
     if (other is Complex) {
       c = this + -other;
     } else if (other is num) {
@@ -68,7 +68,7 @@ class Complex with CopyableMixin<Complex> {
   ///
   /// [other] can be either number or complex number.
   Complex operator *(Object other) {
-    Complex c;
+    var c = Complex();
     if (other is num) {
       final newRe = re * other;
       final newIm = im * other;
@@ -89,7 +89,7 @@ class Complex with CopyableMixin<Complex> {
   ///
   /// [other] can be either number or complex number.
   Complex operator /(Object other) {
-    Complex c;
+    var c = Complex();
     if (other is num) {
       final down = m.pow(other, 2);
       final newRe = (re * other) / down;
@@ -137,7 +137,7 @@ class Complex with CopyableMixin<Complex> {
     }
 
     // final rootModule = m.pow(module, 1 / root);
-    final rootModule = Double(module).rootOf(root).toDouble();
+    final rootModule = Double(module.toDouble()).rootOf(root).toDouble();
 
     for (var i = 0; i < root; i++) {
       final newRe = m.cos((argument + 2 * argument * i) / root) * rootModule;

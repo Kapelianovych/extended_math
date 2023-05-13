@@ -23,8 +23,7 @@ class Number extends TensorBase {
   num get data => _value;
 
   @override
-  Map<String, int> get shape =>
-      <String, int>{}; // Empty because numbers haven't shape
+  List<int> get shape => []; // Empty because numbers haven't shape
 
   /// Gets nth root of this number
   ///
@@ -62,7 +61,7 @@ class Number extends TensorBase {
   /// [other] can be either `num` or [Number].
   @override
   Number operator +(Object other) {
-    Number n;
+    var n = Number(0);
     if (other is num) {
       n = Number(_value + other);
     } else if (other is Number) {
@@ -79,7 +78,7 @@ class Number extends TensorBase {
   /// [other] can be either `num` or [Number].
   @override
   Number operator -(Object other) {
-    Number n;
+    var n = Number(0);
     if (other is num) {
       n = Number(_value - other);
     } else if (other is Number) {
@@ -93,7 +92,7 @@ class Number extends TensorBase {
   /// [other] can be either `num` or [Number].
   @override
   Number operator *(Object other) {
-    Number n;
+    var n = Number(0);
     if (other is num) {
       n = Number(_value * other);
     } else if (other is Number) {
@@ -107,7 +106,7 @@ class Number extends TensorBase {
   /// [other] can be either `num` or [Number].
   @override
   Double operator /(Object other) {
-    Double n;
+    var n = Double(0);
     if (other is num) {
       if (other == 0) {
         throw DivisionByZeroException();
@@ -124,7 +123,7 @@ class Number extends TensorBase {
 
   @override
   bool operator ==(Object other) {
-    bool result;
+    var result = false;
     if (other is num) {
       result = _value == other;
     } else if (other is Number) {

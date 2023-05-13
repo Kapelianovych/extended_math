@@ -58,7 +58,7 @@ class Matrix extends TensorBase {
   List<List<num>> get data => _data.map((r) => r.toList()).toList();
 
   @override
-  Map<String, int> get shape => <String, int>{'width': columns, 'length': rows};
+  List<int> get shape => [columns, rows];
 
   /// Rows count of matrix
   int get rows => data.length;
@@ -432,11 +432,11 @@ class Matrix extends TensorBase {
   /// matrix with positive eigenvalues) to any m×n matrix via an extension
   /// of the polar decomposition.
   ///
-  /// Returns `Map` that contains `E` (singular values), `U` (left-singular
+  /// Returns the matrices `E` (singular values), `U` (left-singular
   /// vectors) and `V` (right-singular vectors) with corresponding values.
   ///
   /// Created from [Jama's implemetation](https://github.com/fiji/Jama/blob/master/src/main/java/Jama/SingularValueDecomposition.java).
-  Map<String, Matrix> svd() {
+  (Matrix, Matrix, Matrix) svd() {
     // Row and column dimensions
     final m = rows;
     final n = columns;
@@ -449,9 +449,9 @@ class Matrix extends TensorBase {
     final v = SquareMatrix.generate(n).data;
 
     // array for internal storage of singular values
-    final s = List<num>(min(m + 1, n));
-    final e = List<num>(n);
-    final work = List<num>(m);
+    final s = List<num>.filled(min(m + 1, n), 0);
+    final e = List<num>.filled(n, 0);
+    final work = List<num>.filled(m, 0);
     bool wantu = true;
     bool wantv = true;
 
@@ -632,8 +632,8 @@ class Matrix extends TensorBase {
 
     int pp = p - 1;
     int iter = 0;
-    double eps = pow(2.0, -52.0);
-    double tiny = pow(2.0, -966.0);
+    double eps = pow(2.0, -52.0).toDouble();
+    double tiny = pow(2.0, -966.0).toDouble();
     while (p > 0) {
       int k, kase;
 
@@ -666,7 +666,7 @@ class Matrix extends TensorBase {
           if (ks == k) {
             break;
           }
-          double t = (ks != p ? e[ks].abs() : 0.0) +
+          num t = (ks != p ? e[ks].abs() : 0.0) +
               (ks != k + 1 ? e[ks - 1].abs() : 0.0);
           if (s[ks].abs() <= tiny + eps * t) {
             s[ks] = 0.0;
@@ -692,10 +692,10 @@ class Matrix extends TensorBase {
 
         case 1:
           {
-            double f = e[p - 2];
+            num f = e[p - 2];
             e[p - 2] = 0.0;
             for (int j = p - 2; j >= k; j--) {
-              double t = hypot(s[j], f);
+              num t = hypot(s[j], f);
               double cs = s[j] / t;
               double sn = f / t;
               s[j] = t;
@@ -718,10 +718,10 @@ class Matrix extends TensorBase {
 
         case 2:
           {
-            double f = e[k - 1];
+            num f = e[k - 1];
             e[k - 1] = 0.0;
             for (int j = k; j < p; j++) {
-              double t = hypot(s[j], f);
+              num t = hypot(s[j], f);
               double cs = s[j] / t;
               double sn = f / t;
               s[j] = t;
@@ -744,7 +744,7 @@ class Matrix extends TensorBase {
           {
             // Calculate the shift.
 
-            double scale = max(
+            num scale = max(
                 max(max(max(s[p - 1].abs(), s[p - 2].abs()), e[p - 2].abs()),
                     s[k].abs()),
                 e[k].abs());
@@ -769,7 +769,7 @@ class Matrix extends TensorBase {
             // Chase zeros.
 
             for (int j = k; j < p - 1; j++) {
-              double t = hypot(f, g);
+              num t = hypot(f, g);
               double cs = f / t;
               double sn = g / t;
               if (j != k) {
@@ -828,7 +828,7 @@ class Matrix extends TensorBase {
               if (s[k] >= s[k + 1]) {
                 break;
               }
-              double t = s[k];
+              num t = s[k];
               s[k] = s[k + 1];
               s[k + 1] = t;
               if (wantv && (k < n - 1)) {
@@ -861,12 +861,11 @@ class Matrix extends TensorBase {
       }
       sAsMatrix[i][i] = s[i];
     }
-
-    return <String, Matrix>{
-      'E': Matrix(sAsMatrix),
-      'U': SquareMatrix(u),
-      'V': Matrix(v)
-    };
+    return (
+      Matrix(sAsMatrix), // E
+      SquareMatrix(u), // U
+      Matrix(v), // V
+    );
   }
 
   /// Calculates QR decomposition of this matrix
@@ -912,7 +911,7 @@ class Matrix extends TensorBase {
   /// (vectors) are matrices (of given dimensions).
   ///
   /// If [q] is provided method computes `Lp,q norm`.
-  double norm(int p, [int q]) {
+  double norm(int p, [int? q]) {
     final matrix = map((v) => pow(v.abs(), p));
     if (q == null) {
       return Number(matrix.reduce((f, s) => f + s)).rootOf(p).data;
@@ -947,14 +946,15 @@ class Matrix extends TensorBase {
 
   /// Computes spectral norm of this matrix
   num spectralNorm() {
-    final singularValues = svd()['E'];
+    final (singularValues, _, _) = svd();
     return CentralTendency(singularValues).maximum();
   }
 
   /// Calculates the ratio `C` of the largest to smallest singular value in
   /// the singular value decomposition of a matrix
   double condition() {
-    final c = CentralTendency(svd()['E']);
+    final (singularValues, _, _) = svd();
+    final c = CentralTendency(singularValues);
     return c.maximum() / c.minimum();
   }
 
@@ -991,7 +991,7 @@ class Matrix extends TensorBase {
   /// Otherwise returns `null`.
   @override
   Matrix operator *(Object other) {
-    Matrix m;
+    var m = Matrix([]);
     if (other is num) {
       m = copy().map((v) => v * other);
     } else if (other is Matrix) {
@@ -1006,7 +1006,7 @@ class Matrix extends TensorBase {
   /// if `this` matrix and [other] are square matrix.
   @override
   Matrix operator /(Object other) {
-    Matrix m;
+    var m = Matrix([]);
     if (other is num) {
       if (other == 0) {
         throw DivisionByZeroException();

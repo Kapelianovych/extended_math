@@ -24,25 +24,25 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// - [2, 3] -> `Matrix` with 2 rows and 3 columns
   /// - [4, 2, 5] -> `Tensor3` with 4 width, 2 length and 5 depth
   factory TensorBase.generate(
-      Map<String, int> shape, num Function(num number) generator) {
+      List<int> shape, num Function(num number) generator) {
     switch (shape.length) {
       case 1:
-        return Vector(List<num>.generate(shape['width'], generator));
+        return Vector(List<num>.generate(shape[0], generator));
       case 2:
-        final row = List<num>.generate(shape['width'], generator);
-        return Matrix(List<List<num>>.generate(shape['length'], (_) => row));
+        final row = List<num>.generate(shape[1], generator);
+        return Matrix(List<List<num>>.generate(shape[0], (_) => row));
       case 3:
-        final depth = List<num>.generate(shape['depth'], generator);
-        final width = List<List<num>>.generate(shape['width'], (_) => depth);
+        final depth = List<num>.generate(shape[2], generator);
+        final width = List<List<num>>.generate(shape[1], (_) => depth);
         return Tensor3(
-            List<List<List<num>>>.generate(shape['length'], (_) => width));
+            List<List<List<num>>>.generate(shape[0], (_) => width));
       case 4:
-        final depth2 = List<num>.generate(shape['depth2'], generator);
-        final depth = List<List<num>>.generate(shape['depth'], (_) => depth2);
+        final depth2 = List<num>.generate(shape[3], generator);
+        final depth = List<List<num>>.generate(shape[2], (_) => depth2);
         final width =
-            List<List<List<num>>>.generate(shape['width'], (_) => depth);
+            List<List<List<num>>>.generate(shape[1], (_) => depth);
         return Tensor4(List<List<List<List<num>>>>.generate(
-            shape['length'], (_) => width));
+            shape[0], (_) => width));
       default:
         return Number(generator(1));
     }
@@ -59,9 +59,10 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
 
   /// Gets shape of this tensor
   ///
-  /// [shape] may contain numbers that denote count of `width`(columns),
-  /// `length`(rows), `depth` and `depth2` in this order.
-  Map<String, int> get shape;
+  /// [shape] may contain numbers that denote count of entries in each
+  /// dimension of the tensor, with shape[0] being the count for the first
+  /// dimension shape[1] in the second and so on.
+  List<int> get shape;
 
   /// Reduces data to number with provided [f] reduce function
   num reduce(num Function(num prev, num next) f);
@@ -79,7 +80,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// otherwise throws [TensorException]
   Number toScalar() {
     if (dimension == 0) {
-      return Number(data);
+      return Number(data as num);
     } else {
       throw TensorException('Tensor cannot be converted to Number, because '
           'dimension of this tensor isn\'t equal to 0!');
@@ -90,7 +91,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// otherwise throws [TensorException]
   Vector toVector() {
     if (dimension == 1) {
-      return Vector(data);
+      return Vector(data as List<num>);
     } else {
       throw TensorException('Tensor cannot be converted to Vector, because '
           'dimension of this tensor isn\'t equal to 1!');
@@ -101,7 +102,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// otherwise throws [TensorException]
   Matrix toMatrix() {
     if (dimension == 2) {
-      return Matrix(data);
+      return Matrix(data as List<List<num>>);
     } else {
       throw TensorException('Tensor cannot be converted to Matrix, because '
           'dimension of this tensor isn\'t equal to 2!');
@@ -112,7 +113,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// otherwise throws [TensorException]
   Tensor3 toTensor3() {
     if (dimension == 3) {
-      return Tensor3(data);
+      return Tensor3(data as List<List<List<num>>>);
     } else {
       throw TensorException('Tensor cannot be converted to Tensor3, because '
           'dimension of this tensor isn\'t equal to 3!');
@@ -123,7 +124,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// otherwise throws [TensorException]
   Tensor4 toTensor4() {
     if (dimension == 4) {
-      return Tensor4(data);
+      return Tensor4(data as List<List<List<List<num>>>>);
     } else {
       throw TensorException('Tensor cannot be converted to Tensor4, because '
           'dimension of this tensor isn\'t equal to 4!');
@@ -137,7 +138,7 @@ abstract class TensorBase with CopyableMixin<TensorBase> {
   /// of known data points [a] (alpha) may be in range from 0 to 1
   /// inclusively. Otherwise throws [TensorException].
   TensorBase lerp(TensorBase other, double a) {
-    if (dimension != other.dimension && !mapsEqual(shape, other.shape)) {
+    if (dimension != other.dimension && !listsEqual(shape, other.shape)) {
       throw ArgumentError('Tensors aren\'t equals!');
     }
 
